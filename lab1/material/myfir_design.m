@@ -6,7 +6,7 @@ function [bi, bq]=myfir_design(N,nb)
 
 close all;
 
-f_cut_off = 1000; % 1kHz
+f_cut_off = 2000; % 1kHz
 f_sampling = 10000; % 10kHz
 
 f_nyq = f_sampling/2; %% Nyquist frequency
