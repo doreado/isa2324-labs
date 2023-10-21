@@ -40,7 +40,11 @@ yq=floor(y*2^(nb-1));
 idy=find(yq==2^(nb-1));
 yq(idy)=2^(nb-1)-1;
 
-%% save input and output
+%% save bi, input and output
+fp=fopen('bi.txt','w');
+fprintf(fp,'%d\n', bi);
+fclose(fp);
+
 fp=fopen('samples.txt','w');
 fprintf(fp,'%d\n', xq);
 fclose(fp);
