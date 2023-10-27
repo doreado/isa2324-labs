@@ -19,12 +19,14 @@ end entity;
 architecture beh of FIR_Filter is 
 
 type sample_t is array (0 to N) of signed (Nb-1 downto 0);
+type V_t is array (0 to N) of std_logic;
 type mulres_t is array (0 to N) of signed (2*Nb-1 downto 0);
-type sum_t is array(0 to N-1) of signed(2*Nb-1 downto 0); --TODO Nb-1 downto 0
+type sum_t is array(0 to N-1) of signed(Nb-1 downto 0); --TODO Nb-1 downto 0
 
 signal x: sample_t; --x0 is the most recent;
 signal sums: sum_t;
 signal mulres: mulres_t;
+signal V: V_t;
 signal DOUT_s: signed (Nb-1 downto 0);
 begin
 
@@ -34,11 +36,14 @@ if (RST_n = '0') then
     x <= (others=>(others => '0'));
     VOUT <= '0';
     DOUT <= (others => '0');
+    V <= (others=>'0');
 elsif (rising_edge(clk)) then
     if (VIN = '1') then
         x(0)<=signed(DIN);
+        V(0)<=VIN;
         loop1: for i in 0 to N-2 loop
             x(i+1)<= x(i);
+            V(i+1)<= V(i);
         end loop;
     end if;
     DOUT_s <= sums(N-1);
@@ -52,11 +57,12 @@ loop2: for i in 0 to N loop
 end loop;
 end process;
 
-sums(0) <= mulres(0) + mulres(1); --TODO troncamento dei mulres
+sums(0) <= mulres(0)(2*Nb-1 downto 2*Nb-9) + mulres(1)(2*Nb-1 downto 2*Nb-9); --TODO troncamento dei mulres
 generate1: for i in 1 to N-1 generate
-    sums(i) <= sums(i-1) + mulres(i+1); -- TODO troncamento
+    sums(i) <= sums(i-1) + mulres(i+1)(2*Nb-1 downto 2*Nb-9); -- TODO troncamento
 end generate;
 
+VOUT <= VIN AND V(N);
 DOUT<= std_logic_vector(DOUT_s);   --TODO alzare VOUT
 
 end beh;
