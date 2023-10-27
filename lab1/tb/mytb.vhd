@@ -6,7 +6,7 @@ use work.constants.all;
 entity tb is 
 end tb;
 
-architecture beh of tb is 
+architecture test of tb is 
 
 component FIR_Filter is
     port(
@@ -51,19 +51,30 @@ component clk_gen is
       B7      : out std_logic_vector(Nb-1 downto 0);
       B8      : out std_logic_vector(Nb-1 downto 0);
       END_SIM : out std_logic);
-  end component;
+end component;
 
-signal end_sim,clk_s,rst_s: std_logic;
+    signal END_SIM_s, clk_s, rst_s, Vin_s, Vout_s: std_logic;
+    signal Din_s, Dout_s, B0_s, B1_s, B2_s, B3_s, B4_s, B5_s, B6_s, B7_s, B8_s,: std_logic_vector(Nb-1 downto 0);
 
 begin
 
     data: data_maker
     port map(
-        clk => clk_s, rst_n => rst_s, Vout => Vin_s, Dout => Din_s, B0 => B0_s
+        clk_s, rst_s, Vin_s, Din_s, B0_s, B1_s, B2_s, B3_s, B4_s, B5_s, B6_s, B7_s, B8_s
     );
     
-
-
+    clock: clk_gen
+    port map(END_SIM_s, clk_s, rst_s);
 
     UUT: FIR_Filter
-   
+    port map (
+        DIN => Din_s, 
+        DOUT => Dout_s,
+        B => B,
+        VIN => Vin_s,
+        VOUT => Vout_s,
+        CLK => clk_s,
+        RST_n => rst_s
+    );
+
+end architecture test;
