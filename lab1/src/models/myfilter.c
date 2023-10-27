@@ -5,7 +5,7 @@
 #define N 8 /// order of the filter
 #define NT (N+1) /// number of coeffs
 #define NB 9 /// number of bits
-#define SHAMT 8 /// shift amount
+#define SHAMT 9 /// shift amount
 
 int bi[NT]; /// b array
 int ai[NT-1]; /// a array
