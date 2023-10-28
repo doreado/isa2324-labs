@@ -68,7 +68,7 @@ begin  -- beh
         if (valid = '1') then
           readline(fp_in, line_in);
           read(line_in, x);
-          DOUT <= conv_std_logic_vector(x, 16) after tco;
+          DOUT <= conv_std_logic_vector(x, Nb) after tco;
           VOUT <= '1' after tco;
           sEndSim <= '0' after tco;          
         else

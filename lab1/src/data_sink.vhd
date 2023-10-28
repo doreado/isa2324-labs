@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_textio.all;
+use work.constants.all;
 
 library std;
 use std.textio.all;
@@ -14,7 +15,7 @@ entity data_sink is
     CLK   : in std_logic;
     RST_n : in std_logic;
     VIN   : in std_logic;
-    DIN   : in std_logic_vector(NBIT-1 downto 0));
+    DIN   : in std_logic_vector(Nb-1 downto 0));
 end data_sink;
 
 architecture beh of data_sink is
@@ -24,7 +25,7 @@ begin  -- beh
   process (CLK, RST_n)
     file res_fp : text open WRITE_MODE is "./results_hdl.txt";
     variable line_out : line;
-    file fp_in : text open READ_MODE is "./results_c.txt";
+    file fp_in : text open READ_MODE is "../src/models/resultsc.txt";
     variable line_in : line;    
     variable x : integer;
     variable cnt : integer := 0;

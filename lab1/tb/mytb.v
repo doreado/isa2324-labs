@@ -2,25 +2,25 @@
 
 module tb;
 
-  parameter Nb = 8;
+  parameter Nb = 9;
 
   // Port declarations
-  reg [Nb-1:0] DIN;
-  wire [Nb-1:0] DOUT;
+  wire [Nb-1:0] datamaker_DOUT;
+  wire [Nb-1:0] filter_DOUT;
   wire [Nb-1:0] B [8:0];
-  wire VIN;
-  wire VOUT;
-  reg CLK;
-  reg RST_n;
+  wire filter_VOUT;
+  wire datamaker_VOUT;
+  wire CLK;
+  wire RST_n;
   wire END_SIM;
 
   // Instantiate the FIR_Filter module
   FIR_Filter UUT (
-    .DIN(DIN),
-    .DOUT(DOUT),
+    .DIN(datamaker_DOUT),
+    .DOUT(filter_DOUT),
     .B(B),
-    .VIN(VIN),
-    .VOUT(VOUT),
+    .VIN(datamaker_VOUT),
+    .VOUT(filter_VOUT),
     .CLK(CLK),
     .RST_n(RST_n)
   );
@@ -29,8 +29,8 @@ module tb;
   data_maker data (
     .CLK(CLK),
     .RST_n(RST_n),
-    .VOUT(VIN),
-    .DOUT(DIN),
+    .VOUT(datamaker_VOUT),
+    .DOUT(datamaker_DOUT),
     .B0(B[0]),
     .B1(B[1]),
     .B2(B[2]),
@@ -46,8 +46,8 @@ module tb;
   data_sink datacmp (
     .CLK(CLK),
     .RST_n(RST_n),
-    .VIN(VIN),
-    .DIN(DIN)
+    .VIN(filter_VOUT),
+    .DIN(filter_DOUT)
   ); 
 
   // Instantiate the clk_gen module
@@ -63,14 +63,11 @@ module tb;
 
     // Simulation control
     $display("Starting simulation");
-    $monitor("DIN = %h, DOUT = %h, B = %h, VIN = %b, VOUT = %b, CLK = %b, RST_n = %b", DIN, DOUT, B, VIN, VOUT, CLK, RST_n);
+    $monitor("DIN = %h, DOUT = %h, B = %p, VIN = %p, VOUT = %p, CLK = %b, RST_n = %b", datamaker_DOUT, filter_DOUT, B, datamaker_VOUT, filter_VOUT, CLK, RST_n);
 
     // Add testbench stimulus and checks as needed
     
 
-
-    // End the simulation
-    $finish;
-  end
+end
 
 endmodule : tb
