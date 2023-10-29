@@ -42,7 +42,7 @@ begin
             if (VIN = '1') then
                 x(0) <= signed(DIN);
                 V(0) <= VIN;
-                loop1 : for i in 0 to N-2 loop
+                loop1 : for i in 0 to N-1 loop
                     x(i+1) <= x(i);
                     V(i+1) <= V(i);
                 end loop;
