@@ -45,8 +45,9 @@ begin
                     x(i+1) <= x(i);
                     V(i+1) <= V(i);
                 end loop;
+
+                DOUT_s <= sums(N-1);
             end if;
-            DOUT_s <= sums(N-1);
         end if;
     end process;
 

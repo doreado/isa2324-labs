@@ -40,7 +40,7 @@ int myfilter(int x)
   /// Moving average part
   y = 0;
   for (i=0; i<NT; i++)
-    y += ((sx[i]*bi[i]) >> SHAMT) << (SHAMT-NB+1);
+    y += ((sx[i]*bi[i]) >> SHAMT);
 
   /// update the y shift register
   for (i=NT-2; i>0; i--)
