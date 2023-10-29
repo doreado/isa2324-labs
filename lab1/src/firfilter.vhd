@@ -35,8 +35,7 @@ begin
     begin
         if (RST_n = '0') then
             x    <= (others => (others => '0'));
-            VOUT <= '0';
-            DOUT <= (others => '0');
+            DOUT_s <= (others => '0');
             V    <= (others => '0');
         elsif (rising_edge(clk)) then
             if (VIN = '1') then
