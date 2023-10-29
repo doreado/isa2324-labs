@@ -50,7 +50,7 @@ begin
         end if;
     end process;
 
-    process(x)
+    process(x, B)
     begin
         loop2 : for i in 0 to N loop
             mulres(i) <= x(i) * B(i);
