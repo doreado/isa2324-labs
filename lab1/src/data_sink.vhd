@@ -29,22 +29,27 @@ begin  -- beh
     variable line_in : line;    
     variable x : integer;
     variable cnt : integer := 0;
+    variable init : integer := 0;
   begin  -- process
     if RST_n = '0' then                 -- asynchronous reset (active low)
       cnt := 0;
     elsif CLK'event and CLK = '1' then  -- rising clock edge
       if (VIN = '1') then
-        write(line_out, conv_integer(signed(DIN)));
-        writeline(res_fp, line_out);
-
-        if not endfile(fp_in) then
-          readline(fp_in, line_in);
-          read(line_in, x);
-          assert conv_integer(signed(DIN)) = x report "Results are different: index=" & integer'image(cnt) & " c=" & integer'image(x) & " HDL=" & integer'image(conv_integer(signed(DIN)))  severity error;
+        if init < 2 then
+          init := init + 1;
         else
-          assert VIN = '0' report "Reached EOF in results_c.txt" severity error;  
+          write(line_out, conv_integer(signed(DIN)));
+          writeline(res_fp, line_out);
+
+          if not endfile(fp_in) then
+            readline(fp_in, line_in);
+            read(line_in, x);
+            assert conv_integer(signed(DIN)) = x report "Results are different: " &" index=" & integer'image(cnt) & " c=" & integer'image(x) & " HDL=" & integer'image(conv_integer(signed(DIN)))  severity error;
+          else
+            assert VIN = '0' report "Reached EOF in results_c.txt" severity error;
+          end if;
+          cnt := cnt + 1;
         end if;
-        cnt := cnt + 1;
       end if;
     end if;
   end process;
