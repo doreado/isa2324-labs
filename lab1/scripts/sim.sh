@@ -21,7 +21,7 @@ case $hostname in
     'yoga')
         INSTALL_DIR=/opt/intelFPGA/20.1/modelsim_ase/bin/
         ;;
-    'MarcoPc')
+    'MarcoPc'|'DESKTOP-R7HTGI3')
         INSTALL_DIR=/mnt/c/intelFPGA_lite/18.1/modelsim_ase/win32aloem
         ;;
     *)
