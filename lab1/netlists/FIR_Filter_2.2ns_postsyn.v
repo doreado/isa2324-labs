@@ -3,7 +3,7 @@
 // Version   : S-2021.06-SP4
 // Date      : Mon Oct 30 17:42:16 2023
 /////////////////////////////////////////////////////////////
-
+// `timescale 1 ns / 1 ns
 
 module FIR_Filter_DW_mult_tc_8 ( a, b, product );
   input [8:0] a;

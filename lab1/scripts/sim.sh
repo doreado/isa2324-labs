@@ -50,9 +50,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Start simulation
-if ps aux | grep -q [v]sim; then
-    exit 1
-else
+#if ps aux | grep -q [v]sim; then
+#   exit 1
     cd $SIM_DIR
-    vsim -t 10ps work.tb -voptargs=+acc
-fi
+    vsim -t 10ps -L /eda/dk/nangate45/verilog/qsim2020.4 work.tb -voptargs=+acc
