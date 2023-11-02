@@ -3,13 +3,14 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_textio.all;
+use work.constants.all;
 
 library std;
 use std.textio.all;
 
 entity data_maker is
   generic (
-    NBIT : integer := 16);
+    NBIT : integer := Nb);
   port (
     CLK     : in  std_logic;
     RST_n   : in  std_logic;
@@ -21,8 +22,11 @@ entity data_maker is
     B1      : out std_logic_vector(NBIT-1 downto 0);
     B2      : out std_logic_vector(NBIT-1 downto 0);
     B3      : out std_logic_vector(NBIT-1 downto 0);
-    A1      : out std_logic_vector(NBIT-1 downto 0);
-    A2      : out std_logic_vector(NBIT-1 downto 0);
+    B4      : out std_logic_vector(NBIT-1 downto 0);
+    B5      : out std_logic_vector(NBIT-1 downto 0);
+    B6      : out std_logic_vector(NBIT-1 downto 0);
+    B7      : out std_logic_vector(NBIT-1 downto 0);
+    B8      : out std_logic_vector(NBIT-1 downto 0);
     END_SIM : out std_logic);
 end data_maker;
 
@@ -40,13 +44,15 @@ architecture beh of data_maker is
 
 begin  -- beh
 
-  B0 <= conv_std_logic_vector(286, NBIT);
-  B1 <= conv_std_logic_vector(1571, NBIT);
-  B2 <= conv_std_logic_vector(5374, NBIT);
-  B3 <= conv_std_logic_vector(9151, NBIT);
-  A1 <= conv_std_logic_vector(-711, NBIT);
-  A2 <= conv_std_logic_vector(115, NBIT);
-
+  B0 <= conv_std_logic_vector(-2, Nb);
+  B1 <= conv_std_logic_vector(-4, Nb);
+  B2 <= conv_std_logic_vector(13, Nb);
+  B3 <= conv_std_logic_vector(67, Nb);
+  B4 <= conv_std_logic_vector(103, Nb);
+  B5 <= conv_std_logic_vector(67, Nb);
+  B6 <= conv_std_logic_vector(13, Nb);
+  B7 <= conv_std_logic_vector(-4, Nb);
+  B8 <= conv_std_logic_vector(-2, Nb);
   process (CLK, RST_n)
     file fp_in : text open READ_MODE is "./samples.txt";
     variable line_in : line;
@@ -72,9 +78,9 @@ begin  -- beh
           read(line_in, x3k1);
           readline(fp_in, line_in);
           read(line_in, x3k2);          
-          DOUT3k <= conv_std_logic_vector(x3k, 16) after tco;
-          DOUT3k1 <= conv_std_logic_vector(x3k1, 16) after tco;
-          DOUT3k2 <= conv_std_logic_vector(x3k2, 16) after tco;          
+          DOUT3k <= conv_std_logic_vector(x3k, 9) after tco;
+          DOUT3k1 <= conv_std_logic_vector(x3k1, 9) after tco;
+          DOUT3k2 <= conv_std_logic_vector(x3k2, 9) after tco;          
           VOUT <= '1' after tco;
           sEndSim <= '0' after tco;          
         else

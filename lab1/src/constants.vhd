@@ -6,6 +6,7 @@ package constants is
 
 constant N: integer := 8;
 constant Nb: integer := 9;
+constant L: integer := 3;
 type parameters is array (0 to N) of signed(Nb-1 downto 0);
 
 end constants;
