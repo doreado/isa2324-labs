@@ -1,6 +1,6 @@
 //`timescale 1ns
 
-module tb_filter ();
+module tb;
 
    parameter NBIT = 9;   
 
@@ -10,7 +10,7 @@ module tb_filter ();
    wire [NBIT-1:0] DIN3k1_i;
    wire [NBIT-1:0] DIN3k2_i;   
    wire VIN_i;
-   wire [80:0] B;
+   wire [NBIT-1:0] B [8:0];
    wire [NBIT-1:0] DOUT3k_i;
    wire [NBIT-1:0] DOUT3k1_i;
    wire [NBIT-1:0] DOUT3k2_i;   
@@ -27,15 +27,15 @@ module tb_filter ();
 				.DOUT3k(DIN3k_i),
 				.DOUT3k1(DIN3k1_i),
 				.DOUT3k2(DIN3k2_i),				
-				.B0(B[8:0]),
-    			.B1(B[17:9]),
-    			.B2(B[26:18]),
-    			.B3(B[35:27]),
-    			.B4(B[44:36]),
-    			.B5(B[53:45]),
-    			.B6(B[62:54]),
-    			.B7(B[71:63]),
-    			.B8(B[80:72]),
+				.B0(B[0]),
+    			.B1(B[1]),
+    			.B2(B[2]),
+    			.B3(B[3]),
+    			.B4(B[4]),
+    			.B5(B[5]),
+    			.B6(B[6]),
+    			.B7(B[7]),
+    			.B8(B[8]),
 				.END_SIM(END_SIM_i));
 
    FIR_FILTER UUT(.CLK(CLK_i),
