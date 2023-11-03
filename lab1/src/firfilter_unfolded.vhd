@@ -65,17 +65,14 @@ begin
     end process;
 
     -- Multiplicators
-    process(x, B, DIN3k, DIN3k1)
-    begin
-        mulres(0, 0) <= x(0) * B(0); mulres(0, 1) <= signed(DIN3k) * B(0); mulres(0, 2) <= signed(DIN3k1) * B(0);
-        mulres(1, 0) <= x(1) * B(1); mulres(1, 1) <= x(0) * B(1); mulres(2, 1) <= signed(DIN3k) * B(1);
-        loop2 : for i in 2 to N-1 loop
-            mulres(i, 0) <= x(i) * B(i);
-            mulres(i, 1) <= x(i-1) * B(i);
-            mulres(i, 2) <= x(i-2) * B(i);
-        end loop;
-    end process;
-    
+    mulres(0, 0) <= x(0) * B(0); mulres(0, 1) <= signed(DIN3k) * B(0); mulres(0, 2) <= signed(DIN3k1) * B(0);
+    mulres(1, 0) <= x(1) * B(1); mulres(1, 1) <= x(0) * B(1); mulres(1, 2) <= signed(DIN3k) * B(1);
+    loop2 : for i in 2 to N generate
+        mulres(i, 0) <= x(i) * B(i);
+        mulres(i, 1) <= x(i-1) * B(i);
+        mulres(i, 2) <= x(i-2) * B(i);
+    end generate;
+
     -- Adders
     sums(0, 0) <= mulres(0, 0)(2*Nb-1 downto 2*Nb-9) + mulres(1, 0)(2*Nb-1 downto 2*Nb-9);
     sums(0, 1) <= mulres(0, 1)(2*Nb-1 downto 2*Nb-9) + mulres(1, 1)(2*Nb-1 downto 2*Nb-9);
