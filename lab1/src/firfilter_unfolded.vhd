@@ -45,9 +45,9 @@ begin
             V <= (others => '0');
         elsif (rising_edge(clk)) then
             if (VIN = '1') then
-                x(0) <= signed(DIN3k);
+                x(0) <= signed(DIN3k2);
                 x(1) <= signed(DIN3k1);
-                x(2) <= signed(DIN3k2);
+                x(2) <= signed(DIN3k);
                 V(0) <= VIN;
                 -- Sample shifting
                 loop1 : for i in 0 to (N-1)/L loop
