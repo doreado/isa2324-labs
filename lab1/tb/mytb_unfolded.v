@@ -10,7 +10,7 @@ module tb;
    wire [NBIT-1:0] DIN3k1_i;
    wire [NBIT-1:0] DIN3k2_i;   
    wire VIN_i;
-   wire [NBIT-1:0] B [0:NBIT-1];
+   wire [NBIT-1:0] B [8:0];
    wire [NBIT-1:0] DOUT3k_i;
    wire [NBIT-1:0] DOUT3k1_i;
    wire [NBIT-1:0] DOUT3k2_i;   
