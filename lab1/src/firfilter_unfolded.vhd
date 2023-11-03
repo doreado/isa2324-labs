@@ -31,7 +31,7 @@ architecture beh of FIR_Filter is
     signal sums   : sum_t;
     signal mulres : mulres_t;
     signal V      : V_t;
-    signal DOUT3k_s, DOUT3k1_s, DOUT3k2_s : signed (Nb-1 downto 0);
+    signal DOUT3k_s: signed (Nb-1 downto 0);
 
 begin
 
@@ -40,8 +40,6 @@ begin
         if (RST_n = '0') then
             x    <= (others => (others => '0'));
             DOUT3k_s <= (others => '0');
-            DOUT3k1_s <= (others => '0');
-            DOUT3k2_s <= (others => '0');
             V <= (others => '0');
         elsif (rising_edge(clk)) then
             if (VIN = '1') then
@@ -57,9 +55,7 @@ begin
                     V(i+1) <= V(i);           
                 end loop;
 
-                DOUT3k_s  <= sums(N - 2, 0);
-                DOUT3k1_s <= sums(N - 2, 1);
-                DOUT3k2_s <= sums(N - 2, 2);
+                DOUT3k_s  <= sums(N - 2, 2);
             end if;
         end if;
     end process;
@@ -84,8 +80,8 @@ begin
     end generate;
 
     VOUT <= VIN and V((N - 1) / L);
-    DOUT3k <= std_logic_vector(DOUT3k_s);
-    DOUT3k1 <= std_logic_vector(DOUT3k1_s);
-    DOUT3k2 <= std_logic_vector(DOUT3k2_s);
+    DOUT3k  <= std_logic_vector(DOUT3k_s);
+    DOUT3k1 <= std_logic_vector(sums(N - 2, 0));
+    DOUT3k2 <= std_logic_vector(sums(N - 2, 1));
 
 end beh;
