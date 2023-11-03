@@ -47,12 +47,14 @@ begin
                 x(1) <= signed(DIN3k1);
                 x(2) <= signed(DIN3k);
                 V(0) <= VIN;
+
                 -- Sample shifting
-                loop1 : for i in 0 to (N-1)/L loop
-                    x(0+i+3) <= x(i*3);
-                    x(1+i+3) <= x(i*3+1);
-                    x(2+i+3) <= x(i*3+2);
-                    V(i+1) <= V(i);           
+                loop1 : for i in 1 to (N-1)/L loop
+                    x(i * L)     <= x((i - 1) * L);
+                    x(i * L + 1) <= x((i - 1) * L + 1);
+                    x(i * L + 2) <= x((i - 1) * L + 2);
+
+                    V(i) <= V(i - 1);
                 end loop;
 
                 DOUT3k_s  <= sums(N - 2, 2);
