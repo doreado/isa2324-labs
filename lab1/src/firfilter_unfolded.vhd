@@ -57,9 +57,9 @@ begin
                     V(i+1) <= V(i);           
                 end loop;
 
-                DOUT3k_s  <= sums(N-1, 0);
-                DOUT3k1_s <= sums(N-1, 1);
-                DOUT3k2_s <= sums(N-1, 2);
+                DOUT3k_s  <= sums(N - 2, 0);
+                DOUT3k1_s <= sums(N - 2, 1);
+                DOUT3k2_s <= sums(N - 2, 2);
             end if;
         end if;
     end process;
