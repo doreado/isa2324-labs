@@ -23,7 +23,7 @@ end entity;
 architecture beh of FIR_Filter is
 
     type sample_t is array (0 to N) of signed (Nb-1 downto 0);
-    type V_t is array (0 to N) of std_logic;
+    type V_t is array (0 to (N - 1) / L) of std_logic;
     type mulres_t is array (0 to N, 0 to L-1) of signed (2*Nb-1 downto 0);
     type sum_t is array(0 to N-1, 0 to L-1) of signed(Nb-1 downto 0);
 
@@ -86,7 +86,7 @@ begin
         sums(i, 2) <= sums(i-1, 2) + mulres(i+1, 2)(2*Nb-1 downto 2*Nb-9);
     end generate;
 
-    VOUT <= VIN and V(N);
+    VOUT <= VIN and V((N - 1) / L);
     DOUT3k <= std_logic_vector(DOUT3k_s);
     DOUT3k1 <= std_logic_vector(DOUT3k1_s);
     DOUT3k2 <= std_logic_vector(DOUT3k2_s);
