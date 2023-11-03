@@ -52,7 +52,7 @@ module tb;
 
    data_sink #(.NBIT(NBIT)) DS(.CLK(CLK_i),
 			       .RST_n(RST_n_i),
-			       .VIN(VOUT_i),
+			       .VIN(datamaker_VOUT),
 			       .DIN3k(DOUT3k_i),
 			       .DIN3k1(DOUT3k1_i),
 			       .DIN3k2(DOUT3k2_i));
