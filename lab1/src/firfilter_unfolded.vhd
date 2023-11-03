@@ -24,8 +24,8 @@ architecture beh of FIR_Filter is
 
     type sample_t is array (0 to N) of signed (Nb-1 downto 0);
     type V_t is array (0 to N) of std_logic;
-    type mulres_t is array (0 to L-1, 0 to N) of signed (2*Nb-1 downto 0);
-    type sum_t is array(0 to L-1, 0 to N-1) of signed(Nb-1 downto 0);
+    type mulres_t is array (0 to N, 0 to L-1) of signed (2*Nb-1 downto 0);
+    type sum_t is array(0 to N-1, 0 to L-1) of signed(Nb-1 downto 0);
 
     signal x      : sample_t;    
     signal sums   : sum_t;
@@ -57,9 +57,9 @@ begin
                     V(i+1) <= V(i);           
                 end loop;
 
-                DOUT3k_s <= sums(0, N-1);
-                DOUT3k1_s <= sums(1, N-1);
-                DOUT3k2_s <= sums(2, N-1);
+                DOUT3k_s  <= sums(N-1, 0);
+                DOUT3k1_s <= sums(N-1, 1);
+                DOUT3k2_s <= sums(N-1, 2);
             end if;
         end if;
     end process;
@@ -67,23 +67,23 @@ begin
     -- Multiplicators
     process(x, B)
     begin
-        mulres(0,0) <= x(0) * B(0); mulres(0,1) <= signed(DIN3k) * B(0); mulres(0,2) <= signed(DIN3k1) * B(0);
-        mulres(1,0) <= x(1) * B(1); mulres(1,1) <= x(0) * B(1); mulres(1,2) <= signed(DIN3k) * B(1);
+        mulres(0, 0) <= x(0) * B(0); mulres(0, 1) <= signed(DIN3k) * B(0); mulres(0, 2) <= signed(DIN3k1) * B(0);
+        mulres(1, 0) <= x(1) * B(1); mulres(1, 1) <= x(0) * B(1); mulres(2, 1) <= signed(DIN3k) * B(1);
         loop2 : for i in 2 to N-1 loop
-            mulres(0,i) <= x(i) * B(i);
-            mulres(1,i) <= x(i-1) * B(i);
-            mulres(2,i) <= x(i-2) * B(i);
+            mulres(i, 0) <= x(i) * B(i);
+            mulres(i, 1) <= x(i-1) * B(i);
+            mulres(i, 2) <= x(i-2) * B(i);
         end loop;
     end process;
     
     -- Adders
-    sums(0,0) <= mulres(0,0)(2*Nb-1 downto 2*Nb-9) + mulres(0,1)(2*Nb-1 downto 2*Nb-9);
-    sums(1,0) <= mulres(1,0)(2*Nb-1 downto 2*Nb-9) + mulres(1,1)(2*Nb-1 downto 2*Nb-9);
-    sums(2,0) <= mulres(2,0)(2*Nb-1 downto 2*Nb-9) + mulres(2,1)(2*Nb-1 downto 2*Nb-9); 
+    sums(0, 0) <= mulres(0, 0)(2*Nb-1 downto 2*Nb-9) + mulres(1, 0)(2*Nb-1 downto 2*Nb-9);
+    sums(0, 1) <= mulres(0, 1)(2*Nb-1 downto 2*Nb-9) + mulres(1, 1)(2*Nb-1 downto 2*Nb-9);
+    sums(0, 2) <= mulres(0, 2)(2*Nb-1 downto 2*Nb-9) + mulres(1, 2)(2*Nb-1 downto 2*Nb-9);
     generate1 : for i in 1 to N-1 generate
-        sums(0,i) <= sums(0,i-1) + mulres(0,i+1)(2*Nb-1 downto 2*Nb-9);
-        sums(1,i) <= sums(1,i-1) + mulres(1,i+1)(2*Nb-1 downto 2*Nb-9);
-        sums(2,i) <= sums(2,i-1) + mulres(2,i+1)(2*Nb-1 downto 2*Nb-9);
+        sums(i, 0) <= sums(i-1, 0) + mulres(i+1, 0)(2*Nb-1 downto 2*Nb-9);
+        sums(i, 1) <= sums(i-1, 1) + mulres(i+1, 1)(2*Nb-1 downto 2*Nb-9);
+        sums(i, 2) <= sums(i-1, 2) + mulres(i+1, 2)(2*Nb-1 downto 2*Nb-9);
     end generate;
 
     VOUT <= VIN and V(N);
