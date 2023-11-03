@@ -65,7 +65,7 @@ begin
     end process;
 
     -- Multiplicators
-    process(x, B)
+    process(x, B, DIN3k, DIN3k1)
     begin
         mulres(0, 0) <= x(0) * B(0); mulres(0, 1) <= signed(DIN3k) * B(0); mulres(0, 2) <= signed(DIN3k1) * B(0);
         mulres(1, 0) <= x(1) * B(1); mulres(1, 1) <= x(0) * B(1); mulres(2, 1) <= signed(DIN3k) * B(1);
