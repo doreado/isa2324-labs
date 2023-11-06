@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 use work.constants.all;
 
 
-entity FIR_Filter is
+entity FIR_Filter_unfolded is
     port(
         DIN3k   : in  std_logic_vector(Nb-1 downto 0);
         DIN3k1   : in  std_logic_vector(Nb-1 downto 0);
@@ -20,7 +20,7 @@ entity FIR_Filter is
         );
 end entity;
 
-architecture beh of FIR_Filter is
+architecture beh of FIR_Filter_unfolded is
 
     type sample_t is array (0 to N) of signed (Nb-1 downto 0);
     type V_t is array (0 to (N - 1) / L) of std_logic;
