@@ -24,7 +24,7 @@ architecture beh of FIR_Filter is
     type sum_t is array(0 to N-1) of signed(Nb-1 downto 0);
 
     signal x      : sample_t;           --x0 is the most recent;
-    signal sums   : sum_t;
+    signal sums, sums_s   : sum_t;
     signal mulres : mulres_t;
     signal mulres_s : mulres_t;
     signal V      : V_t;
@@ -59,10 +59,12 @@ begin
         end loop;
     end process;
     mulres <= mulres_s;
-    sums(0) <= mulres(0)(2*Nb-1 downto 2*Nb-9) + mulres(1)(2*Nb-1 downto 2*Nb-9);
+    
+    sums_s(0) <= mulres(0)(2*Nb-1 downto 2*Nb-9) + mulres(1)(2*Nb-1 downto 2*Nb-9);
     generate1 : for i in 1 to N-1 generate
-        sums(i) <= sums(i-1) + mulres(i+1)(2*Nb-1 downto 2*Nb-9);
+        sums_s(i) <= sums_s(i-1) + mulres(i+1)(2*Nb-1 downto 2*Nb-9);
     end generate;
+    sums <= sums_s;
 
     VOUT <= VIN and V(N);
     DOUT <= std_logic_vector(DOUT_s);
