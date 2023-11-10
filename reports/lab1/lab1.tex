@@ -1,0 +1,125 @@
+\chapter{Lab 1: design and implementation of a digital filter}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% you can organize the report usign section -> \section{Reference model development}
+% or subsection -> \subsection{Matlab model}
+
+%%%%%%   First section
+\section{Reference model development}
+
+\subsection{Matlab model}
+
+The frequency response of the filter is shown in Figure \ref{fig:lab1:fig1}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Caption for my first figure}
+  \label{fig:lab1:fig1}
+\end{figure}
+
+The coefficients of the filter have one bit for the integer part and XYZ bits for the fractional part. They correspond to the integer values shown in Table \ref{tab:cap1:tab1}.
+
+\begin{table}
+  \centering
+  \caption{Caption for my first table}
+  \label{tab:cap1:tab1}  
+  \begin{tabular}{c|c}
+    $b_0$ & 10 \\
+    $b_1$ & 115 \\
+    \multicolumn{2}{c}{$\cdots$} \\
+  \end{tabular}
+\end{table}
+
+\subsection{C model and THD}
+
+The number of bits after each multiplication is XYZ and the THD is XYZ dB.
+
+\subsection{Explanations, comparisons and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%   Second section
+\section{VLSI implementation}
+
+\subsection{Architecture}
+
+The architecture of the filter is shown in Figure \ref{fig:lab1:fig2} and the timing diagram in Figure \ref{fig:lab1:fig3}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Caption for my figure}
+  \label{fig:lab1:fig2}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Caption for my figure}
+  \label{fig:lab1:fig3}
+\end{figure}
+
+\subsubsection{Simulation}
+
+To process all the samples the simulation lasts XYZ ns. A snapshot from XYZ ns to KLM ns is shown in Figure \ref{fig:lab1:fig4} to highlight the behaviour of the filter when VIN moves from 0 to 1 and viceversa.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Caption for my figure}
+  \label{fig:lab1:fig4}
+\end{figure}
+
+\subsection{Logic synthesis}
+
+Snapshots showing slack met and power consumption are shown in Figures 5, 6 and 7.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Figures 5, 6 and 7}
+%%  \label{fig:lab1:fig}
+\end{figure}
+
+Results of the synthesis are shown in Table \ref{tab:cap1:tab2}.
+
+\begin{table}
+  \centering
+  \caption{Caption for my table: A is the area, P is the power consumption and T is the simulation time.}
+  \label{tab:cap1:tab2}
+  \begin{tabular}{c|c|c|c}
+    $f_M$=\dots   & A=\dots & -       & T=\dots \\
+    $f_M/2$=\dots & A=\dots & P=\dots & T=\dots \\
+  \end{tabular}
+\end{table}
+
+\subsection{Place and route}
+
+Snapshots showing no timing violation (timeDesign Summary table for both setup and hold modes) and power consumption are shown in Figures 8, 9 and 10.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{Figures 8, 9 and 10}
+%%  \label{fig:lab1:fig}
+\end{figure}
+
+Results of the place and route are shown in Table \ref{tab:cap1:tab3}.
+
+\begin{table}
+  \centering  
+  \caption{Caption for my table: A is the area, P is the power consumption and T is the simulation time.}
+  \label{tab:cap1:tab3}
+  \begin{tabular}{c|c|c|c}
+    $f_M/2$=\dots & A=\dots & P=\dots & T=\dots \\
+  \end{tabular}
+\end{table}
+
+\subsection{Explanations, comparisons and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%% Third section
+\section{Advanced architecture development}
