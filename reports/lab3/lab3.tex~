@@ -1,0 +1,95 @@
+\chapter{Lab 3: RISC-V-lite}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% PART 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%   First section
+\section{Architecture definition}
+
+The code to run on the RISC-V-lite processor is:
+
+\begin{listato}
+  \lstinputlisting{./lab3/list/crt0.s}
+\end{listato}
+
+The architecture that has been designed is shown in Fig. \ref{fig:lab3:fig1}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=3cm]{./logopoli_new}
+  \caption{...}
+  \label{fig:lab3:fig1}
+\end{figure}
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%   Second section
+\section{Architecture verification}
+
+The architecture has been verified via simulation. Figs. 2 ... $n$ show the obtained waveforms.
+In particular, Fig. $n-1$ shows that the pipeline is not sensitive to the memory latency and that the protocol works as expected.
+Finally, as shown in Fig, $n$, the total number of clock cycles to execute the \emph{maxx} application is ...
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%   Third section
+\section{Architecture - logic synthesis results}
+
+The maximum frequency achieved by the architecture is ... with a total area equal to ....
+Indeed, Figs. $n+1$ and $n+2$ show slack met and area breakdown.
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% PART 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%   First section
+%%\section{Advanced architecture definition}
+%%
+%%The encrypted code to run on the RISC-V-lite processor and the sequence of keys are:
+%%
+%%\begin{listato}
+%%  \lstinputlisting{./lab3/list/crt0.s}
+%%\end{listato}
+%%
+%%The architecture that has been designed to manage the decryption is shown in Fig. $n+3$.
+
+\section{Including the SSRAM in the architecture}
+
+The complete architecture with the SSRAMs is shown in Fig. $n+3$. 
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%   Second section
+%%\section{Advanced architecture verification}
+\section{Complete architecture verification}
+
+The architecture has been verified via simulation, as shown by the following figures.
+In particular, Fig. XYZ shows that the total number of clock cycles to execute the %%encypted
+code is ...
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+%%%%%%   Third section
+\section{Complete architecture - logic synthesis results}
+
+The maximum frequency achieved by the advanced architecture is ... with a total area equal to ....
+Indeed, the following figures show slack met and area breakdown.
+
+\subsection{Explanations and comments}
+
+As it can be observed ... bla, bla, bla, ...
+
+
