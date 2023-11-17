@@ -32,6 +32,7 @@ begin  -- beh
     variable x3k1 : integer;
     variable x3k2 : integer;    
     variable cnt : integer := 0;
+    variable init : integer := 0;
   begin  -- process
     if RST_n = '0' then                 -- asynchronous reset (active low)
       cnt := 0;
@@ -42,23 +43,23 @@ begin  -- beh
         write(line_out, conv_integer(signed(DIN3k1)));
         writeline(res_fp, line_out);
         write(line_out, conv_integer(signed(DIN3k2)));
-        writeline(res_fp, line_out);        
+        writeline(res_fp, line_out);
 
         if not endfile(fp_in) then
           -----------------------------------------------------
           -- NOTE: it works only if samples contains 3k samples
-          -----------------------------------------------------          
-          readline(fp_in, line_in);
-          read(line_in, x3k);
-          readline(fp_in, line_in);
-          read(line_in, x3k1);
-          readline(fp_in, line_in);
-          read(line_in, x3k2);          
-          assert conv_integer(signed(DIN3k)) = x3k report "Results are different: index=" & integer'image(cnt) & " 0" & " c=" & integer'image(x3k) & " HDL=" & integer'image(conv_integer(signed(DIN3k)))  severity error;
-          assert conv_integer(signed(DIN3k1)) = x3k1 report "Results are different: index=" & integer'image(cnt) & " 1" & " c=" & integer'image(x3k1) & " HDL=" & integer'image(conv_integer(signed(DIN3k1)))  severity error;
-          assert conv_integer(signed(DIN3k2)) = x3k2 report "Results are different: index=" & integer'image(cnt) & " 2" & " c=" & integer'image(x3k2) & " HDL=" & integer'image(conv_integer(signed(DIN3k2)))  severity error;          
+          -----------------------------------------------------
+            readline(fp_in, line_in);
+            read(line_in, x3k);
+            readline(fp_in, line_in);
+            read(line_in, x3k1);
+            readline(fp_in, line_in);
+            read(line_in, x3k2);
+            assert conv_integer(signed(DIN3k)) = x3k report "Results are different: index=" & integer'image(cnt) & " 0" & " c=" & integer'image(x3k) & " HDL=" & integer'image(conv_integer(signed(DIN3k)))  severity error;
+            assert conv_integer(signed(DIN3k1)) = x3k1 report "Results are different: index=" & integer'image(cnt) & " 1" & " c=" & integer'image(x3k1) & " HDL=" & integer'image(conv_integer(signed(DIN3k1)))  severity error;
+            assert conv_integer(signed(DIN3k2)) = x3k2 report "Results are different: index=" & integer'image(cnt) & " 2" & " c=" & integer'image(x3k2) & " HDL=" & integer'image(conv_integer(signed(DIN3k2)))  severity error;
         else
-          assert VIN = '0' report "Reached EOF in results_c.txt" severity error;  
+          assert VIN = '0' report "Reached EOF in results_c.txt" severity error;
         end if;
         cnt := cnt + 1;
       end if;
