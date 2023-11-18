@@ -37,6 +37,7 @@ architecture beh of FIR_Filter_adv is
     signal mulres_second_layer: mulres_second_layer_t;
     signal V      : V_t;
     signal DOUT3k_s, DOUT3k_curr: signed (Nb-1 downto 0);
+    signal DOUT3k1_s, DOUT3k1_curr: signed (Nb-1 downto 0);
     signal DOUT3k2_s, DOUT3k2_curr: signed (Nb-1 downto 0);
 
 begin
@@ -46,6 +47,8 @@ begin
         if (RST_n = '0') then
             x    <= (others => (others => '0'));
             DOUT3k_curr <= (others => '0');
+            DOUT3k1_curr <= (others => '0');
+            DOUT3k2_curr <= (others => '0');
             V <= (others => '0');
 
             -- Reset first pipeline multiplication registers layer
@@ -68,8 +71,6 @@ begin
             end loop;
 
         elsif (rising_edge(clk)) then
-            V(0) <= VIN;
-
             if (VIN = '1') then
                 x(0) <= signed(DIN3k2);
                 x(1) <= signed(DIN3k1);
@@ -82,33 +83,37 @@ begin
                     x(i * L + 2) <= x((i - 1) * L + 2);
                 end loop;
 
-                -- Shift the valid bit for 6 cycles
-                for i in 1 to 5 loop
-                    V(i) <= V(i - 1);
-                end loop;
-
-                -- Update first pipeline multiplication registers layer
-                for i in 0 to N loop
-                    for j in 0 to L - 1 loop
-                        mulres_first_layer(i, j) <= mulres(i, j);
-                    end loop;
-                end loop;
-
-                -- Update second pipeline multiplication registers layer
-                for i in 0 to N - (SUM_PIPE_IDX + 2) loop
-                    for j in 0 to L - 1 loop
-                        mulres_second_layer(i, j) <= mulres_first_layer(i + (SUM_PIPE_IDX + 2), j);
-                    end loop;
-                end loop;
-
-                -- Update pipeline sum registers
-                for i in 0 to L - 1 loop
-                    sum_regs(i) <= sums(SUM_PIPE_IDX, i);
-                end loop;
-
-                DOUT3k_curr  <= DOUT3k_s;
-                DOUT3k2_curr <= DOUT3k2_s;
+                V(0) <= VIN;
             end if;
+
+            -- Shift the valid bit for 6 cycles
+            for i in 1 to 5 loop
+                V(i) <= V(i - 1);
+            end loop;
+            V(3) <= V(2) and VIN;
+
+            -- Update first pipeline multiplication registers layer
+            for i in 0 to N loop
+                for j in 0 to L - 1 loop
+                    mulres_first_layer(i, j) <= mulres(i, j);
+                end loop;
+            end loop;
+
+            -- Update second pipeline multiplication registers layer
+            for i in 0 to N - (SUM_PIPE_IDX + 2) loop
+                for j in 0 to L - 1 loop
+                    mulres_second_layer(i, j) <= mulres_first_layer(i + (SUM_PIPE_IDX + 2), j);
+                end loop;
+            end loop;
+
+            -- Update pipeline sum registers
+            for i in 0 to L - 1 loop
+                sum_regs(i) <= sums(SUM_PIPE_IDX, i);
+            end loop;
+
+            DOUT3k_curr  <= DOUT3k_s;
+            DOUT3k1_curr <= DOUT3k1_s;
+            DOUT3k2_curr <= DOUT3k2_s;
         end if;
     end process;
 
@@ -144,11 +149,12 @@ begin
     sums(SUM_PIPE_IDX + 1, 1) <= sum_regs(1) + mulres_second_layer(0, 1)(2 * Nb - 1 downto 2 * Nb - 9);
     sums(SUM_PIPE_IDX + 1, 2) <= sum_regs(2) + mulres_second_layer(0, 2)(2 * Nb - 1 downto 2 * Nb - 9);
 
-    VOUT <= VIN and V(5);
+    VOUT <= V(5);
     DOUT3k_s  <= sums(N - 1, 2);
     DOUT3k2_s <= sums(N - 1, 1);
+    DOUT3k1_s <= sums(N - 1, 0);
 
-    DOUT3k <= std_logic_vector(DOUT3k2_curr);
-    DOUT3k1 <= std_logic_vector(DOUT3k_curr);
-    DOUT3k2 <= std_logic_vector(sums(N - 1, 0));
+    DOUT3k <= std_logic_vector(DOUT3k1_curr);
+    DOUT3k1 <= std_logic_vector(DOUT3k2_curr);
+    DOUT3k2 <= std_logic_vector(DOUT3k_curr);
 end beh;
