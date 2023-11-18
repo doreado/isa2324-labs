@@ -6,7 +6,7 @@
 #define NT (N+1) /// number of coeffs
 #define NB 9 /// number of bits
 #define SHAMT 9 /// shift amount
-#define INIT_LATENCY 9
+#define INIT_LATENCY 8
 
 int bi[NT]; /// b array
 int ai[NT-1]; /// a array

@@ -46,7 +46,7 @@ module tb;
   data_sink datacmp (
     .CLK(CLK),
     .RST_n(RST_n),
-    .VIN(datamaker_VOUT),
+    .VIN(filter_VOUT),
     .DIN(filter_DOUT)
   ); 
 
