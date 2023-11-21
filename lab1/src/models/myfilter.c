@@ -6,6 +6,7 @@
 #define NT (N+1) /// number of coeffs
 #define NB 9 /// number of bits
 #define SHAMT 9 /// shift amount
+#define INIT_LATENCY 8
 
 int bi[NT]; /// b array
 int ai[NT-1]; /// a array
@@ -64,6 +65,7 @@ int main (int argc, char **argv)
   int count = 0; /// output sample
   double somma = 0; /// output sample
   int expected; /// matlab results
+  int init = 0; // counter to discharge the initial values
 
   // Initialize bi with values written in bi.txt
   int iter_bi = 0; // index for bi
@@ -114,6 +116,9 @@ int main (int argc, char **argv)
   /// get samples and apply filter
   fscanf(fp_in, "%d", &x);
   fscanf(fp_out_m, "%d", &expected);
+
+  // because input is latched
+  /* fprintf(fp_out,"%d\n", 0); */
   do{
     y = myfilter(x);
     somma += pow(y - expected, 2);
@@ -122,7 +127,9 @@ int main (int argc, char **argv)
     fscanf(fp_in, "%d", &x);
     fscanf(fp_out_m, "%d", &expected);
 
-    fprintf(fp_out,"%d\n", y);
+    // do not save the first INIT_LATENCY values
+    if (++init > INIT_LATENCY)
+      fprintf(fp_out,"%d\n", y);
   } while (!feof(fp_in));
 
   printf("fixed-point vs pseudo-fixed-point\nrmsd: %f\n", sqrt(somma / count));

@@ -31,9 +31,7 @@ module tb;
     .CLK(CLK),
     .RST_n(RST_n),
     .VOUT(datamaker_VOUT),
-    .DOUT3k(datamaker_DOUT),
-    .DOUT3k1(datamaker_DOUT),
-    .DOUT3k2(datamaker_DOUT),
+    .DOUT(datamaker_DOUT),
     .B0(B[8:0]),
     .B1(B[17:9]),
     .B2(B[26:18]),
@@ -49,10 +47,8 @@ module tb;
   data_sink datacmp (
     .CLK(CLK),
     .RST_n(RST_n),
-    .VIN(datamaker_VOUT),
-    .DIN3k(filter_DOUT)
-    .DIN3k1(filter_DOUT)
-    .DIN3k2(filter_DOUT)
+    .VIN(filter_VOUT),
+    .DIN(filter_DOUT)
   ); 
 
   // Instantiate the clk_gen module

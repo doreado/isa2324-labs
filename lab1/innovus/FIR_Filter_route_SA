@@ -1,0 +1,101 @@
+*----------------------------------------------------------------------------------------
+*	Innovus 20.11-s130_1 (64bit) 08/05/2020 15:53 (Linux 2.6.32-431.11.2.el6.x86_64)
+*	
+*
+* 	Date & Time:	2023-Nov-20 23:19:39 (2023-Nov-20 22:19:39 GMT)
+*
+*----------------------------------------------------------------------------------------
+*
+*	Design: FIR_Filter
+*
+*	Liberty Libraries used: 
+*	        MyAnView: /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib
+*
+*	Power Domain used: 
+*              Rail:        VDD      Voltage:        1.1 
+*
+*       Power View : MyAnView
+*
+*       User-Defined Activity : N.A.
+*
+*	Switching Activity File used: 
+*	        ../vcd/FIR_Filter_route.vcd
+*                    Vcd Window used(Start Time, Stop Time):   
+*                     Vcd Scale Factor: 1 
+* *                    Design annotation coverage: 0/2891 = 0% 
+*
+*       Hierarchical Global Activity: N.A.
+*
+*       Global Activity: N.A.
+*
+*       Sequential Element Activity: N.A.
+*
+*       Primary Input Activity: 0.200000
+*
+*       Default icg ratio: N.A.
+*
+*       Global Comb ClockGate Ratio: N.A.
+*
+*	Power Units = 1mW
+*
+*	Time Units = 1e-09 secs 
+*
+*       report_power -outfile FIR_Filter_route_SA -sort total
+*
+-----------------------------------------------------------------------------------------
+
+
+Total Power 
+-----------------------------------------------------------------------------------------
+Total Internal Power:        0.62837613 	   53.8897%
+Total Switching Power:       0.45055322 	   38.6395%
+Total Leakage Power:         0.08711231 	    7.4708%
+Total Power:                 1.16604166 
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                        0.1785     0.02639    0.008611      0.2135       18.31 
+Macro                                  0           0           0           0           0 
+IO                                     0           0           0           0           0 
+Combinational                     0.4292      0.3696     0.07827       0.877       75.21 
+Clock (Combinational)           0.001715   0.0006114   1.121e-05    0.002338      0.2005 
+Clock (Sequential)               0.01898       0.054    0.000216      0.0732       6.277 
+-----------------------------------------------------------------------------------------
+Total                             0.6284      0.4506     0.08711       1.166         100 
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                       1.1     0.6284      0.4506     0.08711       1.166         100 
+
+
+Clock                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+CLK                              0.02069     0.05461   0.0002272     0.07553       6.478 
+-----------------------------------------------------------------------------------------
+Total (excluding duplicates)     0.02069     0.05461   0.0002272     0.07553       6.478 
+-----------------------------------------------------------------------------------------
+Clock: CLK
+Clock Period: 0.010000 usec 
+Clock Toggle Rate:   909.0909 Mhz 
+Clock Static Probability:  0.5000
+
+
+
+-----------------------------------------------------------------------------------------
+*	Power Distribution Summary: 
+*                Highest Average Power:      clk_gate_V_reg/latch (CLKGATETST_X8):           0.0732 
+*                Highest Leakage Power:      clk_gate_V_reg/latch (CLKGATETST_X8):         0.000216 
+*          Total Cap:      1.25733e-11 F
+*          Total instances in design:  2503
+*          Total instances in design with no power:     0
+*          Total instances in design with no activity:     0
+*          Total Fillers and Decap:     0
+-----------------------------------------------------------------------------------------
+
