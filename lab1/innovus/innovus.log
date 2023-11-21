@@ -1,0 +1,87 @@
+
+Cadence Innovus(TM) Implementation System.
+Copyright 2020 Cadence Design Systems, Inc. All rights reserved worldwide.
+
+Version:	v20.11-s130_1, built Wed Aug 5 15:53:11 PDT 2020
+Options:	
+Date:		Sun Nov 19 21:01:21 2023
+Host:		isaserver (x86_64 w/Linux 3.10.0-1160.81.1.el7.x86_64) (6cores*6cpus*QEMU Virtual CPU version 2.5+ 16384KB)
+OS:		CentOS Linux release 7.9.2009 (Core)
+
+License:
+		invs	Innovus Implementation System	20.1	checkout succeeded
+		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+Change the soft stacksize limit to 0.2%RAM (64 mbytes). Set global soft_stack_size_limit to change the value.
+
+**INFO:  MMMC transition support version v31-84 
+
+<CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+<CMD> suppressMessage ENCEXT-2799
+<CMD> win
+<CMD> set init_design_netlisttype verilog
+<CMD> set init_design_settop 1
+<CMD> set init_top_cell FIR_Filter
+<CMD> set init_verilog ../netlists/FIR_Filter_adv_1.19ns_postsyn_gating.v
+<CMD> set init_lef_file /eda/dk/nangate45/lef/NangateOpenCellLibrary.lef
+<CMD> set init_gnd_net VSS
+<CMD> set init_pwr_net VDD
+<CMD> set init_mmmc_file mmm_design.tcl
+<CMD> init_design
+#% Begin Load MMMC data ... (date=11/19 21:07:47, mem=570.3M)
+**ERROR: (TCLCMD-989):	cannot open SDC file '../design_compiler_sdc/FIR_Filter_adv_1.19ns_postsyn_gating.sdc' for mode 'SDC_layout'
+<CMD> set init_mmmc_file mmm_design.tcl
+<CMD> init_design
+% Begin Load MMMC data ... (date=11/19 21:08:07, mem=570.5M)
+Extraction setup Started 
+Extraction setup Started 
+**ERROR: (TCLCMD-989):	cannot open SDC file '../design_compiler_sdc/FIR_Filter_adv_1.19ns_postsyn_gating.sdc' for mode 'SDC_layout'
+<CMD> set init_mmmc_file mmm_design.tcl
+<CMD> init_design
+% Begin Load MMMC data ... (date=11/19 21:10:03, mem=570.7M)
+Extraction setup Started 
+Extraction setup Started 
+**ERROR: (TCLCMD-989):	cannot open SDC file '../design_compiler_sdc/FIR_Filter_adv_1.19ns_postsyn_gating.sdc' for mode 'SDC_layout'
+<CMD> set init_mmmc_file mmm_design.tcl
+<CMD> init_design
+% Begin Load MMMC data ... (date=11/19 21:11:15, mem=570.7M)
+Extraction setup Started 
+Extraction setup Started 
+% End Load MMMC data ... (date=11/19 21:11:15, total cpu=0:00:00.1, real=0:00:00.0, peak res=570.7M, current mem=570.7M)
+my_rc
+
+Loading LEF file /eda/dk/nangate45/lef/NangateOpenCellLibrary.lef ...
+Set DBUPerIGU to M2 pitch 380.
+
+viaInitial starts at Sun Nov 19 21:11:15 2023
+viaInitial ends at Sun Nov 19 21:11:15 2023
+
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+Loading view definition file from mmm_design.tcl
+Reading MY_LIBSET timing library '/eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib' ...
+**ERROR: (TECHLIB-1346):	The attribute 'index_1' defined in group 'ecsm_waveform' on line 393863 is not monotonically increasing for values '0.000041' to '0.000037'. This may lead to undesirable analysis results. The attribute will be ignored. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib)
+**ERROR: (TECHLIB-1256):	The ecsm_waveform group 1 is being ignored due to errors in this group. This group will be excluded for any further library checks. Refer to the previous messages issued for ecsm_waveform group 1 to find the details of the issues in this group. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib, Line 393862)
+**ERROR: (TECHLIB-420):	Number of ecsm_waveforms in the 'rise_transition' table on pin ZN of cell OAI222_X2 does not match the number of transition table axis points specified in the template 'Timing_7_7'. Ignoring waveform data. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib, Line 393848)
+**ERROR: (TECHLIB-1346):	The attribute 'index_1' defined in group 'ecsm_waveform' on line 395723 is not monotonically increasing for values '0.000041' to '0.000037'. This may lead to undesirable analysis results. The attribute will be ignored. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib)
+**ERROR: (TECHLIB-1256):	The ecsm_waveform group 1 is being ignored due to errors in this group. This group will be excluded for any further library checks. Refer to the previous messages issued for ecsm_waveform group 1 to find the details of the issues in this group. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib, Line 395722)
+**ERROR: (TECHLIB-420):	Number of ecsm_waveforms in the 'rise_transition' table on pin ZN of cell OAI222_X2 does not match the number of transition table axis points specified in the template 'Timing_7_7'. Ignoring waveform data. (File /eda/dk/nangate45/liberty/NangateOpenCellLibrary_typical_ecsm_nowlm.lib, Line 395708)
+Read 134 cells in library 'NangateOpenCellLibrary' 
+*** End library_loading (cpu=0.03min, real=0.03min, mem=11.0M, fe_cpu=1.39min, fe_real=9.93min, fe_mem=778.4M) ***
+% Begin Load netlist data ... (date=11/19 21:11:17, mem=584.1M)
+*** Begin netlist parsing (mem=778.4M) ***
+Created 134 new cells from 1 timing libraries.
+Reading netlist ...
+Backslashed names will retain backslash and a trailing blank character.
+Reading verilog netlist '../netlists/FIR_Filter_adv_1.19ns_postsyn_gating.v'
+
+*** Memory Usage v#2 (Current mem = 780.355M, initial mem = 272.289M) ***
+*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=780.4M) ***
+% End Load netlist data ... (date=11/19 21:11:18, total cpu=0:00:00.2, real=0:00:00.0, peak res=591.0M, current mem=591.0M)
+**ERROR: (IMPSYC-300):	Cell FIR_Filter not found.
+**ERROR: (IMPVL-904):	Can't set top cell to "FIR_Filter" because it does not exist.  Exiting!
+
+*** Memory Usage v#2 (Current mem = 781.363M, initial mem = 272.289M) ***
+*** Message Summary: 0 warning(s), 12 error(s)
+
+--- Ending "Innovus" (totcpu=0:01:25, real=0:10:05, mem=781.4M) ---
