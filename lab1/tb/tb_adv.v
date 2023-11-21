@@ -38,7 +38,7 @@ module tb;
                                 .B8(B[8]),
                                 .END_SIM(END_SIM_i));
 
-   FIR_FILTER_ADV UUT(.CLK(CLK_i),
+   FIR_Filter_adv UUT(.CLK(CLK_i),
                       .RST_n(RST_n_i),
                       .DIN3k(DIN3k_i),
                       .DIN3k1(DIN3k1_i),
