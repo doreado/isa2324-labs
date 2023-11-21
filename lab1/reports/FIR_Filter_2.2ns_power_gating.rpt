@@ -8,7 +8,7 @@ Report : power
         -analysis_effort low
 Design : FIR_Filter
 Version: S-2021.06-SP4
-Date   : Mon Nov 20 19:11:28 2023
+Date   : Mon Nov 20 17:59:38 2023
 ****************************************
 
 
@@ -34,12 +34,12 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  = 549.2753 uW   (68%)
-  Net Switching Power  = 264.4073 uW   (32%)
+  Cell Internal Power  = 449.3328 uW   (57%)
+  Net Switching Power  = 336.0511 uW   (43%)
                          ---------
-Total Dynamic Power    = 813.6827 uW  (100%)
+Total Dynamic Power    = 785.3839 uW  (100%)
 
-Cell Leakage Power     =  98.1925 uW
+Cell Leakage Power     =  91.5266 uW
 
 
                  Internal         Switching           Leakage            Total
@@ -48,10 +48,10 @@ Power Group      Power            Power               Power              Power  
 io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
-clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register         316.2967           12.8384        8.3442e+03          337.4793  (  37.01%)
+clock_network      4.8107           48.2608           58.3688           53.1298  (   6.06%)
+register         172.8328           12.6455        8.4104e+03          193.8888  (  22.11%)
 sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
-combinational    232.9787          251.5691        8.9848e+04          574.3960  (  62.99%)
+combinational    271.6893          275.1449        8.3058e+04          629.8917  (  71.83%)
 --------------------------------------------------------------------------------------------------
-Total            549.2754 uW       264.4076 uW     9.8192e+04 nW       911.8752 uW
+Total            449.3328 uW       336.0512 uW     9.1527e+04 nW       876.9103 uW
 1

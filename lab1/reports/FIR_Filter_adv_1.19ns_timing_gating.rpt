@@ -1,0 +1,65 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : FIR_Filter_adv
+Version: S-2021.06-SP4
+Date   : Sun Nov 19 11:45:11 2023
+****************************************
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: x_reg_6__3_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: mulres_first_layer_reg_8__2__17_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIR_Filter_adv     5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  x_reg_6__3_/CK (DFFR_X2)                                0.00       0.00 r
+  x_reg_6__3_/Q (DFFR_X2)                                 0.17       0.17 r
+  mult_126_G7_U330/ZN (NAND2_X1)                          0.04       0.22 f
+  mult_126_G7_U332/ZN (NAND2_X1)                          0.04       0.25 r
+  mult_126_G7_U404/ZN (OAI22_X1)                          0.04       0.29 f
+  mult_126_G7_U140/CO (FA_X1)                             0.11       0.40 f
+  mult_126_G7_U135/S (FA_X1)                              0.13       0.53 r
+  mult_126_G7_U134/S (FA_X1)                              0.11       0.65 f
+  mult_126_G7_U355/ZN (NAND2_X1)                          0.04       0.68 r
+  mult_126_G7_U344/ZN (INV_X1)                            0.03       0.71 f
+  mult_126_G7_U351/ZN (AOI21_X1)                          0.04       0.75 r
+  mult_126_G7_U539/ZN (OAI21_X1)                          0.04       0.79 f
+  mult_126_G7_U515/ZN (AOI21_X1)                          0.04       0.83 r
+  mult_126_G7_U503/ZN (OAI21_X1)                          0.03       0.87 f
+  mult_126_G7_U338/ZN (AOI21_X1)                          0.04       0.91 r
+  mult_126_G7_U537/ZN (OAI21_X1)                          0.03       0.94 f
+  mult_126_G7_U536/ZN (AOI21_X1)                          0.04       0.98 r
+  mult_126_G7_U513/ZN (INV_X1)                            0.02       1.01 f
+  mult_126_G7_U478/Z (XOR2_X1)                            0.06       1.07 f
+  mulres_first_layer_reg_8__2__17_/D (DFFR_X1)            0.01       1.08 f
+  data arrival time                                                  1.08
+
+  clock CLK (rise edge)                                   1.19       1.19
+  clock network delay (ideal)                             0.00       1.19
+  clock uncertainty                                      -0.07       1.12
+  mulres_first_layer_reg_8__2__17_/CK (DFFR_X1)           0.00       1.12 r
+  library setup time                                     -0.04       1.08
+  data required time                                                 1.08
+  --------------------------------------------------------------------------
+  data required time                                                 1.08
+  data arrival time                                                 -1.08
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1
