@@ -1,0 +1,7 @@
+netlists/3_fpnew_top_0.15ns_postsyn.v
+
+cvfpu_lite/tb/clk_gen.vhd
+cvfpu_lite/tb/data_gen16.vhd
+cvfpu_lite/tb/data_sink.vhd
+cvfpu_lite/tb/tb_fpnew_top_net.sv
+
