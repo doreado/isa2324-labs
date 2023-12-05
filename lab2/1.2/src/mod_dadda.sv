@@ -5,16 +5,8 @@ module mod_dadda ( input pp_t pp,
                        );
 
     sign_ext_pp_t sign_ext_pp;
-    dots_t dots;
-    bit_dots_t init_dots;
-    // heights retrieved using a script
-    // heights do consider carry generated in that level
-    localparam int       heights[0:2][dots_width - 1:0] = {{2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 7, 5, 5, 3, 4, 2, 3, 1, 2},
-                                                           {3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 2, 3, 1, 2},
-                                                           {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 1, 2}};
-    // height threshold for each level
-    localparam int                  max_heights[0:2] = {4, 3, 2};
-
+    // triangular, extended matrix with rows for sums and carries
+    ext_dots_t dots;
 
     genvar i, j; // row_idx, column_idx
     // Sign extend partial products (pp)
@@ -28,26 +20,26 @@ module mod_dadda ( input pp_t pp,
 
             // The thirteenth element of the first row is the sign,
             // the next 4 rows have not(sign) and the last element has Z
-            assign sign_ext_pp[i][dadda_width] = i == 0 ? signs[i] : i <= 4 ? !signs[i] : 1'bz;
+            assign sign_ext_pp[i][dadda_width] = i == 0 ? signs[i] : i <= 4 ? !signs[i] : 1'bx;
             // The fourteenth element of the first row is the sign
             // the remaining three rows have 1. The two last ones have Z
-            assign sign_ext_pp[i][dadda_width + 1] = i == 0 ? signs[i] : i < 4 ? 1 : 1'bz;
+            assign sign_ext_pp[i][dadda_width + 1] = i == 0 ? signs[i] : i < 4 ? 1 : 1'bx;
             // Only the first element is extended
-            assign sign_ext_pp[i][dadda_width + 2] = i == 0 ? !signs[i] : 1'bz;
+            assign sign_ext_pp[i][dadda_width + 2] = i == 0 ? !signs[i] : 1'bx;
         end
     endgenerate
 
     // Represent sign_extended_pp with the correct shift, adding the rightmost sign bits
     generate
         for (i = 0; i < row_num; i++) begin
-            for (j = 0; j < i * 2; j++) begin
-                // Ensure adding sign bit in the correct position
-                assign dots[i][j] = j == ( i - 1 ) * 2  ? signs[i - 1] : 1'bz;
-            end
+            assign dots[i][( i - 1 ) * 2] = signs[i - 1];
 
             for (j = 0; j < dadda_width + 3; j++) begin
-                // Ensure do not exceed the bounds
-                if (j + (i * 2) <= dots_width - 1) begin
+                if ((j + (i * 2)) >= 15) begin
+                    assign dots[row_num - 1 - i][j + (i * 2)] = sign_ext_pp[i][j];
+                end
+                else begin
+                    // create the triangular share, flipping the lines
                     assign dots[i][j + (i * 2)] = sign_ext_pp[i][j];
                 end
             end
@@ -55,25 +47,62 @@ module mod_dadda ( input pp_t pp,
     endgenerate
 
     // Allocate
+    genvar last;
     generate
         for (j = 0; j < 3; j++) begin
             for(i = 0; i < col_num; i++) begin
                 case (heights[j][i] - max_heights[j])
-                  1: begin
+                  1: begin : one_ha
+                      $info("HA");
 
-                      // HA
+                      $info("layer: %d col: %d", j, i);
+                      HA ha( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
                   end
-                  2: begin
-                      // FA
+                  2: begin : one_fa
+                      $info("FA");
+
+                      $info("layer: %d col: %d", j, i);
+                      FA fa( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_in(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
                   end
                   3: begin
-                      // HA
-                      // FA
+                      $info("HA FA");
+
+                      $info("layer: %d col: %d", j, i);
+
+                      HA ha( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
+
+                      FA fa( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_in(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
                   end
 
                   4: begin
-                      // FA
-                      // FA
+                      $info("FA FA");
+
+                      $info("layer: %d col: %d", j, i);
+
+                      FA fa( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_in(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
+                      FA faa( .a(dots[dot_to_sum(i)][i]),
+                             .b(dots[dot_to_sum(i)][i]),
+                             .c_in(dots[dot_to_sum(i)][i]),
+                             .c_out(dots[first_available(i + 1)][i + 1]),
+                             .sum(dots[first_available(i)][i]));
                   end
 
                   default: ;
