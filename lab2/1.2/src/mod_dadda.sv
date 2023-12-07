@@ -6,7 +6,7 @@ module mod_dadda ( input pp_t pp,
 
     sign_ext_pp_t sign_ext_pp;
     // triangular, extended matrix with rows for sums and carries
-    ext_dots_t dots;
+    dots_t dots;
 
     genvar i, j; // row_idx, column_idx
     // Sign extend partial products (pp)
@@ -32,80 +32,91 @@ module mod_dadda ( input pp_t pp,
     // Represent sign_extended_pp with the correct shift, adding the rightmost sign bits
     generate
         for (i = 0; i < row_num; i++) begin
-            assign dots[i][( i - 1 ) * 2] = signs[i - 1];
+            assign dots[0][i][( i - 1 ) * 2] = signs[i - 1];
 
             for (j = 0; j < dadda_width + 3; j++) begin
                 if ((j + (i * 2)) >= 15) begin
-                    assign dots[row_num - 1 - i][j + (i * 2)] = sign_ext_pp[i][j];
+                    assign dots[0][row_num - 1 - i][j + (i * 2)] = sign_ext_pp[i][j];
                 end
                 else begin
                     // create the triangular share, flipping the lines
-                    assign dots[i][j + (i * 2)] = sign_ext_pp[i][j];
+                    assign dots[0][i][j + (i * 2)] = sign_ext_pp[i][j];
                 end
             end
         end
     endgenerate
 
-    // Allocate
-    genvar last;
+    // Allocate compressors
+    genvar r;
     generate
         for (j = 0; j < 3; j++) begin
-            for(i = 0; i < col_num; i++) begin
+            for(i = 0; i < dots_width; i++) begin : adders_layers
                 case (heights[j][i] - max_heights[j])
                   1: begin : one_ha
-                      $info("HA");
+                      HA ha ( .a(dots[j][0][i]),
+                              .b(dots[j][1][i]),
+                              .c_out(dots[j + 1][0][i + 1]),
+                              .sum(dots[j + 1][0 + carry_offset(j, i)][i]));
 
-                      $info("layer: %d col: %d", j, i);
-                      HA ha( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
+                      // Propagate elements not summed in the next layer
+                      for (r = 1; r < row_num; r++) begin
+                          assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r + 1][i];
+                      end
                   end
+
                   2: begin : one_fa
-                      $info("FA");
+                      FA fa ( .a(dots[j][0][i]),
+                              .b(dots[j][1][i]),
+                              .c_in(dots[j][2][i]),
+                              .c_out(dots[j + 1][0][i + 1]),
+                              .sum(dots[j + 1][0 + carry_offset(j, i)][i]));
 
-                      $info("layer: %d col: %d", j, i);
-                      FA fa( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_in(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
+                      // Propagate elements not summed in the next layer
+                      for (r = 1; r < row_num; r++) begin
+                          assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r + 2][i];
+                      end
                   end
-                  3: begin
-                      $info("HA FA");
+                  3: begin : one_ha_fa
+                      HA ha ( .a(dots[j][0][i]),
+                              .b(dots[j][1][i]),
+                              .c_out(dots[j + 1][0][i + 1]),
+                              .sum(dots[j + 1][0 + carry_offset(j, i)][i]));
 
-                      $info("layer: %d col: %d", j, i);
+                      FA fa ( .a(dots[j][2][i]),
+                              .b(dots[j][3][i]),
+                              .c_in(dots[j][4][i]),
+                              .c_out(dots[j + 1][1][i + 1]),
+                              .sum(dots[j + 1][1 + carry_offset(j, i)][i]));
 
-                      HA ha( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
-
-                      FA fa( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_in(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
-                  end
-
-                  4: begin
-                      $info("FA FA");
-
-                      $info("layer: %d col: %d", j, i);
-
-                      FA fa( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_in(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
-                      FA faa( .a(dots[dot_to_sum(i)][i]),
-                             .b(dots[dot_to_sum(i)][i]),
-                             .c_in(dots[dot_to_sum(i)][i]),
-                             .c_out(dots[first_available(i + 1)][i + 1]),
-                             .sum(dots[first_available(i)][i]));
+                      for (r = 2; r < row_num; r++) begin
+                          assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r + 3][i];
+                      end
                   end
 
-                  default: ;
+                  4: begin: two_fa
+                      FA fa ( .a(dots[j][0][i]),
+                              .b(dots[j][1][i]),
+                              .c_in(dots[j][2][i]),
+                              .c_out(dots[j + 1][0][i + 1]),
+                              .sum(dots[j + 1][0 + carry_offset(j, i)][i]));
+
+                      FA faa ( .a(dots[j][3][i]),
+                               .b(dots[j][4][i]),
+                               .c_in(dots[j][5][i]),
+                               .c_out(dots[j + 1][1][i + 1]),
+                               .sum(dots[j + 1][1 + carry_offset(j, i)][i]));
+
+                      for (r = 2; r < row_num; r++) begin
+                          assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r + 4][i];
+                      end
+                  end
+
+                  default: begin
+                      // it happens only when no compressor are allocated by construction
+                      for (r = 0; r < row_num; r++) begin
+                          assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r][i];
+                      end
+                    end
                 endcase
             end
         end

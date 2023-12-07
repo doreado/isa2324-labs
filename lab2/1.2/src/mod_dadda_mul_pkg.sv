@@ -19,46 +19,23 @@ package mod_dadda_mul_pkg;
     // Reducing the height of Dadda tree implies extending by one additional bit the first row
     typedef logic [dadda_width + 2:0] sign_ext_pp_t[0:row_num - 1];
     typedef logic [0:row_num - 2] signs_t;
-    typedef logic [dots_width - 1:0] dots_t[0:row_num - 1];
-    // consider also sums and carries as part of dots matrix
-    // 1th       2th       3th
-    //  S   C     S   C     S   C
-    // (2 + 2) + (1 + 1) + (1 + 1) = 8
-    typedef logic [dots_width - 1:0] ext_dots_t[0:row_num - 1 + 8];
-    typedef bit [dots_width - 1:0] bit_dots_t[0:row_num - 1];
+    // Four dimensional matrix to represent connections
+    typedef logic [dots_width - 1:0] dots_t[0:3][0:row_num - 1];
 
     // Functions
-    function int count_dots(int col_idx, dots_t dots);
-        automatic int acc = 0;
+    function int carry_offset(int layer, int column);
+        automatic int diff;
 
-        for (int i = 0; i < row_num; i++) begin
-            if (dots[i][col_idx] != 1'bz) begin
-                acc++;
-            end
+        if (column < 1) begin
+            return 0;
         end
 
-        // $display("I've count %0d dots", acc);
-        return acc;
-    endfunction : count_dots
+        diff = heights[layer][column - 1] - max_heights[layer];
 
-    // returns the index of the element in column col_idx
-    // that should be summed in the next compressor allocation
-    function int dot_to_sum(int col_idx);
-        static int last[dots_width - 1: 0] = '{default: 0};
+        if (diff < 1 || diff > 4) begin
+            return 0;
+        end
 
-        last[col_idx] += 1;
-
-        return last[col_idx] - 1;
-    endfunction : dot_to_sum;
-
-    // returns the first available index in which sum and carry out in the
-    // column col_idx bit should be placed when a compressor is allocated
-    function int first_available(int col_idx);
-        static int last[dots_width - 1: 0] = heights[0];
-
-        last[col_idx] += 1;
-
-        return last[col_idx] - 1;
-    endfunction : first_available;
-
+        return diff <= 2 ? 1 : 2;
+    endfunction : carry_offset
 endpackage
