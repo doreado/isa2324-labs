@@ -2,7 +2,7 @@
 
 layers = 4
 dadda_width = 12
-dots_width = 21
+dots_width = 22
 row_num = 6
 width = 21
 
@@ -14,16 +14,13 @@ for i in range(0, row_num):
         if j == (i - 1) * 2:
             dots[i][dots_width - 1 - j] = 1
     for j in range(dadda_width):
-        if i != 5 or j != dadda_width - 1:
-            dots[i][dots_width - 1 - (j + (i * 2))] = 1
+        dots[i][dots_width - 1 - (j + (i * 2))] = 1
 
 # add sign extension
-for i in range(0, row_num - 1):
+for i in range(row_num):
     for j in range(2):
         dots[i][dots_width - 1 - (dadda_width + j + (i * 2))] = 1
 dots[0][dots_width - 1 - (dadda_width + 2)] = 1
-dots[4][dots_width - 1] = 0
-dots[4][0] = 1
 
 for i in range(row_num):
     print(dots[i])

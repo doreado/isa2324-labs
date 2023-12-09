@@ -19,11 +19,11 @@ module mod_dadda ( input pp_t pp,
             end
 
             // The thirteenth element of the first row is the sign,
-            // the next 4 rows have not(sign) and the last element has Z
+            // the next 4 rows have not(sign) and the last element has X
             assign sign_ext_pp[i][dadda_width] = i == 0 ? signs[i] : i <= 4 ? !signs[i] : 1'bx;
             // The fourteenth element of the first row is the sign
-            // the remaining three rows have 1. The two last ones have Z
-            assign sign_ext_pp[i][dadda_width + 1] = i == 0 ? signs[i] : i < 4 ? 1 : 1'bx;
+            // the remaining three rows have 1. The last one has X
+            assign sign_ext_pp[i][dadda_width + 1] = i == 0 ? signs[i] : i <= 4 ? 1 : 1'bx;
             // Only the first element is extended
             assign sign_ext_pp[i][dadda_width + 2] = i == 0 ? !signs[i] : 1'bx;
         end

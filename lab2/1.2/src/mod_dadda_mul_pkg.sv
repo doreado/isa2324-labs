@@ -4,13 +4,13 @@ package mod_dadda_mul_pkg;
     localparam int dadda_width = 12;
     localparam int row_num = 6;
     localparam int col_num = 21;
-    localparam int dots_width = 21;
+    localparam int dots_width = 22;
 
     // heights retrieved using a script
     // heights do consider carry generated in that level
-    localparam int       heights[0:2][dots_width - 1:0] = {{2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 7, 5, 5, 3, 4, 2, 3, 1, 2},
-                                                           {3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 2, 3, 1, 2},
-                                                           {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 1, 2}};
+    localparam int       heights[0:2][dots_width - 1:0] = {{2, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 7, 5, 5, 3, 4, 2, 3, 1, 2},
+                                                           {2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 2, 3, 1, 2},
+                                                           {3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 1, 2}};
     // height threshold for each level
     localparam int       max_heights[0:2] = {4, 3, 2};
 
