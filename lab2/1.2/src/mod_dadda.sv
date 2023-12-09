@@ -1,12 +1,14 @@
 import mod_dadda_mul_pkg::*;
 
 module mod_dadda ( input pp_t pp,
-                   input signs_t signs
-                       );
+                   input  signs_t signs,
+                   output dots_t a,
+                   output dots_t b
+                   );
 
     sign_ext_pp_t sign_ext_pp;
     // triangular, extended matrix with rows for sums and carries
-    dots_t dots;
+    dots_matrices_t dots;
 
     genvar i, j; // row_idx, column_idx
     // Sign extend partial products (pp)
@@ -45,6 +47,9 @@ module mod_dadda ( input pp_t pp,
             end
         end
     endgenerate
+
+    // Set to zero the second element of the second row in the first layer
+    assign dots[0][1][1] = 0;
 
     // Allocate compressors
     genvar r;
@@ -121,4 +126,8 @@ module mod_dadda ( input pp_t pp,
             end
         end
     endgenerate
+
+    // Assign first two rows to the outputs
+    assign a = dots[layers_num - 1][0];
+    assign b = dots[layers_num - 1][1];
 endmodule

@@ -1,10 +1,12 @@
 package mod_dadda_mul_pkg;
 
     // Constants
+    localparam int bit_num = 11;
     localparam int dadda_width = 12;
     localparam int row_num = 6;
     localparam int col_num = 21;
     localparam int dots_width = 22;
+    localparam int layers_num = 4;
 
     // heights retrieved using a script
     // heights do consider carry generated in that level
@@ -20,7 +22,11 @@ package mod_dadda_mul_pkg;
     typedef logic [dadda_width + 2:0] sign_ext_pp_t[0:row_num - 1];
     typedef logic [0:row_num - 2] signs_t;
     // Four dimensional matrix to represent connections
-    typedef logic [dots_width - 1:0] dots_t[0:3][0:row_num - 1];
+    typedef logic [dots_width - 1:0] dots_matrices_t[0:layers_num - 1][0:row_num - 1];
+    // One dots row
+    typedef logic [dots_width - 1:0] dots_t;
+    typedef logic [bit_num * 2: 0] p_t ;
+
 
     // Functions
     function int carry_offset(int layer, int column);

@@ -3,9 +3,10 @@ import mod_dadda_mul_pkg::*;
 module tb_mod_dadda ();
 
     pp_t pp;
+    dots_t a, b;
     signs_t signs;
 
-    mod_dadda dut (.pp, .signs);
+    mod_dadda dut (.pp, .signs, .a, .b);
 
     initial begin
         // Initialize pp with ones using nested loops
@@ -15,7 +16,6 @@ module tb_mod_dadda ();
             end
         end
 
-        // Initialize signs with ones using nested loops
         for (int i = 0; i < dadda_width; i++) begin
             signs[i] = 0'b1;
         end
