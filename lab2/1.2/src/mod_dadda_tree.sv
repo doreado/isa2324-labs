@@ -1,13 +1,13 @@
 import mod_dadda_mul_pkg::*;
 
-module mod_dadda ( input pp_t pp,
-                   input  signs_t signs,
-                   output dots_t a,
-                   output dots_t b
-                   );
+module mod_dadda_tree ( input pp_t pp,
+                        input  signs_t signs,
+                        output dots_t a,
+                        output dots_t b
+                        );
 
     sign_ext_pp_t sign_ext_pp;
-    // triangular, extended matrix with rows for sums and carries
+    // holds all connections
     dots_matrices_t dots;
 
     genvar i, j; // row_idx, column_idx
@@ -34,7 +34,7 @@ module mod_dadda ( input pp_t pp,
     // Represent sign_extended_pp with the correct shift, adding the rightmost sign bits
     generate
         for (i = 0; i < row_num; i++) begin
-            assign dots[0][i][( i - 1 ) * 2] = signs[i - 1];
+            assign dots[0][i][(i - 1) * 2] = signs[i - 1];
 
             for (j = 0; j < dadda_width + 3; j++) begin
                 if ((j + (i * 2)) >= 15) begin
@@ -117,7 +117,7 @@ module mod_dadda ( input pp_t pp,
                   end
 
                   default: begin
-                      // it happens only when no compressor are allocated by construction
+                      // it happens only when no compressors are allocated by construction
                       for (r = 0; r < row_num; r++) begin
                           assign dots[j + 1][r + carry_offset(j, i)][i] = dots[j][r][i];
                       end
