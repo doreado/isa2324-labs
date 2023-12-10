@@ -29,7 +29,7 @@ package mod_dadda_mul_pkg;
 
 
     // Functions
-    function int carry_offset(int layer, int column);
+    function automatic int carry_offset(int layer, int column);
         automatic int diff;
 
         if (column < 1) begin
