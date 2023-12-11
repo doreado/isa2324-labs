@@ -3,7 +3,7 @@ module tb_MBE;
   parameter NBIT = 11;
   reg [10:0] a;
   reg [10:0] b;
-  wire [21:0] result;
+  reg [21:0] result;
   reg [21:0] expected_result;
 
   MBE uut (
@@ -16,31 +16,18 @@ module tb_MBE;
   always #5 clk = ~clk;
 
   initial begin
-
-    a = 11'b11011011011;
-    b = 11'b00000000001;
-    expected_result = a * b;
-    
-    #10 a = 11'b11011011011;
-    b = 11'b10101010101;
-    expected_result = a * b;
-
-    #10 a = 11'b10101010101;
-    b = 11'b11011011011;
-    expected_result = a * b;
-
-    #10 a = 11'b01101101100;
-    b = 11'b00110011001;
-    expected_result = a * b;
-
-    #10 $stop;
+    for (a = 11'b00000000000; a <= 11'b11111111111; a = a + 1) begin
+      for (b = 11'b00000000000; b <= 11'b11111111111; b = b + 1) begin
+         expected_result = a * b;
+         #10;
+     end
+    end
   end
 
   
   always @(posedge clk) begin
     if (result !== expected_result) begin
-      $display("Mismatch: result=%0d, expected=%0d", result, expected_result);
-      $stop;
+      $display("Mismatch: a=%0d, b=%0d, result=%0d, expected=%0d", a, b, result, expected_result);
     end
   end
 
