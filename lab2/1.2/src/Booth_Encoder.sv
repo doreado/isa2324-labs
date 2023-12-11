@@ -2,7 +2,7 @@ import mod_dadda_mul_pkg::*;
 module Booth_Encoder #(parameter NBIT = 11) (
     input wire [NBIT-1:0] A,
     input wire [NBIT-1:0] B,
-    output reg [5:0] S,
+    output signs_t S,
     output pp_t partial_products
 );
     reg [2:0] B_temp[5:0];
