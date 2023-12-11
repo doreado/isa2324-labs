@@ -26,7 +26,7 @@ module Booth_Encoder #(parameter NBIT = 11) (
                 3'b100:  partial_products[i] = ~{A, 1'b0};
                 3'b101:  partial_products[i] = ~{1'b0, A};
                 3'b110:  partial_products[i] = ~{1'b0, A};
-                3'b111:  partial_products[i] = {NBIT{1'b1}};
+                3'b111:  partial_products[i] = {NBIT + 1 {1'b1}};
                 default:  partial_products[i] = {NBIT{1'b0}};
             endcase;
             S[i] = B_temp [i][2];
