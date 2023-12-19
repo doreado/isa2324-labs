@@ -40,7 +40,7 @@ begin  -- beh
           readline(fp_in, line_in);
           read(line_in, x);
 
-          assert DIN /= x report "Results are different: index=" & integer'image(cnt) & " c=" & integer'image(to_integer(signed(x))) & " HDL=" & integer'image(to_integer(signed(x))) severity error; 
+          assert DIN = x report "Results are different: index=" & integer'image(cnt) & " c=" & integer'image(to_integer(signed(x))) & " HDL=" & integer'image(to_integer(signed(DIN))) severity error; 
         else
           assert VIN = '0' report "Reached EOF in results_c.txt" severity error;
         end if;

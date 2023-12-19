@@ -20,8 +20,8 @@ end entity data_gen16;
 
 architecture beh of data_gen16 is
 
-  --constant tco : time := 0.218 ns;
-  constant tco : time := 0.218 ns;
+  --constant tco : time := 0.260 ns;
+  constant tco : time := 0.260 ns;
 
   --type tval_t is array (0 to 5) of std_logic_vector(15 downto 0);
   --constant ctvalA : tval_t := (

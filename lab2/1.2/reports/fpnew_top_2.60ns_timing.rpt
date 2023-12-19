@@ -1,0 +1,107 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : fpnew_top
+Version: S-2021.06-SP4
+Date   : Sat Dec 16 20:45:09 2023
+****************************************
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_inp_pipe_operands_q_reg_1__0__0_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_mid_pipe_final_sign_q_reg_1_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  fpnew_top          5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_inp_pipe_operands_q_reg_1__0__0_/CK (DFFR_X1)
+                                                          0.00       0.00 r
+  gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_inp_pipe_operands_q_reg_1__0__0_/Q (DFFR_X1)
+                                                          0.11       0.11 r
+  U2793/ZN (OR2_X1)                                       0.04       0.14 r
+  U2795/ZN (NOR2_X1)                                      0.02       0.17 f
+  U1830/ZN (AND2_X1)                                      0.04       0.21 f
+  U1832/ZN (NOR4_X1)                                      0.09       0.30 r
+  U2857/ZN (NOR2_X1)                                      0.03       0.33 f
+  U2906/ZN (INV_X1)                                       0.03       0.36 r
+  U2907/ZN (NAND2_X1)                                     0.03       0.38 f
+  U1980/ZN (XNOR2_X1)                                     0.05       0.44 f
+  U1449/ZN (OR2_X1)                                       0.06       0.50 f
+  U1650/ZN (NAND2_X1)                                     0.04       0.54 r
+  U1916/ZN (OAI21_X1)                                     0.04       0.58 f
+  U1976/ZN (NAND2_X1)                                     0.03       0.61 r
+  U2921/ZN (NAND2_X1)                                     0.03       0.64 f
+  U1466/ZN (NAND2_X1)                                     0.03       0.67 r
+  U1945/ZN (NAND2_X1)                                     0.03       0.70 f
+  U1947/ZN (NAND3_X1)                                     0.03       0.74 r
+  U2934/ZN (NAND2_X1)                                     0.03       0.76 f
+  U2935/ZN (NAND2_X1)                                     0.03       0.79 r
+  U3264/S (FA_X1)                                         0.12       0.91 f
+  U3273/ZN (AND2_X1)                                      0.04       0.95 f
+  U1875/ZN (OR2_X1)                                       0.06       1.01 f
+  U1989/ZN (NAND2_X1)                                     0.03       1.03 r
+  U3277/ZN (NAND2_X1)                                     0.03       1.07 f
+  U3278/Z (BUF_X2)                                        0.05       1.12 f
+  U3347/ZN (OR2_X1)                                       0.06       1.18 f
+  U3348/ZN (OAI211_X1)                                    0.04       1.22 r
+  U3349/ZN (INV_X1)                                       0.02       1.24 f
+  U1962/ZN (AND2_X1)                                      0.04       1.28 f
+  U3399/ZN (NAND2_X1)                                     0.03       1.31 r
+  U1984/ZN (OAI21_X1)                                     0.03       1.34 f
+  U1862/Z (MUX2_X1)                                       0.07       1.41 f
+  U3439/ZN (NAND2_X1)                                     0.03       1.44 r
+  U3440/ZN (XNOR2_X1)                                     0.04       1.49 f
+  U1475/ZN (OR2_X1)                                       0.07       1.56 f
+  U3441/ZN (NAND2_X1)                                     0.04       1.60 r
+  U3514/ZN (OAI21_X1)                                     0.03       1.63 f
+  U3517/ZN (AOI21_X1)                                     0.05       1.68 r
+  U3526/ZN (OAI21_X1)                                     0.04       1.71 f
+  U3527/ZN (AOI21_X1)                                     0.06       1.78 r
+  U3533/ZN (OAI21_X1)                                     0.05       1.82 f
+  U1469/ZN (NAND2_X1)                                     0.03       1.86 r
+  U1471/ZN (NAND3_X1)                                     0.05       1.91 f
+  U1888/ZN (NAND2_X1)                                     0.04       1.94 r
+  U1890/ZN (NAND3_X1)                                     0.04       1.98 f
+  U1848/ZN (NAND2_X1)                                     0.03       2.02 r
+  U1851/ZN (NAND3_X1)                                     0.04       2.06 f
+  U3534/CO (FA_X1)                                        0.09       2.15 f
+  U3538/ZN (NAND2_X1)                                     0.03       2.18 r
+  U3539/ZN (NAND2_X1)                                     0.03       2.21 f
+  U3934/CO (FA_X1)                                        0.12       2.33 f
+  U1857/ZN (NAND2_X1)                                     0.04       2.37 r
+  U1966/ZN (NAND2_X1)                                     0.04       2.41 f
+  U3656/Z (BUF_X2)                                        0.05       2.46 f
+  U3868/ZN (INV_X1)                                       0.03       2.49 r
+  U3869/ZN (NAND2_X1)                                     0.03       2.52 f
+  U3871/ZN (OAI211_X1)                                    0.04       2.55 r
+  gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_mid_pipe_final_sign_q_reg_1_/D (DFFR_X1)
+                                                          0.01       2.56 r
+  data arrival time                                                  2.56
+
+  clock CLK (rise edge)                                   2.60       2.60
+  clock network delay (ideal)                             0.00       2.60
+  gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_mid_pipe_final_sign_q_reg_1_/CK (DFFR_X1)
+                                                          0.00       2.60 r
+  library setup time                                     -0.04       2.56
+  data required time                                                 2.56
+  --------------------------------------------------------------------------
+  data required time                                                 2.56
+  data arrival time                                                 -2.56
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1

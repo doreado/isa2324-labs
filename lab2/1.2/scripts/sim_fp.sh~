@@ -1,30 +1,11 @@
 #!/usr/bin/env sh
 
 SIM_DIR='./sim'
-TB_DIR='./tb'
-CLK="2.60"
-tco="0.260"
+TB_DIR='./cvfpu_lite/tb'
 
-if [ $# -eq 0 ]; then
-    COMPONENTS_FILE=$SIM_DIR"/components_post"
-    SIM_CMD="vsim -c \
-            -t 10ps  \
-            -voptargs=+acc \
-            -L /eda/dk/nangate45/verilog/qsim2020.4 \
-            -sdftyp /tb_fpnew_top/UUT=../sdf/fpnew_top_postsyn.sdf \
-            work.tb_fpnew_top"
-elif [ $# -eq 1 ] && [ $1 == "1" ]; then
-    COMPONENTS_FILE=$SIM_DIR"/components_MBE"
-    SIM_CMD="vsim -c \
-            -t 10ps  \
-            -voptargs=+acc \
-            work.tb_MBE"
-else
-    echo "Usage: no args for post-synth, '1' for MBE multiplier simulation" 
-fi
-
-sed -i "s/\(^.*constant Ts : time := \).*$/\1"$CLK" ns;/" cvfpu_lite/tb/clk_gen.vhd
-sed -i "s/\(^.*constant tco : time := \).*$/\1"$tco" ns;/" cvfpu_lite/tb/data_gen16.vhd
+echo "[INFO] Compiling default design."
+COMPONENTS_FILE=$SIM_DIR'/prj.txt'
+SIM_CMD="vsim -c -t 10ps -voptargs=+acc work.tb_fpnew_top"
 
 echo "[INFO] Starting Compilation."
 echo "[INFO] Moving into simulation directory"
@@ -84,6 +65,6 @@ while IFS= read -r line || [ -n "$line" ]; do
     fi
 done < "$COMPONENTS_FILE"
 
-cd $SIM_DIR
-$SIM_CMD
-rm -rf ./work
+    cd $SIM_DIR
+    $SIM_CMD
+    rm -rf ./work
