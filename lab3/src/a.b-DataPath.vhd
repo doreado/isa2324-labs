@@ -26,7 +26,8 @@ entity DATAPATH is
         -- forwarding unit signals
         MUX_FWD_MEM_LMD_SEL: in std_logic;
         MUX_FWD_EX_LMD_SEL: in std_logic;
-        MUX_FWD_BZ_SEL: in std_logic_vector(1 downto 0);
+        MUX_FWD_BZA_SEL: in std_logic_vector(1 downto 0);
+        MUX_FWD_BZB_SEL: in std_logic_vector(1 downto 0);
         MUX_A_SEL    : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
         MUX_B_SEL    : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
         dp_to_fu     : out dp_to_fu_t;
@@ -112,13 +113,14 @@ architecture RTL of DATAPATH is
     signal A         : data_t;
     signal B         : data_t;
     signal IMM       : data_t;
+    signal target_addr : pc_t;
     signal NPC_ID    : pc_t;
     signal RD_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal MUX_J_OUT : data_t;
     signal MUX_R_OUT : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RS_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RT_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
-    signal A_EQ_ZERO : std_logic;
+    signal a_gte_b : std_logic;
 
     ---------------------------- [EX] STAGE
     signal ALU_IN_1    : data_t;
@@ -130,7 +132,8 @@ architecture RTL of DATAPATH is
     signal B_TAKEN     : std_logic;
     signal NPC_EX      : pc_t;
     signal RD_EX       : std_logic_vector(INS_R1_SIZE - 1 downto 0);
-    signal MUX_FWD_BZ_OUT : data_t;
+    signal mux_fwd_cmp_a_out : data_t;
+    signal mux_fwd_cmp_b_out : data_t;
 
     ---------------------------- [ME] STAGE
     signal MUX_COND_OUT   : pc_t;
@@ -191,17 +194,6 @@ begin
                 ALU_OUT_REG     when MUX_B_SEL = "10" else -- from exe
                 MUX_LMD_OUT     when MUX_B_SEL = "11"; -- from mem
 
-    -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
-    MUX_COND_OUT <= pc_t(ALU_OUT(PC_SIZE - 1 downto 0)) when
-                    -- J-TYPE instructions
-                    ((CW.execute.MUX_COND_SEL = "11") OR 
-                    -- Branch zero and zero detected
-                    ((CW.execute.MUX_COND_SEL = "01") AND (A_EQ_ZERO = '1')) OR
-                    -- Branch not zero and zero not detected
-                    ((CW.execute.MUX_COND_SEL = "10") AND (A_EQ_ZERO = '0'))) else
-                    -- All other I/R TYPE instructions
-                    (PC + 4);
-
     -- MUX_LMD: RF data write input (0: LMD, 1: ALU_OUT)
     MUX_LMD_OUT <= LMD when CW.wb.MUX_LMD_SEL = "00" else
         ALU_OUT_REG_ME when CW.wb.MUX_LMD_SEL = "01" else
@@ -217,12 +209,34 @@ begin
     MUX_FWD_EX_LMD_OUT <= std_logic_vector(B) when MUX_FWD_EX_LMD_SEL = '0' else
         MUX_LMD_OUT;
 
-    ---------------------------- BRANCH DETECTORS
-    MUX_FWD_BZ_OUT <= A when MUX_FWD_BZ_SEL = "00" else
-                      ALU_OUT_REG when MUX_FWD_BZ_SEL = "10" else  -- from the exe
-                      MUX_LMD_OUT when MUX_FWD_BZ_SEL = "11";      -- from mem
-    -- A_EQ_ZERO: zero detector for A register; 1 if it's all zeroes, 0 otherwise
-    A_EQ_ZERO <= '1' when to_integer(unsigned(MUX_FWD_BZ_OUT)) = 0 else '0';
+    ---------------------------- BRANCH COMPARATOR
+    -- Forwarding connections
+    mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_BZA_SEL = "00" else
+                      ALU_OUT_REG when MUX_FWD_BZA_SEL = "10" else  -- from the exe
+                      MUX_LMD_OUT when MUX_FWD_BZA_SEL = "11";      -- from mem
+    mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_BZB_SEL = "00" else
+                      ALU_OUT_REG when MUX_FWD_BZB_SEL = "10" else  -- from the exe
+                      MUX_LMD_OUT when MUX_FWD_BZB_SEL = "11";      -- from mem
+    -- Branch Comparator
+    a_gte_b <= '1' when
+                        (cw.decode.cmp_sel = '0' and 
+                         unsigned(mux_fwd_cmp_a_out) >= unsigned(mux_fwd_cmp_b_out)) or
+                        (cw.decode.cmp_sel = '1' and
+                         signed(mux_fwd_cmp_a_out) >= signed(mux_fwd_cmp_b_out))  else 
+                 '0';
+
+    ---------------------------- NEXT PC GENERATION
+    -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
+    -- TODO: evaluate if MUX_J_OUT is appropriate (maybe taking the immediate directly from IR is better)
+    target_addr <= unsigned(RF_OUT_1) + unsigned(MUX_J_OUT) when cw.decode.is_jalr = '1' else
+                       PC + shift_left(unsigned(MUX_J_OUT), 1);
+
+    MUX_COND_OUT    <= pc_t(target_addr) when -- J-TYPE instructions
+                       ((CW.decode.MUX_COND_SEL = "11") or -- Branch zero and zero detected
+                        ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- Branch not zero and zero not detected
+                        ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else
+                       -- All other I/R TYPE instructions
+                       (PC + 4);
 
     ---------------------------- FORWARDING UNIT
     dp_to_fu <= (
@@ -249,7 +263,7 @@ begin
     -- Component Instantiation
     ----------------------------------------------------------------
 
-    B_TAKEN <= '1' when ((CW.execute.MUX_COND_SEL = "01") AND (A_EQ_ZERO = '1')) OR ((CW.execute.MUX_COND_SEL = "10") AND (A_EQ_ZERO = '0')) else '0';
+    B_TAKEN <= '1' when ((CW.decode.MUX_COND_SEL = "01") AND (a_gte_b = '1')) OR ((CW.decode.MUX_COND_SEL = "10") AND (a_gte_b = '0')) else '0';
 
     RF_i : REGISTER_FILE
     generic map(
