@@ -62,7 +62,8 @@ architecture RTL of DLX is
             SECW                : in stage_enable_t;
             MUX_FWD_MEM_LMD_SEL : out std_logic;
             MUX_FWD_EX_LMD_SEL  : out std_logic;
-            MUX_FWD_BZ_SEL      : out std_logic_vector(1 downto 0);
+            MUX_FWD_CMP_A_SEL   : out std_logic_vector(1 downto 0);
+            MUX_FWD_CMP_B_SEL   : out std_logic_vector(1 downto 0);
             MUX_A_SEL           : out std_logic_vector(1 downto 0);
             MUX_B_SEL           : out std_logic_vector(1 downto 0)
         );
@@ -96,8 +97,8 @@ architecture RTL of DLX is
             MUX_B_SEL           : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
             MUX_FWD_MEM_LMD_SEL : in std_logic;
             MUX_FWD_EX_LMD_SEL  : in std_logic;
-            MUX_FWD_BZA_SEL      : in std_logic_vector(1 downto 0);
-            MUX_FWD_BZB_SEL      : in std_logic_vector(1 downto 0);
+            MUX_FWD_CMP_A_SEL   : in std_logic_vector(1 downto 0);
+            MUX_FWD_CMP_B_SEL   : in std_logic_vector(1 downto 0);
             dp_to_fu            : out dp_to_fu_t;
             dp_to_hu            : out dp_to_hu_t;
             OUT_CW              : out cw_from_mem;
@@ -124,8 +125,8 @@ architecture RTL of DLX is
     signal cu_to_fu            : cu_to_fu_t;
     signal MUX_FWD_MEM_LMD_SEL : std_logic;
     signal MUX_FWD_EX_LMD_SEL  : std_logic;
-    signal MUX_FWD_BZA_SEL      : std_logic_vector(1 downto 0);
-    signal MUX_FWD_BZB_SEL      : std_logic_vector(1 downto 0);
+    signal MUX_FWD_CMP_A_SEL   : std_logic_vector(1 downto 0);
+    signal MUX_FWD_CMP_B_SEL   : std_logic_vector(1 downto 0);
     signal MUX_A_SEL           : std_logic_vector(1 downto 0);
     signal MUX_B_SEL           : std_logic_vector(1 downto 0);
     signal dp_to_hu            : dp_to_hu_t;
@@ -160,7 +161,8 @@ begin
             dp_to_fu            => dp_to_fu,
             MUX_FWD_MEM_LMD_SEL => MUX_FWD_MEM_LMD_SEL,
             MUX_FWD_EX_LMD_SEL  => MUX_FWD_EX_LMD_SEL,
-            MUX_FWD_BZ_SEL      => MUX_FWD_BZA_SEL,
+            MUX_FWD_CMP_A_SEL   => MUX_FWD_CMP_A_SEL,
+            MUX_FWD_CMP_B_SEL   => MUX_FWD_CMP_B_SEL,
             MUX_A_SEL           => MUX_A_SEL,
             MUX_B_SEL           => MUX_B_SEL);
 
@@ -189,8 +191,8 @@ begin
             OUT_CW              => cw_from,
             MUX_FWD_MEM_LMD_SEL => MUX_FWD_MEM_LMD_SEL,
             MUX_FWD_EX_LMD_SEL  => MUX_FWD_EX_LMD_SEL,
-            MUX_FWD_BZA_SEL      => MUX_FWD_BZA_SEL,
-            MUX_FWD_BZB_SEL      => MUX_FWD_BZB_SEL,
+            MUX_FWD_CMP_A_SEL   => MUX_FWD_CMP_A_SEL,
+            MUX_FWD_CMP_B_SEL   => MUX_FWD_CMP_B_SEL,
             MUX_A_SEL           => MUX_A_SEL,
             MUX_B_SEL           => MUX_B_SEL,
             dp_to_fu            => dp_to_fu,

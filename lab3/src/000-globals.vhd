@@ -166,6 +166,8 @@ package myTypes is
     pure function to_data(arg : pc_t) return data_t;
 
     type dp_to_fu_t is record
+        rs1_F     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
+        rs2_F     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
         RD_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
         RD_EX     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
         RD_MEM    : std_logic_vector(INS_R1_SIZE - 1 downto 0);

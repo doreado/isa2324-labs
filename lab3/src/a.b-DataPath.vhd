@@ -26,8 +26,8 @@ entity DATAPATH is
         -- forwarding unit signals
         MUX_FWD_MEM_LMD_SEL: in std_logic;
         MUX_FWD_EX_LMD_SEL: in std_logic;
-        MUX_FWD_BZA_SEL: in std_logic_vector(1 downto 0);
-        MUX_FWD_BZB_SEL: in std_logic_vector(1 downto 0);
+        MUX_FWD_CMP_A_SEL: in std_logic_vector(1 downto 0);
+        MUX_FWD_CMP_B_SEL: in std_logic_vector(1 downto 0);
         MUX_A_SEL    : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
         MUX_B_SEL    : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
         dp_to_fu     : out dp_to_fu_t;
@@ -211,12 +211,12 @@ begin
 
     ---------------------------- BRANCH COMPARATOR
     -- Forwarding connections
-    mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_BZA_SEL = "00" else
-                      ALU_OUT_REG when MUX_FWD_BZA_SEL = "10" else  -- from the exe
-                      MUX_LMD_OUT when MUX_FWD_BZA_SEL = "11";      -- from mem
-    mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_BZB_SEL = "00" else
-                      ALU_OUT_REG when MUX_FWD_BZB_SEL = "10" else  -- from the exe
-                      MUX_LMD_OUT when MUX_FWD_BZB_SEL = "11";      -- from mem
+    mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_CMP_A_SEL = "00" else
+                      ALU_OUT_REG when MUX_FWD_CMP_A_SEL = "10" else  -- from the exe
+                      MUX_LMD_OUT when MUX_FWD_CMP_A_SEL = "11";      -- from mem
+    mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_CMP_B_SEL = "00" else
+                      ALU_OUT_REG when MUX_FWD_CMP_B_SEL = "10" else  -- from the exe
+                      MUX_LMD_OUT when MUX_FWD_CMP_B_SEL = "11";      -- from mem
     -- Branch Comparator
     a_gte_b <= '1' when
                         (cw.decode.cmp_sel = '0' and 
@@ -240,6 +240,8 @@ begin
 
     ---------------------------- FORWARDING UNIT
     dp_to_fu <= (
+        rs1_f => INS_RS1,
+        rs2_f => INS_RS2,
         RD_ID => RD_ID,
         RS_ID => RS_ID,
         RT_ID => RT_ID,
