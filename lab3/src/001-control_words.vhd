@@ -66,848 +66,316 @@ package control_words is
 
     -- ADDI
     constant ADDI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "01"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '1',
+            MUX_LMD_SEL => "01"
         )
     );
 
-    -- ADDUI
-    constant ADDUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
+    -- auipc: pc + {imm, 12'b0}
+    constant AUIPC : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "01"
         ),
-        execute        => (
-        ALU_OP         => ALU_ADDu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SUBI
-    constant SUBI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sub,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SUBUI
-    constant SUBUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => ALU_SUBu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- ANDI
-    constant ANDI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_and,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- ORI
-    constant ORI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_or,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '1',
+            MUX_LMD_SEL => "01"
         )
     );
 
     -- SW
     constant SW_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "01"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '1',
-        DRAM_READNOTWRITE => '0'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '1',
+            DRAM_READNOTWRITE => '0'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
         )
     );
 
     -- LW
     constant LW_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "01"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '1',
-        DRAM_ENABLE       => '1',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '1',
+            DRAM_ENABLE       => '1',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "00"
+        wb      => (
+            RF_WR       => '1',
+            MUX_LMD_SEL => "00"
         )
     );
-
-    -- XORI
-    constant XORI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_xor,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SLLI
-    constant SLLI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sll,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SRLI
-    constant SRLI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_srl,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SEQI
-    constant SEQI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_seq,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SNEI
-    constant SNEI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sne,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SLTI
-    constant SLTI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_slt,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SGTI
-    constant SGTI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sgt,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SLEI
-    constant SLEI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sle,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SGEI
-    constant SGEI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sge,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SLTUI
-    constant SLTUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sltu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SGTUI
-    constant SGTUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sgtu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SLEUI
-    constant SLEUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sleu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- SGEUI
-    constant SGEUI_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
-        ),
-        execute        => (
-        ALU_OP         => alu_sgeu,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
-        )
-    );
-    ---------------------------- N TYPE 
 
     -- NOP
     constant NOP_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "01"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "01"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
         )
     );
-
-    ---------------------------- R TYPE 
 
     -- R TYPE
     constant RTYPE_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "00"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '0'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '0'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '1',
+            MUX_LMD_SEL => "01"
         )
     );
 
-    ---------------------------- J TYPE 
-
     -- J
     constant J_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "11",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '1',
-        MUX_R_SEL  => "00"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "11",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '1',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "00"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "00"
         )
     );
 
     -- JAL
     constant JAL_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => uj_imm,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "11",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '1',
-        MUX_R_SEL  => "10"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => uj_imm,
+            is_jalr      => '0',
+            MUX_COND_SEL => "11",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '1',
+            MUX_R_SEL    => "10"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '1',
-        MUX_LMD_SEL => "10"
+        wb      => (
+            RF_WR       => '1',
+            MUX_LMD_SEL => "10"
         )
     );
 
     -- JALR
-        constant JALR_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => i_imm,
-        is_jalr    => '1',
-        MUX_COND_SEL => "11",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '1',
-        MUX_R_SEL  => "00"
+    constant JALR_CW : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => i_imm,
+            is_jalr      => '1',
+            MUX_COND_SEL => "11",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '1',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '0'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '1',
+            MUX_B_SEL => '0'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
         )
     );
 
-    -- JR
-        constant JR_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "11",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '1',
-        MUX_R_SEL  => "00"
-        ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '1',
-        MUX_B_SEL      => '0'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- BEQZ
+    -- BGE
     constant BGE_CW : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '1',
+            imm_sel      => sb_imm,
+            is_jalr      => '0',
+            MUX_COND_SEL => "01",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
+        ),
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1'
+        ),
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
+        ),
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
+        )
+    );
+
+    -- BGEU
+    constant BGEU_CW : cw_t := (
         decode     => (
         RF_RESET   => '0',
         RF_ENABLE  => '1',
@@ -917,7 +385,7 @@ package control_words is
         imm_sel    => sb_imm,
         is_jalr    => '0',
         MUX_COND_SEL   => "01",
-        MUX_SIGNED => '1',
+        MUX_SIGNED => '0',
         MUX_J_SEL  => '0',
         MUX_R_SEL  => "00"
         ),
@@ -937,64 +405,65 @@ package control_words is
         )
     );
 
-    constant BEQZ_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => sb_imm,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "01",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "00"
+    -- BLT
+    constant BLT_CW : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '1',
+            imm_sel      => sb_imm,
+            is_jalr      => '0',
+            MUX_COND_SEL => "01",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
         )
     );
 
-    -- BNEZ
-    constant BNEZ_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => sb_imm,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "10",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "00"
+    -- BLTU
+    constant BLTU_CW : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '1',
+            imm_sel      => sb_imm,
+            is_jalr      => '0',
+            MUX_COND_SEL => "01",
+            MUX_SIGNED   => '0',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '1'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "01"
         )
     );
 
@@ -1002,32 +471,32 @@ package control_words is
 
     -- Reset Init
     signal init_cw : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '0',
-        imm_sel    => zero,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "00",
-        MUX_SIGNED => '1',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "00"
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '1',
+            RF_RD2       => '1',
+            cmp_sel      => '0',
+            imm_sel      => zero,
+            is_jalr      => '0',
+            MUX_COND_SEL => "00",
+            MUX_SIGNED   => '1',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
         ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '0'
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '0'
         ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
         ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "00"
+        wb      => (
+            RF_WR       => '0',
+            MUX_LMD_SEL => "00"
         )
     );
 

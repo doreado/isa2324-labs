@@ -231,10 +231,10 @@ begin
     target_addr <= unsigned(RF_OUT_1) + unsigned(MUX_J_OUT) when cw.decode.is_jalr = '1' else
                        PC + shift_left(unsigned(MUX_J_OUT), 1);
 
-    MUX_COND_OUT    <= pc_t(target_addr) when -- J-TYPE instructions
-                       ((CW.decode.MUX_COND_SEL = "11") or -- Branch zero and zero detected
-                        ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- Branch not zero and zero not detected
-                        ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else
+    MUX_COND_OUT    <= pc_t(target_addr) when 
+                       ((CW.decode.MUX_COND_SEL = "11") or  -- J-TYPE instructions
+                        ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- gte[u] and a >= b
+                        ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else -- glt[u] and a < b
                        -- All other I/R TYPE instructions
                        (PC + 4);
 
