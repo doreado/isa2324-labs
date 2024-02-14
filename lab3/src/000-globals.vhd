@@ -16,29 +16,61 @@ package myTypes is
     -- Instructions Size
     constant INS_SIZE : integer := 32;
     subtype ins_t is std_logic_vector(INS_SIZE - 1 downto 0);
-    constant INS_OP_CODE_SIZE : integer := 6;  -- OPCODE field size
+    constant INS_OP_CODE_SIZE : integer := 7;  -- OPCODE field size
     constant INS_R1_SIZE      : integer := 5;  -- R1 field size
     constant INS_R2_SIZE      : integer := 5;  -- R2 field size
     constant INS_R3_SIZE      : integer := 5;  -- R3 field size
-    constant INS_IMM_SIZE     : integer := 16; -- IMM field size
-    constant INS_J_IMM_SIZE   : integer := 26; -- IMM field size for J-TYPEs
-    constant INS_FUNC_SIZE    : integer := 11; -- FUNC field size
+    constant INS_FUNCT7_SIZE  : integer := 7;  -- FUNCT7 size
+    constant INS_FUNCT3_SIZE  : integer := 3;  -- FUNCT3 size
+    constant INS_IMM_SIZE     : integer := 12; -- IMM field size
+
+    constant INS_U_IMM_SIZE     : integer := 20; -- IMM field size
+    constant INS_UJ_IMM_SIZE     : integer := 20;
+    constant INS_S_IMM_SIZE     : integer := 12; -- IMM field size
+    constant INS_SB_IMM_SIZE     : integer := 12; -- IMM field size
+    --constant INS_FUNC_SIZE    : integer := 11; -- FUNC field size
 
     -- Instrucions Left and Right bit
-    constant INS_OP_CODE_L : integer := 31;
-    constant INS_OP_CODE_R : integer := 26;
-    constant INS_R1_L      : integer := 25;
-    constant INS_R1_R      : integer := 21;
-    constant INS_R2_L      : integer := 20;
-    constant INS_R2_R      : integer := 16;
-    constant INS_R3_L      : integer := 15;
-    constant INS_R3_R      : integer := 11;
-    constant INS_IMM_L     : integer := 15;
-    constant INS_IMM_R     : integer := 0;
+    constant INS_OP_CODE_L : integer := 6;
+    constant INS_OP_CODE_R : integer := 0;
+    constant INS_R1_L      : integer := 19;
+    constant INS_R1_R      : integer := 15;
+    constant INS_R2_L      : integer := 24;
+    constant INS_R2_R      : integer := 20;
+    constant INS_R3_L      : integer := 11;
+    constant INS_R3_R      : integer := 7;
+    constant INS_IMM_L     : integer := 31;
+    constant INS_IMM_R     : integer := 20;
+
+    constant INS_U_IMM_L    : integer := 31;
+    constant INS_U_IMM_R    : integer := 12;
+    constant INS_S_IMM_UP_L  : integer := 31;  
+    constant INS_S_IMM_UP_R  : integer := 25;  
+    constant INS_S_IMM_DOWN_L : integer := 11;  
+    constant INS_S_IMM_DOWN_R  : integer := 7; 
+    
+    constant INS_SB_IMM_UP  : integer := 31;
+    constant INS_SB_IMM_UP_L   : integer := 30;  
+    constant INS_SB_IMM_UP_R   : integer := 25;  
+    constant INS_SB_IMM_DOWN_L   : integer := 11;  
+    constant INS_SB_IMM_DOWN_R  : integer := 8; 
+    constant INS_SB_IMM_DOWN : integer :=7; 
+
+    constant INS_UJ_IMM_UP  : integer := 31;
+    constant INS_UJ_IMM_UP_L   : integer := 30;  
+    constant INS_UJ_IMM_UP_R   : integer := 21;  
+    constant INS_UJ_IMM_DOWN_L   : integer := 19;  
+    constant INS_UJ_IMM_DOWN_R  : integer := 12; 
+    constant INS_UJ_IMM_DOWN : integer :=20; 
+
+
     constant INS_J_IMM_L   : integer := 25;
     constant INS_J_IMM_R   : integer := 0;
-    constant INS_FUNC_L    : integer := 10;
-    constant INS_FUNC_R    : integer := 0;
+
+    constant INS_FUNC7_L    : integer := 31;
+    constant INS_FUNC7_R    : integer := 25;
+    constant INS_FUNC3_L    : integer := 14;
+    constant INS_FUNC3_R    : integer := 12;
 
     -- Mux
     constant IVDELAY     : time := 0 ns; --0.1 ns;
@@ -76,8 +108,9 @@ package myTypes is
     constant IRAM_DELAY : integer := 0;
 
     -- Control Unit Input Sizes
-    constant C_OP_CODE_SIZE : integer := 6;        -- OPCODE field size
-    constant C_FUNC_SIZE    : integer := 11;       -- FUNC field size
+    constant C_OP_CODE_SIZE : integer := 7;        -- OPCODE field size
+    constant C_FUNC3_SIZE    : integer := 3;       -- FUNC field size
+    constant C_FUNC7_SIZE    : integer := 7;
     constant C_IR_SIZE      : integer := INS_SIZE; -- Instruction Register Size
     constant C_CW_SIZE      : integer := 30;       -- Control Word Size
     constant ALU_OP_SIZE    : integer := 2;
@@ -93,65 +126,54 @@ package myTypes is
     constant C_UCODE_MEM_SIZE : integer := (C_RELOC_MEM_SIZE * 3 + 1);   -- Microcode Memory Size
 
     ---- INSTRUCTIONS -----
-    subtype func_t is std_logic_vector(C_FUNC_SIZE - 1 downto 0);
-    subtype opcode_t is std_logic_vector(C_OP_CODE_SIZE - 1 downto 0);
+    subtype func3_t is std_logic_vector(C_FUNC3_SIZE - 1 downto 0);
+    subtype func7_t is std_logic_vector(C_FUNC7_SIZE - 1 downto 0);
+    subtype opcode_t is std_logic_vector(C_OP_CODE_SIZE -1 downto 0);
 
     -- R-Type instruction -> FUNC field
-    constant FUNC_ADD  : func_t := "00000100000";
-    constant FUNC_ADDu : func_t := "00000100001";
-    constant FUNC_SUB  : func_t := "00000100010";
-    constant FUNC_SUBu : func_t := "00000100011";
-    constant FUNC_AND  : func_t := "00000100100";
-    constant FUNC_OR   : func_t := "00000100101";
-    constant FUNC_XOR  : func_t := "00000100110";
-    constant FUNC_SLL  : func_t := "00000000100";
-    constant FUNC_SRL  : func_t := "00000000110";
-    constant FUNC_SEQ  : func_t := "00000101000";
-    constant FUNC_SNE  : func_t := "00000101001";
-    constant FUNC_SLT  : func_t := "00000101010";
-    constant FUNC_SGT  : func_t := "00000101011";
-    constant FUNC_SLE  : func_t := "00000101100";
-    constant FUNC_SGE  : func_t := "00000101101";
-    constant FUNC_SLTu : func_t := "00000111010";
-    constant FUNC_SGTu : func_t := "00000111011";
-    constant FUNC_SLEu : func_t := "00000111100";
-    constant FUNC_SGEu : func_t := "00000111101";
+    constant FUNC3_ADD  : func3_t := "000";
+    constant FUNC7_ADD  : func7_t := "0000000";
+    constant FUNC3_SUB  : func3_t := "000";
+    constant FUNC7_SUB  : func7_t := "0100000";
+   
+
+    -- I-Type instruction -> FUNC field
+    constant FUNC3_ADDI  : func3_t := "000";
+    constant FUNC3_SW  : func3_t := "010";
+    constant FUNC3_LW  : func3_t := "010";
+    constant FUNC3_JALR  : func3_t := "000";
+
+    -- SB-Type instruction -> FUNC field
+    constant FUNC3_BGE  : func3_t := "101";
+    constant FUNC3_BLTU  : func3_t := "110";
 
     -- R-Type instruction -> OPCODE field
-    constant RTYPE : opcode_t := "000000";
+    constant RTYPE : opcode_t := "0110011";
+    --constant RTYPE_SUB : opcode_t := "0110011";
 
     -- I-Type instruction -> OPCODE field
-    constant ITYPE_ADDI  : opcode_t := "001000";
-    constant ITYPE_SUBI  : opcode_t := "001010";
-    constant ITYPE_ADDUI : opcode_t := "001001";
-    constant ITYPE_SUBUI : opcode_t := "001011";
-    constant ITYPE_ANDI  : opcode_t := "001100";
-    constant ITYPE_ORI   : opcode_t := "001101";
-    constant ITYPE_XORI  : opcode_t := "001110";
-    constant ITYPE_SLLI  : opcode_t := "010100";
-    constant ITYPE_SRLI  : opcode_t := "010110";
-    constant ITYPE_SEQI  : opcode_t := "011000";
-    constant ITYPE_SNEI  : opcode_t := "011001";
-    constant ITYPE_SLTI  : opcode_t := "011010";
-    constant ITYPE_SGTI  : opcode_t := "011011";
-    constant ITYPE_SLEI  : opcode_t := "011100";
-    constant ITYPE_SGEI  : opcode_t := "011101";
-    constant ITYPE_SLTUI : opcode_t := "111010";
-    constant ITYPE_SGTUI : opcode_t := "111011";
-    constant ITYPE_SLEUI : opcode_t := "111100";
-    constant ITYPE_SGEUI : opcode_t := "111101";
-    constant ITYPE_BEQZ  : opcode_t := "000100";
-    constant ITYPE_BNEZ  : opcode_t := "000101";
-    constant ITYPE_LW    : opcode_t := "100011";
-    constant ITYPE_SW    : opcode_t := "101011";
+    constant ITYPE_ADDI  : opcode_t := "0010011";
+    
+    constant ITYPE_LW    : opcode_t := "0000011";
+    constant ITYPE_JALR  : opcode_t := "1100111";
+    
+    -- SB-Type instruction -> OPCODE field
+     --constant SBTYPE_BGE  : opcode_t := "1100011";   --for ble
+    -- constant SBTYPE_BLTU : opcode_t := "1100011";
+    constant SBTYPE       : opcode_t := "1100011";
+    constant STYPE_SW    : opcode_t := "0100011";
+    -- UJ-Type instruction -> OPCODE field
+    --constant JTYPE_J   : opcode_t := "000010";
+    constant UJTYPE_JAL : opcode_t := "1101111";
+    
 
-    -- J-Type instruction -> OPCODE field
-    constant JTYPE_J   : opcode_t := "000010";
-    constant JTYPE_JAL : opcode_t := "000011";
-    constant JTYPE_JR  : opcode_t := "010010";
+     -- U-Type instruction -> OPCODE field
+     constant UTYPE_AUIPC : opcode_t := "0010111";
+     constant UTYPE_LUI   : opcode_t := "0110111";
+
 
     -- N-Type instruction -> OPCODE field
-    constant NTYPE_NOP : opcode_t := "010101";
+    --constant NTYPE_NOP : opcode_t := "010101";
 
     -- Only for simulation purpose
     constant RO_HEX      : string := "./memories/ro/hex.txt";

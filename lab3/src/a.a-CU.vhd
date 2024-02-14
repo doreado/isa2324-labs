@@ -14,6 +14,7 @@ entity CU is
     port (
         CLK : in std_logic;
         RST : in std_logic; -- Active High
+        Imm : out std_logic_vector( 2 downto 0);
         -- Control
         CW       : out cw_t; -- control word for datapath and memories
         cu_to_fu : out cu_to_fu_t;
@@ -22,7 +23,8 @@ entity CU is
         -- Inputs
         IN_CW  : in cw_from_mem;
         OPCODE : in opcode_t;
-        FUNC   : in func_t;
+        FUNC7  : in func7_t;
+        FUNC3  : in func3_t;
         -- RAM
         IRAM_ENABLE       : out std_logic;
         DRAM_ENABLE       : out std_logic;
@@ -36,7 +38,8 @@ architecture RTL of CU is
     -- Signals Declaration
     ----------------------------------------------------------------
 
-    signal FUNC_OP : func_t;
+    signal FUNC7_OP : func7_t;
+    signal FUNC3_OP : func3_t;
 
     ---------------------------- CW Pipeline
     signal cw_s, cw2, cw3, cw4 : cw_t;
@@ -52,7 +55,8 @@ begin
 
     ---------------------------- CW Pipeline
     -- Convert the func field into enum type func_t
-    FUNC_OP <= FUNC;
+    FUNC7_OP <= FUNC7;
+    FUNC3_OP <= FUNC3;
 
     -- Assign the control signals to the outputs
     CW <= (
@@ -100,27 +104,45 @@ begin
     ---------------------------- CW Pipeline
     -- OPCODE is used as index of cw_mem.
     -- get the complete control word of the current instruction
-    CW_S_UP : process (OPCODE, STALL.FETCH)
+    CW_S_UP : process (OPCODE,FUNC3_OP,STALL.FETCH)
     begin
         -- if stalling
         if STALL.FETCH = '0' then
             cw_s <= NOP_CW;
         else
             case OPCODE is
+                when UTYPE_AUIPC => 
+                    cw_s <= AUIPC_CW;
+                    imm <= "001";
+                --when UTYPE_LUI => 
+                  --  cw_s <= LUI_CW;
                 when ITYPE_ADDI => -- ITYPE
                     cw_s <= ADDI_CW;
-                when NTYPE_NOP => -- NTYPE
-                    cw_s <= NOP_CW;
-                when ITYPE_SW =>
+                    imm <= "000";
+                --when NTYPE_NOP => -- NTYPE
+                    --cw_s <= NOP_CW;
+                when STYPE_SW =>
                     cw_s <= SW_CW;
+                    imm <= "100";
                 when ITYPE_LW =>
                     cw_s <= LW_CW;
-
-                when JTYPE_J => -- JTYPE
-                    cw_s <= J_CW;
-                when JTYPE_JAL =>
+                    imm <= "000";
+                when ITYPE_JALR =>
+                    cw_s <= JALR_CW;
+                    imm <= "000";
+                --when JTYPE_J => -- JTYPE
+                   -- cw_s <= J_CW;
+                when UJTYPE_JAL =>
                     cw_s <= JAL_CW;
-
+                    imm <= "010";
+                when SBTYPE =>
+                    imm <= "101";
+                    if(FUNC3_OP = FUNC3_BGE ) then
+                        cw_s <= BGE_CW;
+                    end if;
+                    if(FUNC3_OP = FUNC3_BLTU ) then
+                        cw_s <= BLTU_CW;
+                    end if; 
                 when others => -- RTYPE
                     cw_s <= RTYPE_CW;
             end case;
@@ -160,7 +182,7 @@ begin
     end process CW_PIPE;
 
     -- ALU_OPCODE Generation (from FUNC for R-Type Instructions)
-    ALU_OPCODE_P : process (OPCODE, FUNC_OP, cw_s)
+    ALU_OPCODE_P : process (OPCODE, FUNC7_OP, cw_s)
     begin
 
         ALU_OPCODE <= cw_s.execute.ALU_OP;
@@ -169,45 +191,11 @@ begin
         -- use the FUNC field to select correctly their ALU_OPCODE.
         -- Updating directly CW(6) and CW(5) would gerenare a conflict
         if (OPCODE = RTYPE) then
-            case FUNC_OP is
-                when func_add =>
+            case FUNC7_OP is
+                when func7_add =>
                     ALU_OPCODE <= alu_add;
-                when FUNC_ADDu =>
-                    ALU_OPCODE <= ALU_ADDu;
-                when func_sub =>
+                when func7_sub =>
                     ALU_OPCODE <= alu_sub;
-                when FUNC_SUBu =>
-                    ALU_OPCODE <= ALU_SUBu;
-                when func_and =>
-                    ALU_OPCODE <= alu_and;
-                when func_or =>
-                    ALU_OPCODE <= alu_or;
-                when func_xor =>
-                    ALU_OPCODE <= alu_xor;
-                when func_sll =>
-                    ALU_OPCODE <= alu_sll;
-                when func_srl =>
-                    ALU_OPCODE <= alu_srl;
-                when func_seq =>
-                    ALU_OPCODE <= alu_seq;
-                when func_sne =>
-                    ALU_OPCODE <= alu_sne;
-                when func_sge =>
-                    ALU_OPCODE <= alu_sge;
-                when func_sgt =>
-                    ALU_OPCODE <= alu_sgt;
-                when func_sle =>
-                    ALU_OPCODE <= alu_sle;
-                when func_slt =>
-                    ALU_OPCODE <= alu_slt;
-                when func_sgeu =>
-                    ALU_OPCODE <= alu_sgeu;
-                when func_sgtu =>
-                    ALU_OPCODE <= alu_sgtu;
-                when func_sleu =>
-                    ALU_OPCODE <= alu_sleu;
-                when func_sltu =>
-                    ALU_OPCODE <= alu_sltu;
                 when others =>
                     ALU_OPCODE <= alu_add;
             end case;

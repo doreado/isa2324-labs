@@ -96,7 +96,7 @@ package control_words is
     );
 
     -- auipc: pc + {imm, 12'b0}
-    constant AUIPC : cw_t := (
+    constant AUIPC_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
             RF_ENABLE    => '1',
