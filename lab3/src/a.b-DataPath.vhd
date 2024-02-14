@@ -23,7 +23,6 @@ entity DATAPATH is
         RST          : in std_logic;      -- Active Low Reset
         CW           : in cw_t;           -- Control Word
         SECW         : in stage_enable_t; -- Stage Enable Control Word
-        Imm          : in std_logic_vector(2 downto 0);
         -- forwarding unit signals
         MUX_FWD_MEM_LMD_SEL: in std_logic;
         MUX_FWD_EX_LMD_SEL: in std_logic;
@@ -35,7 +34,8 @@ entity DATAPATH is
         dp_to_hu     : out dp_to_hu_t;
         OUT_CW       : out cw_from_mem;   -- Output Signals to CU
         OPCODE       : out opcode_t;
-        FUNC         : out func_t;
+        FUNCT3        : out funct3_t;
+        FUNCT7        : out funct7_t;
         DRAM_IN      : out data_t;
         DRAM_OUT     : in data_t;
         IRAM_DATA    : in data_t;
@@ -97,11 +97,11 @@ architecture RTL of DATAPATH is
     signal INS_RS1       : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal INS_RS2       : std_logic_vector(INS_R2_SIZE - 1 downto 0);
     signal INS_RD        : std_logic_vector(INS_R3_SIZE - 1 downto 0);
-    signal INS_IMM       : std_logic_vector(INS_IMM_SIZE - 1 downto 0);
+    signal INS_I_IMM     : std_logic_vector(INS_IMM_SIZE - 1 downto 0);
     signal INS_U_IMM     : std_logic_vector(INS_U_IMM_SIZE - 1 downto 0);
-    signal INS_UJ_IMM     : std_logic_vector(INS_UJ_IMM_SIZE - 1 downto 0);
-    signal INS_FUNC7     : std_logic_vector(INS_FUNC7_SIZE - 1 downto 0);
-    signal INS_FUNC3     : std_logic_vector(INS_FUNC3_SIZE - 1 downto 0);
+    signal INS_UJ_IMM    : std_logic_vector(INS_UJ_IMM_SIZE - 1 downto 0);
+    signal INS_FUNC7     : std_logic_vector(INS_FUNCT7_SIZE - 1 downto 0);
+    signal INS_FUNC3     : std_logic_vector(INS_FUNCT3_SIZE - 1 downto 0);
     signal INS_S_IMM    : std_logic_vector(INS_S_IMM_SIZE - 1 downto 0);
     signal INS_SB_IMM    : std_logic_vector(INS_SB_IMM_SIZE - 1 downto 0);
     signal INS_IMM_EXT   : data_t;
@@ -169,10 +169,9 @@ begin
     INS_I_IMM     <= IR(INS_IMM_L downto INS_IMM_R);
     INS_S_IMM  <= IR(INS_S_IMM_UP_L downto INS_S_IMM_UP_R) & IR(INS_S_IMM_DOWN_L downto INS_S_IMM_DOWN_R);
     INS_SB_IMM  <= IR(INS_SB_IMM_UP) & IR(INS_SB_IMM_DOWN) & IR(INS_SB_IMM_UP_L downto INS_SB_IMM_UP_R) & IR(INS_SB_IMM_DOWN_L downto INS_SB_IMM_DOWN_R);
-    --INS_J_IMM   <= IR(INS_J_IMM_L downto INS_J_IMM_R);
     INS_UJ_IMM   <= IR(INS_UJ_IMM_UP) & IR(INS_UJ_IMM_DOWN_L downto INS_UJ_IMM_DOWN_R)  & IR(INS_UJ_IMM_DOWN) & IR(INS_UJ_IMM_UP_L downto INS_UJ_IMM_UP_R);
-    ---FUNC   <= IR(INS_FUNC_L downto INS_FUNC_R);       -- send the func field to the controller
-    --OPCODE <= IR(INS_OP_CODE_L downto INS_OP_CODE_R); -- send the opcode to the controller
+    FUNCT3      <= INS_FUNC3;
+    FUNCT7      <= INS_FUNC7;
 
     ---------------------------- Sign Extend
     -- MUX_SIGNED: based on the signed type and shift needed (00: unsigned, 01: signed, 10: shifted signed for branches)

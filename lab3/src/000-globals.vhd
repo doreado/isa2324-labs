@@ -126,26 +126,26 @@ package myTypes is
     constant C_UCODE_MEM_SIZE : integer := (C_RELOC_MEM_SIZE * 3 + 1);   -- Microcode Memory Size
 
     ---- INSTRUCTIONS -----
-    subtype func3_t is std_logic_vector(C_FUNC3_SIZE - 1 downto 0);
-    subtype func7_t is std_logic_vector(C_FUNC7_SIZE - 1 downto 0);
+    subtype funct3_t is std_logic_vector(C_FUNC3_SIZE - 1 downto 0);
+    subtype funct7_t is std_logic_vector(C_FUNC7_SIZE - 1 downto 0);
     subtype opcode_t is std_logic_vector(C_OP_CODE_SIZE -1 downto 0);
 
     -- R-Type instruction -> FUNC field
-    constant FUNC3_ADD  : func3_t := "000";
-    constant FUNC7_ADD  : func7_t := "0000000";
-    constant FUNC3_SUB  : func3_t := "000";
-    constant FUNC7_SUB  : func7_t := "0100000";
+    constant FUNC3_ADD  : funct3_t := "000";
+    constant FUNC7_ADD  : funct7_t := "0000000";
+    constant FUNC3_SUB  : funct3_t := "000";
+    constant FUNC7_SUB  : funct7_t := "0100000";
    
 
     -- I-Type instruction -> FUNC field
-    constant FUNC3_ADDI  : func3_t := "000";
-    constant FUNC3_SW  : func3_t := "010";
-    constant FUNC3_LW  : func3_t := "010";
-    constant FUNC3_JALR  : func3_t := "000";
+    constant FUNC3_ADDI : funct3_t := "000";
+    constant FUNC3_SW   : funct3_t := "010";
+    constant FUNC3_LW   : funct3_t := "010";
+    constant FUNC3_JALR : funct3_t := "000";
 
     -- SB-Type instruction -> FUNC field
-    constant FUNC3_BGE  : func3_t := "101";
-    constant FUNC3_BLTU  : func3_t := "110";
+    constant FUNC3_BGE  : funct3_t := "101";
+    constant FUNC3_BLTU : funct3_t := "110";
 
     -- R-Type instruction -> OPCODE field
     constant RTYPE : opcode_t := "0110011";
@@ -186,6 +186,7 @@ package myTypes is
 
     ---- Process declarations ----
     pure function to_data(arg : pc_t) return data_t;
+    pure function to_data(arg : signed) return data_t;
 
     type dp_to_fu_t is record
         rs1_F     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
@@ -231,4 +232,10 @@ package body myTypes is
 begin
     return data_t(resize(unsigned(arg), numBit));
 end function to_data;
+
+    pure function to_data(arg : signed) return data_t is
+    begin
+        return data_t(resize(arg, numBit));
+    end function to_data;
+
 end package body myTypes;

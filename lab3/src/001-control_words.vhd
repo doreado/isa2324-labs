@@ -12,7 +12,7 @@ package control_words is
     -----------------------------------------------------------------------------
 
     -- Symbols to distinguish diffent immediate modes in control words.
-    type imm_t is (uj_imm, i_imm, sb_imm, zero);
+    type imm_t is (u_imm, uj_imm, i_imm, s_imm, sb_imm, zero);
 
     type decode_cw_t is record
         RF_RESET   : std_logic; -- register file reset signal

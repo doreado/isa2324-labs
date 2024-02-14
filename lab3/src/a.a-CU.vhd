@@ -23,8 +23,8 @@ entity CU is
         -- Inputs
         IN_CW  : in cw_from_mem;
         OPCODE : in opcode_t;
-        FUNC7  : in func7_t;
-        FUNC3  : in func3_t;
+        FUNCT7  : in funct7_t;
+        FUNCT3  : in funct3_t;
         -- RAM
         IRAM_ENABLE       : out std_logic;
         DRAM_ENABLE       : out std_logic;
@@ -38,8 +38,8 @@ architecture RTL of CU is
     -- Signals Declaration
     ----------------------------------------------------------------
 
-    signal FUNC7_OP : func7_t;
-    signal FUNC3_OP : func3_t;
+    signal FUNC7_OP : funct7_t;
+    signal FUNC3_OP : funct3_t;
 
     ---------------------------- CW Pipeline
     signal cw_s, cw2, cw3, cw4 : cw_t;
@@ -55,8 +55,8 @@ begin
 
     ---------------------------- CW Pipeline
     -- Convert the func field into enum type func_t
-    FUNC7_OP <= FUNC7;
-    FUNC3_OP <= FUNC3;
+    FUNC7_OP <= FUNCT7;
+    FUNC3_OP <= FUNCT3;
 
     -- Assign the control signals to the outputs
     CW <= (

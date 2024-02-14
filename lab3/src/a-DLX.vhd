@@ -47,7 +47,8 @@ architecture RTL of DLX is
             -- Inputs
             IN_CW  : in cw_from_mem;
             OPCODE : in opcode_t;
-            FUNC   : in func_t;
+            FUNCT3 : in funct3_t;
+            FUNCT7 : in funct7_t;
             -- RAM
             IRAM_ENABLE       : out std_logic;
             DRAM_ENABLE       : out std_logic;
@@ -103,7 +104,8 @@ architecture RTL of DLX is
             dp_to_hu            : out dp_to_hu_t;
             OUT_CW              : out cw_from_mem;
             OPCODE              : out opcode_t;
-            FUNC                : out func_t;
+            FUNC3               : out funct3_t;
+            FUNC7               : out funct7_t;
             DRAM_IN             : in data_t;
             IRAM_DATA           : in data_t;
             IRAM_ADDRESS        : out std_logic_vector(INS_SIZE - 1 downto 0);
@@ -118,7 +120,8 @@ architecture RTL of DLX is
 
     signal cw_from             : cw_from_mem;
     signal OPCODE              : opcode_t;
-    signal FUNC                : func_t;
+    signal FUNCT3               : funct3_t;
+    signal FUNCT7               : funct7_t;
     signal CW                  : cw_t;
     signal SECW                : stage_enable_t;
     signal dp_to_fu            : dp_to_fu_t;
@@ -146,7 +149,8 @@ begin
             cu_to_hu    => cu_to_hu,
             stall       => SECW,
             OPCODE      => OPCODE,
-            FUNC        => FUNC,
+            FUNCT3      => FUNCT3,
+            FUNCT7      => FUNCT7,
             CLK         => CLK,
             RST         => RST,
             IRAM_ENABLE => IRAM_ENABLE,
@@ -198,7 +202,8 @@ begin
             dp_to_fu            => dp_to_fu,
             dp_to_hu            => dp_to_hu,
             OPCODE              => OPCODE,
-            FUNC                => FUNC,
+            FUNCT3              => FUNCT3,
+            FUNCT7              => FUNCT7,
             DRAM_IN             => DRAM_IN,
             IRAM_DATA           => IRAM_DATA,
             IRAM_ADDRESS        => IRAM_ADDRESS,
