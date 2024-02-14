@@ -175,14 +175,13 @@ begin
 
     ---------------------------- Sign Extend
     -- MUX_SIGNED: based on the signed type and shift needed (00: unsigned, 01: signed, 10: shifted signed for branches)
-    INS_IMM_EXT <= to_data(resize(unsigned(INS_IMM), IMM'length)) when CW.decode.MUX_SIGNED = '0' else
-        to_data(unsigned(resize(signed(INS_IMM), IMM'length))) when CW.decode.MUX_SIGNED = '1';
-
-    INS_J_IMM_EXT <= to_data(unsigned((resize(signed(INS_J_IMM), IMM'length))));
-
-    -- MUX_J: based on the instruction type (0: I, 1: J)
-    MUX_J_OUT <= INS_IMM_EXT when CW.decode.MUX_J_SEL = '0' else
-        INS_J_IMM_EXT;
+    with cw.decode.imm_sel select MUX_J_OUT  <=
+        to_data(signed(INS_I_IMM)) when i_imm,
+        to_data(signed(INS_S_IMM)) when s_imm,
+        to_data(signed(INS_SB_IMM & '0')) when sb_imm,
+        to_data(shift_left(signed(INS_U_IMM), 12)) when u_imm,
+        to_data(signed(INS_UJ_IMM) & '0') when uj_imm,
+        (others => '0') when zero;
 
     ---------------------------- MUX_LMDs
     -- MUX_R: based on the instruction type or jal (0: I, 1: R, 2: jal)
