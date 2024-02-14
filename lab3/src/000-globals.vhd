@@ -98,7 +98,7 @@ package myTypes is
 
     -- xRAM
     constant DRAM_DEPTH     : integer := 256;
-    constant IRAM_DEPTH     : integer := 128;
+    constant IRAM_DEPTH     : integer := 1024;
     constant PC_SIZE        : integer := numBit;
     constant IRAM_ADDR_SIZE : integer := PC_SIZE;
     subtype pc_t is unsigned(PC_SIZE - 1 downto 0);

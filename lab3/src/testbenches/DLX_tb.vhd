@@ -10,7 +10,7 @@ architecture tb of DLX_tb is
     component ROMEM is
         generic (
             FILE_PATH  : string;         -- ROM data file
-            ENTRIES    : integer := 128; -- Number of lines in the ROM
+            ENTRIES    : integer := 1024; -- Number of lines in the ROM
             WORD_SIZE  : integer := 32;  -- Number of bits per word
             ADDR_SIZE  : integer := 5;
             DATA_DELAY : natural := 2 -- Delay ( in # of clock cycles )
