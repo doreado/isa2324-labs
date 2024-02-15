@@ -36,3 +36,4 @@
 
 # tb
 ./testbenches/DLX_tb.vhd
+./testbenches/riscv_tb.sv
