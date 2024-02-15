@@ -1,0 +1,15 @@
+* add
+* addi
+* auipc :
+ble : capire perché l'emulatore la traduce in bge e cosa dovremmo eseguire
+bltu
+* j
+* jal
+li : da capire cosa fare
+lui : capire come si fa la somma 
+* lw
+* mv
+* nop
+ret (jalr x0, x1, 0)
+* sub
+* sw
