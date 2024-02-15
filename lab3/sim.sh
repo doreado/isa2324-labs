@@ -24,7 +24,20 @@ fi
 
 cd "$SIM_DIR"
 echo "[INFO] (SETMENTOR)"
-INSTALL_DIR=/opt/intelFPGA/20.1/modelsim_ase/bin/
+hostname=$(hostname)
+case $hostname in
+    'yoga')
+        INSTALL_DIR=/opt/intelFPGA/20.1/modelsim_ase/bin/
+        ;;
+    'MarcoPc'|'DESKTOP-R7HTGI3')
+        INSTALL_DIR=/mnt/c/intelFPGA_lite/18.1/modelsim_ase/win32aloem
+        ;;
+    *)
+        INSTALL_DIR=/eda/mentor/2020-21/RHELx86/QUESTA-CORE-PRIME_2020.4/questasim/linux_x86_64
+        export LM_LICENSE_FILE=${LM_LICENSE_FILE}:1717@led-x3850-3.polito.it
+        source /eda/mentor/2020-21/scripts/QUESTA-CORE-PRIME_2020.4_RHELx86.sh
+        ;;
+esac
 # export LM_LICENSE_FILE=${LM_LICENSE_FILE}:1717@led-x3850-3.polito.it
 # source /eda/mentor/2020-21/scripts/QUESTA-CORE-PRIME_2020.4_RHELx86.sh
 export PATH=$INSTALL_DIR:$PATH
@@ -65,5 +78,5 @@ done < "$COMPONENTS_FILE"
 if ps aux | grep -q [v]sim; then
     exit 1
 else
-    setsid vsim -t 10ps work.tb -voptargs=+acc
+    setsid vsim -c -t 10ps work.tb -voptargs=+acc
 fi
