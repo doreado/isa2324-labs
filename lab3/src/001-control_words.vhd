@@ -32,6 +32,7 @@ package control_words is
         ALU_OP         : alu_op_t;
         MUX_A_SEL      : std_logic; -- MUX_A selection signal
         MUX_B_SEL      : std_logic; -- MUX_B selection signal
+        is_lui         : std_logic; -- 1: use 0 as operand, 0: use MUX_A_OUT
     end record execute_cw_t;
 
     type memory_cw_t is record
@@ -82,7 +83,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -113,7 +115,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -144,7 +147,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -175,7 +179,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '1',
@@ -206,7 +211,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -237,7 +243,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '0'
+            MUX_B_SEL => '0',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -268,7 +275,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -299,7 +307,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -330,7 +339,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -361,7 +371,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -392,7 +403,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '1'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -425,7 +437,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '0'
+            MUX_B_SEL => '0',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',

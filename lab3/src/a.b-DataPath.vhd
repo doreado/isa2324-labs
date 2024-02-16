@@ -128,6 +128,8 @@ architecture RTL of DATAPATH is
     signal a_gte_b : std_logic;
 
     ---------------------------- [EX] STAGE
+
+    signal MUX_A_OUT   : data_t;
     signal ALU_IN_1    : data_t;
     signal ALU_IN_2    : data_t;
     signal ALU_OUT     : data_t;
@@ -191,11 +193,15 @@ begin
                 INS_RS2 when CW.decode.MUX_R_SEL = "01" else
                 std_logic_vector(to_unsigned(LR_INDEX, INS_R1_SIZE));
 
-    -- MUX_A: ALU input 1 (0: NPC, 1: A)
-    ALU_IN_1 <= to_data(NPC_ID) when MUX_A_SEL = "00" else
+    -- MUX_A
+    MUX_A_OUT <= to_data(NPC_ID) when MUX_A_SEL = "00" else
                 A               when MUX_A_SEL = "01" else
                 ALU_OUT_REG     when MUX_A_SEL = "10" else -- from the exe
                 MUX_LMD_OUT     when MUX_A_SEL = "11"; -- from mem
+
+    -- MUX_LUI: ALU input 1, switch between lui and other instructions
+    ALU_IN_1 <= (others => '0') when cw.execute.is_lui = '1' else 
+                MUX_A_OUT;
 
     -- MUX_B: ALU input 2 (0: B, 1: IMM)
     ALU_IN_2 <= B               when MUX_B_SEL = "00" else
