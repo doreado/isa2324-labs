@@ -102,6 +102,7 @@ package myTypes is
     constant PC_SIZE        : integer := numBit;
     constant IRAM_ADDR_SIZE : integer := PC_SIZE;
     subtype pc_t is unsigned(PC_SIZE - 1 downto 0);
+    subtype addr_t is unsigned(PC_SIZE - 1 downto 0);
 
     -- RAM Delays
     constant DRAM_DELAY : integer := 0;
