@@ -22,9 +22,9 @@ package control_words is
         cmp_sel    : std_logic; -- Select how to extend operands in branch comparator (1: signed, 0: unsigned)
         imm_sel    : imm_t;     -- Select the second operand used to compute the target address 
         is_jalr    : std_logic;
-        MUX_COND_SEL : std_logic_vector(1 downto 0); -- MUX_COND selection signal
+        MUX_COND_SEL : std_logic_vector(1 downto 0); -- used to distinguish bge, blt, jal
         MUX_SIGNED : std_logic; -- MUX_SIGNED selection signal
-        MUX_J_SEL  : std_logic; -- MUX_J_SEL selection signal
+        MUX_J_SEL  : std_logic; -- MUX_J_SEL selection signal TODO: useless
         MUX_R_SEL  : std_logic_vector(1 downto 0); -- selects between RD, RS and LR
     end record decode_cw_t;
 
@@ -32,6 +32,7 @@ package control_words is
         ALU_OP         : alu_op_t;
         MUX_A_SEL      : std_logic; -- MUX_A selection signal
         MUX_B_SEL      : std_logic; -- MUX_B selection signal
+        is_lui         : std_logic; -- 1: use 0 as operand, 0: use MUX_A_OUT
     end record execute_cw_t;
 
     type memory_cw_t is record
@@ -70,9 +71,9 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD2       => '0',
             cmp_sel      => '0',
-            imm_sel      => zero,
+            imm_sel      => i_imm,
             is_jalr      => '0',
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
@@ -82,7 +83,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -101,9 +103,9 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD2       => '0',
             cmp_sel      => '0',
-            imm_sel      => zero,
+            imm_sel      => u_imm,
             is_jalr      => '0',
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
@@ -113,7 +115,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -132,9 +135,9 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD2       => '0',
             cmp_sel      => '0',
-            imm_sel      => zero,
+            imm_sel      => s_imm,
             is_jalr      => '0',
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
@@ -144,7 +147,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -163,9 +167,9 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD2       => '0',
             cmp_sel      => '0',
-            imm_sel      => zero,
+            imm_sel      => i_imm,
             is_jalr      => '0',
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
@@ -175,7 +179,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '1',
@@ -206,7 +211,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -237,7 +243,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '0'
+            MUX_B_SEL => '0',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -250,44 +257,13 @@ package control_words is
         )
     );
 
-    -- J
-    constant J_CW : cw_t := (
-        decode  => (
-            RF_RESET     => '0',
-            RF_ENABLE    => '1',
-            RF_RD1       => '1',
-            RF_RD2       => '1',
-            cmp_sel      => '0',
-            imm_sel      => zero,
-            is_jalr      => '0',
-            MUX_COND_SEL => "11",
-            MUX_SIGNED   => '1',
-            MUX_J_SEL    => '1',
-            MUX_R_SEL    => "00"
-        ),
-        execute => (
-            ALU_OP    => alu_add,
-            MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
-        ),
-        memory  => (
-            LMD_EN            => '0',
-            DRAM_ENABLE       => '0',
-            DRAM_READNOTWRITE => '1'
-        ),
-        wb      => (
-            RF_WR       => '0',
-            MUX_LMD_SEL => "00"
-        )
-    );
-
     -- JAL
     constant JAL_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
             RF_ENABLE    => '1',
-            RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD1       => '0',
+            RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => uj_imm,
             is_jalr      => '0',
@@ -299,7 +275,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -318,7 +295,7 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '1',
+            RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => i_imm,
             is_jalr      => '1',
@@ -330,7 +307,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '1',
-            MUX_B_SEL => '0'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -338,7 +316,7 @@ package control_words is
             DRAM_READNOTWRITE => '1'
         ),
         wb      => (
-            RF_WR       => '0',
+            RF_WR       => '1',
             MUX_LMD_SEL => "01"
         )
     );
@@ -361,69 +339,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
-        ),
-        memory  => (
-            LMD_EN            => '0',
-            DRAM_ENABLE       => '0',
-            DRAM_READNOTWRITE => '1'
-        ),
-        wb      => (
-            RF_WR       => '0',
-            MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- BGEU
-    constant BGEU_CW : cw_t := (
-        decode     => (
-        RF_RESET   => '0',
-        RF_ENABLE  => '1',
-        RF_RD1     => '1',
-        RF_RD2     => '1',
-        cmp_sel    => '1',
-        imm_sel    => sb_imm,
-        is_jalr    => '0',
-        MUX_COND_SEL   => "01",
-        MUX_SIGNED => '0',
-        MUX_J_SEL  => '0',
-        MUX_R_SEL  => "00"
-        ),
-        execute        => (
-        ALU_OP         => alu_add,
-        MUX_A_SEL      => '0',
-        MUX_B_SEL      => '1'
-        ),
-        memory            => (
-        LMD_EN            => '0',
-        DRAM_ENABLE       => '0',
-        DRAM_READNOTWRITE => '1'
-        ),
-        wb          => (
-        RF_WR       => '0',
-        MUX_LMD_SEL => "01"
-        )
-    );
-
-    -- BLT
-    constant BLT_CW : cw_t := (
-        decode  => (
-            RF_RESET     => '0',
-            RF_ENABLE    => '1',
-            RF_RD1       => '1',
-            RF_RD2       => '1',
-            cmp_sel      => '1',
-            imm_sel      => sb_imm,
-            is_jalr      => '0',
-            MUX_COND_SEL => "01",
-            MUX_SIGNED   => '1',
-            MUX_J_SEL    => '0',
-            MUX_R_SEL    => "00"
-        ),
-        execute => (
-            ALU_OP    => alu_add,
-            MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -443,7 +360,7 @@ package control_words is
             RF_ENABLE    => '1',
             RF_RD1       => '1',
             RF_RD2       => '1',
-            cmp_sel      => '1',
+            cmp_sel      => '0',
             imm_sel      => sb_imm,
             is_jalr      => '0',
             MUX_COND_SEL => "01",
@@ -454,7 +371,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '1'
+            MUX_B_SEL => '1',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',
@@ -463,6 +381,38 @@ package control_words is
         ),
         wb      => (
             RF_WR       => '0',
+            MUX_LMD_SEL => "01"
+        )
+    );
+
+    -- LUI
+    constant LUI_CW : cw_t := (
+        decode  => (
+            RF_RESET     => '0',
+            RF_ENABLE    => '1',
+            RF_RD1       => '0',
+            RF_RD2       => '0',
+            cmp_sel      => '0',
+            imm_sel      => u_imm,
+            is_jalr      => '0',
+            MUX_COND_SEL => "01",
+            MUX_SIGNED   => '0',
+            MUX_J_SEL    => '0',
+            MUX_R_SEL    => "00"
+        ),
+        execute => (
+            ALU_OP    => alu_add,
+            MUX_A_SEL => '0',
+            MUX_B_SEL => '1',
+            is_lui    => '1'
+        ),
+        memory  => (
+            LMD_EN            => '0',
+            DRAM_ENABLE       => '0',
+            DRAM_READNOTWRITE => '1'
+        ),
+        wb      => (
+            RF_WR       => '1',
             MUX_LMD_SEL => "01"
         )
     );
@@ -487,7 +437,8 @@ package control_words is
         execute => (
             ALU_OP    => alu_add,
             MUX_A_SEL => '0',
-            MUX_B_SEL => '0'
+            MUX_B_SEL => '0',
+            is_lui    => '0'
         ),
         memory  => (
             LMD_EN            => '0',

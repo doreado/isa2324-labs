@@ -12,14 +12,12 @@ module tb;
   logic [31:0] DRAM_OUT;
   logic         DRAM_READY;
   logic         IRAM_ENABLE;
-  logic [ins_size-1:0] IRAM_ADDRESS_dlx;
-  logic [ins_size-1:0] IRAM_ADDRESS_ram;
+  logic [ins_size-1:0] IRAM_ADDRESS;
   logic         DRAM_ENABLE;
   logic         init_DRAM_ENABLE;
   logic         DRAM_ENABLE_s;
   logic         DRAM_READNOTWRITE;
-  logic [ins_size-1:0] DRAM_ADDRESS_dlx;
-  logic [ins_size-1:0] DRAM_ADDRESS_ram;
+  logic [ins_size-1:0] DRAM_ADDRESS;
 
   // Instantiate ROMEM component
   ROMEM #(ro_hex, iram_depth, ins_size, iram_addr_size, iram_delay)
@@ -27,7 +25,7 @@ module tb;
   (
     .CLK        (CLK),
     .RST        (RST),
-    .ADDRESS    (IRAM_ADDRESS_ram),
+    .ADDRESS    (IRAM_ADDRESS),
     .ENABLE     (IRAM_ENABLE),
     .DATA_READY (IRAM_READY),
     .DATA       (IRAM_DATA)
@@ -39,7 +37,7 @@ module tb;
   (
     .CLK          (CLK),
     .RST          (RST),
-    .ADDR         (DRAM_ADDRESS_ram),
+    .ADDR         (DRAM_ADDRESS),
     .DATA_IN      (DRAM_IN),
     .ENABLE       (DRAM_ENABLE),
     .READNOTWRITE (DRAM_READNOTWRITE),
@@ -57,10 +55,10 @@ module tb;
     .DRAM_OUT          (DRAM_OUT),
     .DRAM_READY        (DRAM_READY),
     .IRAM_ENABLE       (IRAM_ENABLE),
-    .IRAM_ADDRESS      (IRAM_ADDRESS_dlx),
+    .IRAM_ADDRESS      (IRAM_ADDRESS),
     .DRAM_ENABLE       (DRAM_ENABLE_s),
     .DRAM_READNOTWRITE (DRAM_READNOTWRITE),
-    .DRAM_ADDRESS      (DRAM_ADDRESS_dlx)
+    .DRAM_ADDRESS      (DRAM_ADDRESS)
   );
 
   // Assignments and clock generation
@@ -77,8 +75,8 @@ module tb;
 
   // Monitor process to display signals
   always @(posedge CLK) begin
-    $display("Time = %0t: OPCODE = %b FUNCT3 = %b FUNCT7 = %b", 
-      $time, DLX_1.datapath_1.opcode, DLX_1.datapath_1.funct3, DLX_1.datapath_1.funct7);
+    $display("Time = %0t: IR = %h OPCODE = %b FUNCT3 = %b FUNCT7 = %b", 
+      $time, DLX_1.datapath_1.ir, DLX_1.datapath_1.opcode, DLX_1.datapath_1.funct3, DLX_1.datapath_1.funct7);
   end
 
 endmodule: tb
