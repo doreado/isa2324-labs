@@ -62,16 +62,6 @@ begin
             else
                 SECW <= STALL_CLEAR; -- do nothing if the branch is not taken
             end if;
-        elsif (cu_to_hu.IS_JUMP_EX = '1') then -- insert a nop in IR when the jump is in execute, but load PC with target address
-            SECW <= (
-                FLUSH_IF => '1',
-                PREFETCH => '1',
-                FETCH    => '1',
-                DECODE   => '1',
-                EXECUTE  => '1',
-                MEMORY   => '1',
-                WB       => '1'
-            );
         elsif ((cu_to_hu.LMD_EN = '1') and -- if the instruction is a load
             ((dp_to_hu.RT_ID = dp_to_hu.RS_IF) or (dp_to_hu.RT_ID = dp_to_hu.RT_IF))) then -- if the instruction in decode needs the loaded value, stall it in decode
             SECW <= (
@@ -96,7 +86,7 @@ begin
         elsif (cu_to_hu.IS_JUMP_ID = '1') then -- if a jump is decoded, put a nop in IR and do not update the PC.
             SECW <= (
                 FLUSH_IF => '1',
-                PREFETCH => '0',
+                PREFETCH => '1',
                 FETCH    => '1',
                 DECODE   => '1',
                 EXECUTE  => '1',

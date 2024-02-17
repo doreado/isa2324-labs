@@ -110,7 +110,7 @@ architecture RTL of DATAPATH is
     ---------------------------- [IF] STAGE
     signal IR  : std_logic_vector(INS_SIZE - 1 downto 0);
     signal PC  : pc_t;
-    signal NPC : pc_t;
+    signal PC_IFID : pc_t;
 
     ---------------------------- [ID] STAGE
     signal RF_OUT_1  : data_t;
@@ -121,7 +121,7 @@ architecture RTL of DATAPATH is
     signal target_addr : pc_t;
     signal NPC_ID    : pc_t;
     signal RD_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
-    signal MUX_J_OUT : data_t;
+    signal MUX_IMM_OUT : data_t;
     signal MUX_R_OUT : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RS_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RT_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
@@ -179,7 +179,7 @@ begin
 
     ---------------------------- Sign Extend
     -- MUX_SIGNED: based on the signed type and shift needed (00: unsigned, 01: signed, 10: shifted signed for branches)
-    with cw.decode.imm_sel select MUX_J_OUT  <=
+    with cw.decode.imm_sel select MUX_IMM_OUT  <=
         to_data(signed(INS_I_IMM)) when i_imm,
         to_data(signed(INS_S_IMM)) when s_imm,
         to_data(signed(INS_SB_IMM & '0')) when sb_imm,
@@ -243,13 +243,15 @@ begin
     ---------------------------- NEXT PC GENERATION
     -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
     -- TODO: evaluate if MUX_J_OUT is appropriate (maybe taking the immediate directly from IR is better)
-    target_addr <= unsigned(RF_OUT_1) + unsigned(MUX_J_OUT) when cw.decode.is_jalr = '1' else
-                       PC + shift_left(unsigned(MUX_J_OUT), 1);
+    with cw.decode.ta_op1_sel select target_addr <= 
+        PC + shift_left(unsigned(MUX_IMM_OUT), 1) when pc_ta,
+        unsigned(mux_fwd_cmp_a_out) + unsigned(MUX_IMM_OUT) when jalr_ta,
+        PC_IFID + unsigned(MUX_IMM_OUT) when j_ta;
 
     MUX_COND_OUT    <= pc_t(target_addr) when 
                        ((CW.decode.MUX_COND_SEL = "11") or  -- J-TYPE instructions
                         ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- gte[u] and a >= b
-                        ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else -- glt[u] and a < b
+                        ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else -- blt[u] and a < b
                        -- All other I/R TYPE instructions
                        (PC + 4);
 
@@ -332,16 +334,16 @@ begin
     end process PC_P;
 
     -- NPC
-    NPC_P : process (CLK, RST)
+    PC_IFID_P : process (CLK, RST)
     begin
         if RST = '1' then
-            NPC <= (others => '0');
+            PC_IFID <= (others => '0');
         elsif falling_edge(CLK) then
             if (SECW.FETCH = '1') then
-                NPC <= PC + 4;
+                PC_IFID <= PC;
             end if;
         end if;
-    end process NPC_P;
+    end process PC_IFID_P;
 
     -- IR
     IR_P : process (CLK, RST)
@@ -391,7 +393,7 @@ begin
             IMM <= (others => '0');
         elsif falling_edge(CLK) then
             if (SECW.DECODE = '1') then
-                IMM <= MUX_J_OUT;
+                IMM <= MUX_IMM_OUT;
             end if;
         end if;
     end process IMM_P;
@@ -403,7 +405,7 @@ begin
             NPC_ID <= (others => '0');
         elsif falling_edge(CLK) then
             if (SECW.DECODE = '1') then
-                NPC_ID <= NPC;
+                NPC_ID <= PC_IFID;
             end if;
         end if;
     end process NPC_ID_P;
