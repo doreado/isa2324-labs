@@ -1,0 +1,7 @@
+src/FA.sv
+src/HA.sv
+
+src/mod_dadda_mul_pkg.sv
+
+src/mod_dadda_tree.sv
+tb/tb_mod_dadda.sv

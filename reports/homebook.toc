@@ -1,0 +1,39 @@
+\babel@toc {english}{}
+\contentsline {chapter}{\numberline {1}Lab 1: design and implementation of a digital filter}{1}%
+\contentsline {section}{\numberline {1.1}Reference model development}{1}%
+\contentsline {subsection}{\numberline {1.1.1}Matlab model}{1}%
+\contentsline {subsection}{\numberline {1.1.2}C model and THD}{1}%
+\contentsline {subsection}{\numberline {1.1.3}Explanations, comparisons and comments}{1}%
+\contentsline {section}{\numberline {1.2}VLSI implementation}{2}%
+\contentsline {subsection}{\numberline {1.2.1}Architecture}{2}%
+\contentsline {subsubsection}{Simulation}{2}%
+\contentsline {subsection}{\numberline {1.2.2}Logic synthesis}{2}%
+\contentsline {subsection}{\numberline {1.2.3}Place and route}{2}%
+\contentsline {subsection}{\numberline {1.2.4}Explanations, comparisons and comments}{3}%
+\contentsline {section}{\numberline {1.3}Advanced architecture development}{3}%
+\contentsline {chapter}{\numberline {2}Lab 2: digital arithmetic}{5}%
+\contentsline {section}{\numberline {2.1}FPU model}{5}%
+\contentsline {subsection}{\numberline {2.1.1}Simulation}{5}%
+\contentsline {subsection}{\numberline {2.1.2}Synthesis}{5}%
+\contentsline {subsection}{\numberline {2.1.3}Explanations, comparisons and comments}{5}%
+\contentsline {subsection}{\numberline {2.1.4}R4-MBE multiplier}{5}%
+\contentsline {subsubsection}{Simulation}{5}%
+\contentsline {paragraph}{Standalone multiplier}{5}%
+\contentsline {paragraph}{Whole FPU}{5}%
+\contentsline {subsubsection}{Synthesis}{6}%
+\contentsline {subsubsection}{Explanations, comparisons and comments}{6}%
+\contentsline {chapter}{\numberline {3}Lab 3: RISC-V-lite}{7}%
+\contentsline {section}{\numberline {3.1}Architecture definition}{7}%
+\contentsline {subsection}{\numberline {3.1.1}Explanations and comments}{7}%
+\contentsline {section}{\numberline {3.2}Architecture verification}{8}%
+\contentsline {subsection}{\numberline {3.2.1}Explanations and comments}{8}%
+\contentsline {section}{\numberline {3.3}Architecture - logic synthesis results}{8}%
+\contentsline {subsection}{\numberline {3.3.1}Explanations and comments}{8}%
+\contentsline {section}{\numberline {3.4}Architecture - place and route}{8}%
+\contentsline {subsection}{\numberline {3.4.1}Explanations and comments}{8}%
+\contentsline {section}{\numberline {3.5}Including the SSRAM in the architecture}{8}%
+\contentsline {subsection}{\numberline {3.5.1}Explanations and comments}{8}%
+\contentsline {section}{\numberline {3.6}Complete architecture verification}{8}%
+\contentsline {subsection}{\numberline {3.6.1}Explanations and comments}{8}%
+\contentsline {section}{\numberline {3.7}Complete architecture - logic synthesis results}{9}%
+\contentsline {subsection}{\numberline {3.7.1}Explanations and comments}{9}%

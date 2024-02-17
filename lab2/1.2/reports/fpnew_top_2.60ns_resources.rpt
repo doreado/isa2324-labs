@@ -1,0 +1,198 @@
+ 
+****************************************
+Report : resources
+Design : fpnew_top
+Version: S-2021.06-SP4
+Date   : Sat Dec 16 20:45:11 2023
+****************************************
+
+
+Resource Report for this hierarchy in file ./cvfpu_lite/src/fpnew_top.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| lte_x_4        | DW_cmp         | width=2    | i_arbiter/lte_209_G4 (rr_arb_tree.sv:209) |
+| add_x_97       | DW01_add       | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_285 (fpnew_fma.sv:285) |
+| gt_x_99        | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/gt_295 (fpnew_fma.sv:295) |
+| lte_x_101      | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/lte_302 (fpnew_fma.sv:302) |
+| lte_x_102      | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/lte_305 (fpnew_fma.sv:305) |
+| ashr_104       | DW_rightsh     | A_width=48 | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/srl_350 (fpnew_fma.sv:350) |
+| SH_width=6 |  |
+| lte_x_108      | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/lte_511 (fpnew_fma.sv:511) |
+| lte_x_109      | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/lte_511_2 (fpnew_fma.sv:511) |
+| ash_113        | DW_leftsh      | A_width=38 | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sll_531 (fpnew_fma.sv:531) |
+| SH_width=6 |  |
+| gt_x_114       | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/gt_548 (fpnew_fma.sv:548) |
+| gte_x_117      | DW_cmp         | width=7    | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/gte_577 (fpnew_fma.sv:577) |
+| add_x_174      | DW01_add       | width=15   | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/i_fpnew_rounding/add_63 (fpnew_rounding.sv:63) |
+| DP_OP_233J1_122_153             |            |                            |
+|                | DP_OP_233J1_122_153 |       |                            |
+| DP_OP_234J1_123_36              |            |                            |
+|                | DP_OP_234J1_123_36 |        |                            |
+| DP_OP_235J1_124_9924            |            |                            |
+|                | DP_OP_235J1_124_9924 |      |                            |
+| DP_OP_236J1_125_1051            |            |                            |
+|                | DP_OP_236J1_125_1051 |      |                            |
+| DP_OP_236_133_2281              |            |                            |
+|                | DP_OP_236_133_2281 |        |                            |
+| DP_OP_85J1_126_9431             |            |                            |
+|                | DP_OP_85J1_126_9431 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_233J1_122_153
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_233J1_122_153  | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_513 (fpnew_fma.sv:513) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_513 (fpnew_fma.sv:513) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_516 (fpnew_fma.sv:516) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_516 (fpnew_fma.sv:516) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/gte_513 (fpnew_fma.sv:513) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 5     |                                          |
+| I2    | PI   | Signed   | 7     |                                          |
+| T226  | IFO  | Signed   | 6     | -I1 + $unsigned(1'b1) ( fpnew_fma.sv:513 fpnew_fma.sv:516 ) |
+| T222  | IFO  | Signed   | 9     | I2 + T226 (fpnew_fma.sv:513)             |
+| O1    | PO   | Signed   | 1     | T222 >= $signed(1'b0) (fpnew_fma.sv:513) |
+| O2    | PO   | Signed   | 7     | I2 + T226 (fpnew_fma.sv:516)             |
+==============================================================================
+
+Datapath Report for DP_OP_234J1_123_36
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_234J1_123_36   | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_287 (fpnew_fma.sv:287) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_287_2 (fpnew_fma.sv:287) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_287_3 (fpnew_fma.sv:287) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_287 (fpnew_fma.sv:287) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 5     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| I3    | PI   | Unsigned | 5     |                                          |
+| I4    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Signed   | 7     | I1 + I2 + I3 + I4 - $unsigned(4'b1111) (fpnew_fma.sv:287) |
+==============================================================================
+
+Datapath Report for DP_OP_235J1_124_9924
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_235J1_124_9924 | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_293 (fpnew_fma.sv:293) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_306 (fpnew_fma.sv:306) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 6     |                                          |
+| I2    | PI   | Signed   | 7     |                                          |
+| T149  | IFO  | Signed   | 6     | O1[5:0]                                  |
+| O1    | PO   | Signed   | 7     | I1 - I2 (fpnew_fma.sv:293)               |
+| O2    | PO   | Signed   | 6     | $unsigned(4'b1110) - T149 (fpnew_fma.sv:306) |
+==============================================================================
+
+Datapath Report for DP_OP_236J1_125_1051
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_236J1_125_1051 | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_369 (fpnew_fma.sv:369) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_369_2 (fpnew_fma.sv:369) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_373 (fpnew_fma.sv:373) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 24    |                                          |
+| I2    | PI   | Unsigned | 37    |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| T155  | IFO  | Signed   | 37    | O1[36:0]                                 |
+| O1    | PO   | Unsigned | 38    | I1 + I2 + I3 (fpnew_fma.sv:369)          |
+| O2    | PO   | Signed   | 37    | $unsigned(1'b0) - T155 (fpnew_fma.sv:373) |
+==============================================================================
+
+Datapath Report for DP_OP_236_133_2281
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_236_133_2281   | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_543 (fpnew_fma.sv:543) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_550 (fpnew_fma.sv:550) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 7     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Signed   | 7     | addsub(I1,1,I2) ( fpnew_fma.sv:543 fpnew_fma.sv:550 ) |
+==============================================================================
+
+Datapath Report for DP_OP_85J1_126_9431
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_85J1_126_9431  | gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_515 (fpnew_fma.sv:515) |
+| gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_520 (fpnew_fma.sv:520) |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 6     |                                          |
+| O1    | PO   | Unsigned | 6     | $unsigned(4'b1101) + I1 ( fpnew_fma.sv:515 fpnew_fma.sv:520 ) |
+==============================================================================
+
+
+Datapath Extraction Report
+
+Information: Operator associated with resources 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_516 (fpnew_fma.sv:516) gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_516 (fpnew_fma.sv:516)' in design 'fpnew_top' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/C1463 (fpnew_fma.sv:513)'.  (HDL-120)
+
+Information: Operator associated with resources 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_293 (fpnew_fma.sv:293)' in design 'fpnew_top' breaks the datapath extraction because there is leakage due to truncation on the fanout of its driver 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/add_285 (fpnew_fma.sv:285)'.  (HDL-120)
+
+Information: Operator associated with resources 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/gt_295 (fpnew_fma.sv:295)' in design 'fpnew_top' breaks the datapath extraction because there is leakage due to truncation on the fanout of its driver 'gen_operation_groups[0].i_opgroup_block/gen_parallel_slices[2].active_format.i_fmt_slice/gen_num_lanes[0].active_lane.lane_instance.i_fma/sub_293 (fpnew_fma.sv:293)'.  (HDL-120)
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| lte_x_4            | DW_cmp           | apparch (area)     |                |
+| add_x_97           | DW01_add         | apparch (area)     |                |
+| gt_x_99            | DW_cmp           | apparch (area)     |                |
+| lte_x_101          | DW_cmp           | apparch (area)     |                |
+| lte_x_102          | DW_cmp           | apparch (area)     |                |
+| ashr_104           | DW_rightsh       | astr (area)        |                |
+| lte_x_108          | DW_cmp           | apparch (area)     |                |
+| lte_x_109          | DW_cmp           | apparch (area)     |                |
+| ash_113            | DW_leftsh        | astr (area)        |                |
+| gt_x_114           | DW_cmp           | apparch (area)     |                |
+| gte_x_117          | DW_cmp           | apparch (area)     |                |
+| add_x_174          | DW01_add         | apparch (area)     |                |
+| DP_OP_233J1_122_153                   |                    |                |
+|                    | DP_OP_233J1_122_153 | str (area,speed)                 |
+| DP_OP_234J1_123_36 | DP_OP_234J1_123_36 | str (area,speed) |                |
+| DP_OP_235J1_124_9924                  |                    |                |
+|                    | DP_OP_235J1_124_9924 | str (area)     |                |
+| DP_OP_236J1_125_1051                  |                    |                |
+|                    | DP_OP_236J1_125_1051 | str (area,speed)                |
+| DP_OP_236_133_2281 | DP_OP_236_133_2281 | str (area)       |                |
+| DP_OP_85J1_126_9431                   |                    |                |
+|                    | DP_OP_85J1_126_9431 | str (area)      |                |
+===============================================================================
+
+1

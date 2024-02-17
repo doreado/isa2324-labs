@@ -1,0 +1,75 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : fpnew_top
+Version: S-2021.06-SP4
+Date   : Sun Dec  3 18:57:31 2023
+****************************************
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: CLK_r_REG20_S2
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: status_o_UF_
+            (output port clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  fpnew_top          5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock CLK (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  CLK_r_REG20_S2/CK (DFFR_X1)              0.00       0.00 r
+  CLK_r_REG20_S2/QN (DFFR_X1)              0.06       0.06 f
+  U930/ZN (NOR4_X1)                        0.09       0.16 r
+  U1343/ZN (NAND2_X1)                      0.04       0.20 f
+  U988/ZN (NAND2_X1)                       0.04       0.23 r
+  U958/ZN (NAND2_X1)                       0.03       0.26 f
+  U1923/ZN (OAI221_X1)                     0.05       0.31 r
+  U1009/ZN (INV_X1)                        0.03       0.34 f
+  U1029/ZN (AND2_X1)                       0.05       0.39 f
+  U1969/ZN (AOI22_X1)                      0.05       0.45 r
+  U1970/ZN (OAI221_X1)                     0.05       0.50 f
+  U1114/Z (MUX2_X1)                        0.07       0.57 f
+  U2076/ZN (OAI33_X1)                      0.08       0.65 r
+  U1288/ZN (AOI221_X1)                     0.04       0.69 f
+  U1290/ZN (NAND3_X1)                      0.04       0.73 r
+  U954/Z (CLKBUF_X1)                       0.06       0.79 r
+  U2109/ZN (NOR3_X1)                       0.03       0.82 f
+  U1221/ZN (AOI221_X1)                     0.09       0.91 r
+  U1351/ZN (AOI22_X1)                      0.04       0.96 f
+  U1294/ZN (NAND2_X1)                      0.04       0.99 r
+  U795/Z (BUF_X2)                          0.06       1.05 r
+  U2150/ZN (OAI211_X1)                     0.06       1.11 f
+  U1050/ZN (AND3_X1)                       0.06       1.17 f
+  U831/ZN (AND3_X1)                        0.05       1.22 f
+  U1116/ZN (NAND2_X1)                      0.03       1.25 r
+  U2195/Z (XOR2_X1)                        0.07       1.32 r
+  U2203/ZN (NAND3_X1)                      0.04       1.36 f
+  U2206/ZN (NOR3_X1)                       0.05       1.41 r
+  U2208/ZN (OAI21_X1)                      0.03       1.44 f
+  U849/ZN (NAND2_X1)                       0.03       1.47 r
+  U867/ZN (AND2_X1)                        0.05       1.52 r
+  status_o_UF_ (out)                       0.02       1.54 r
+  data arrival time                                   1.54
+
+  clock CLK (rise edge)                    2.04       2.04
+  clock network delay (ideal)              0.00       2.04
+  output external delay                   -0.50       1.54
+  data required time                                  1.54
+  -----------------------------------------------------------
+  data required time                                  1.54
+  data arrival time                                  -1.54
+  -----------------------------------------------------------
+  slack (MET)                                         0.00
+
+
+1

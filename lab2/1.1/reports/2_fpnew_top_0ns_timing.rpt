@@ -1,0 +1,82 @@
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : fpnew_top
+Version: S-2021.06-SP4
+Date   : Thu Nov 30 17:09:11 2023
+****************************************
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: CLK_r_REG154_S2
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: result_o[5]
+            (output port clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  fpnew_top          5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  CLK_r_REG154_S2/CK (DFFR_X1)                            0.00       0.00 r
+  CLK_r_REG154_S2/Q (DFFR_X1)                             0.09       0.09 f
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/A[5] (fpnew_top_DW01_sub_13)
+                                                          0.00       0.09 f
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/U52/ZN (OR2_X1)
+                                                          0.06       0.15 f
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/U86/ZN (INV_X1)
+                                                          0.03       0.17 r
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/U107/ZN (OAI21_X1)
+                                                          0.03       0.21 f
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/U94/ZN (XNOR2_X1)
+                                                          0.06       0.27 r
+  sub_1_root_gen_operation_groups_0__i_opgroup_block_gen_parallel_slices_2__active_format_i_fmt_slice_gen_num_lanes_0__active_lane_lane_instance_i_fma_add_512/DIFF[6] (fpnew_top_DW01_sub_13)
+                                                          0.00       0.27 r
+  U2224/ZN (INV_X1)                                       0.03       0.30 f
+  U1584/ZN (INV_X1)                                       0.03       0.33 r
+  U2234/ZN (NAND3_X1)                                     0.04       0.37 f
+  U2235/ZN (NAND2_X1)                                     0.04       0.40 r
+  U1119/ZN (AND2_X1)                                      0.04       0.44 r
+  U2189/ZN (AND2_X2)                                      0.05       0.50 r
+  U1549/ZN (INV_X1)                                       0.05       0.55 f
+  U2321/ZN (OAI22_X1)                                     0.08       0.62 r
+  U1477/ZN (OR2_X1)                                       0.05       0.67 r
+  U2404/ZN (INV_X1)                                       0.03       0.70 f
+  U1176/ZN (AND2_X1)                                      0.04       0.74 f
+  U1177/ZN (NOR3_X1)                                      0.06       0.79 r
+  U2407/ZN (OAI21_X1)                                     0.04       0.84 f
+  U2625/ZN (NAND3_X1)                                     0.04       0.88 r
+  U2669/ZN (NAND2_X1)                                     0.03       0.91 f
+  U2670/ZN (OAI33_X1)                                     0.09       1.00 r
+  U2671/ZN (NAND2_X1)                                     0.05       1.05 f
+  U776/ZN (AND2_X1)                                       0.05       1.10 f
+  U1034/ZN (OAI21_X1)                                     0.05       1.15 r
+  U2744/ZN (NAND2_X1)                                     0.03       1.18 f
+  U1253/ZN (AND2_X1)                                      0.04       1.22 f
+  U1362/ZN (AND2_X1)                                      0.04       1.26 f
+  U857/ZN (NOR3_X2)                                       0.05       1.32 r
+  result_o[5] (out)                                       0.02       1.34 r
+  data arrival time                                                  1.34
+
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  output external delay                                  -0.50      -0.50
+  data required time                                                -0.50
+  --------------------------------------------------------------------------
+  data required time                                                -0.50
+  data arrival time                                                 -1.34
+  --------------------------------------------------------------------------
+  slack (VIOLATED)                                                  -1.84
+
+
+1
