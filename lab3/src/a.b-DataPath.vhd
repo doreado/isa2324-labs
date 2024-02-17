@@ -110,7 +110,9 @@ architecture RTL of DATAPATH is
     ---------------------------- [IF] STAGE
     signal IR  : std_logic_vector(INS_SIZE - 1 downto 0);
     signal PC  : pc_t;
+    signal NPC : pc_t; -- PC + 4 signal
     signal PC_IFID : pc_t;
+    signal NPC_IFID : pc_t; -- It stores PC + 4
 
     ---------------------------- [ID] STAGE
     signal RF_OUT_1  : data_t;
@@ -189,9 +191,7 @@ begin
 
     ---------------------------- MUX_LMDs
     -- MUX_R: based on the instruction type or jal (0: I, 1: R, 2: jal)
-    MUX_R_OUT <= INS_RD when CW.decode.MUX_R_SEL = "00" else
-                INS_RS2 when CW.decode.MUX_R_SEL = "01" else
-                std_logic_vector(to_unsigned(LR_INDEX, INS_R1_SIZE));
+    MUX_R_OUT <= INS_RD;
 
     -- MUX_A
     MUX_A_OUT <= to_data(NPC_ID) when MUX_A_SEL = "00" else
@@ -241,6 +241,10 @@ begin
                  '0';
 
     ---------------------------- NEXT PC GENERATION
+
+    -- Compute the next address to be fetched
+    NPC <= PC + 4;
+
     -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
     -- TODO: evaluate if MUX_J_OUT is appropriate (maybe taking the immediate directly from IR is better)
     with cw.decode.ta_op1_sel select target_addr <= 
@@ -253,7 +257,7 @@ begin
                         ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- gte[u] and a >= b
                         ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else -- blt[u] and a < b
                        -- All other I/R TYPE instructions
-                       (PC + 4);
+                       NPC;
 
     ---------------------------- FORWARDING UNIT
     dp_to_fu <= (
@@ -333,7 +337,7 @@ begin
         end if;
     end process PC_P;
 
-    -- NPC
+    -- PC_IFID
     PC_IFID_P : process (CLK, RST)
     begin
         if RST = '1' then
@@ -344,6 +348,18 @@ begin
             end if;
         end if;
     end process PC_IFID_P;
+
+    -- NPC_IFID
+    NPC_IFID_P : process (CLK, RST)
+    begin
+        if RST = '1' then
+            NPC_IFID <= (others => '0');
+        elsif falling_edge(CLK) then
+            if (SECW.FETCH = '1') then
+                NPC_IFID <= NPC;
+            end if;
+        end if;
+    end process NPC_IFID_P;
 
     -- IR
     IR_P : process (CLK, RST)
@@ -405,7 +421,7 @@ begin
             NPC_ID <= (others => '0');
         elsif falling_edge(CLK) then
             if (SECW.DECODE = '1') then
-                NPC_ID <= PC_IFID;
+                NPC_ID <= NPC_IFID;
             end if;
         end if;
     end process NPC_ID_P;
