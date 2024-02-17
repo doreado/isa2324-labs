@@ -14,7 +14,7 @@ entity LoadStoreUnit is
         wdata_in: in data_t;
         we_in: in std_logic;
         -- from MEM
-        --mem_rdy: in std_logic;
+        mem_rdy: in std_logic;
         rdata: in data_t;
         valid_in: in std_logic;
         -- to CPU
