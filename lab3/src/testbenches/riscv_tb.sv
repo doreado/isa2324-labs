@@ -13,11 +13,16 @@ module tb;
   logic         DRAM_READY;
   logic         IRAM_ENABLE;
   logic [ins_size-1:0] IRAM_ADDRESS;
+  logic [ins_size-1:0] IRAM_ADDRESS_mem;
   logic         DRAM_ENABLE;
   logic         init_DRAM_ENABLE;
   logic         DRAM_ENABLE_s;
   logic         DRAM_READNOTWRITE;
   logic [ins_size-1:0] DRAM_ADDRESS;
+  logic [ins_size-1:0] DRAM_ADDRESS_mem;
+
+  assign IRAM_ADDRESS_mem = IRAM_ADDRESS >> 2;
+  assign DRAM_ADDRESS_mem = DRAM_ADDRESS >> 2;
 
   // Instantiate ROMEM component
   ROMEM #(ro_hex, iram_depth, ins_size, iram_addr_size, iram_delay)
@@ -25,7 +30,7 @@ module tb;
   (
     .CLK        (CLK),
     .RST        (RST),
-    .ADDRESS    (IRAM_ADDRESS),
+    .ADDRESS    (IRAM_ADDRESS_mem),
     .ENABLE     (IRAM_ENABLE),
     .DATA_READY (IRAM_READY),
     .DATA       (IRAM_DATA)
@@ -37,7 +42,7 @@ module tb;
   (
     .CLK          (CLK),
     .RST          (RST),
-    .ADDR         (DRAM_ADDRESS),
+    .ADDR         (DRAM_ADDRESS_mem),
     .DATA_IN      (DRAM_IN),
     .ENABLE       (DRAM_ENABLE),
     .READNOTWRITE (DRAM_READNOTWRITE),
