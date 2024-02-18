@@ -81,7 +81,8 @@ begin
         MUX_A_CU          => cw2.execute.MUX_A_SEL,
         MUX_B_CU          => cw2.execute.MUX_B_SEL,
         IS_JUMP_EX        => cw2.decode.MUX_J_SEL,
-        MUX_COND_SEL      => cw2.decode.MUX_COND_SEL
+        MUX_COND_SEL      => cw_s.decode.MUX_COND_SEL,
+        ta_op1_sel        => cw_s.decode.ta_op1_sel
         );
 
     ---------------------------- Hazard detectino unit

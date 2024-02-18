@@ -11,11 +11,6 @@ package control_words is
     -- Pipeline control signals type definitions
     -----------------------------------------------------------------------------
 
-    -- Symbols to distinguish diffent immediate modes in control words.
-    type imm_t is (u_imm, uj_imm, i_imm, s_imm, sb_imm, zero);
-    -- First operand Target address selection signal
-    type ta_op1_sel_t is (pc_ta, jalr_ta, j_ta);
-
     type decode_cw_t is record
         RF_RESET   : std_logic; -- register file reset signal
         RF_ENABLE  : std_logic; -- register file enable signal
@@ -319,7 +314,7 @@ package control_words is
         ),
         wb      => (
             RF_WR       => '1',
-            MUX_LMD_SEL => "01"
+            MUX_LMD_SEL => "10"
         )
     );
 

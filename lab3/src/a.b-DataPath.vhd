@@ -227,11 +227,11 @@ begin
     ---------------------------- BRANCH COMPARATOR
     -- Forwarding connections
     mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_CMP_A_SEL = "00" else
-                      ALU_OUT_REG when MUX_FWD_CMP_A_SEL = "10" else  -- from the exe
-                      MUX_LMD_OUT when MUX_FWD_CMP_A_SEL = "11";      -- from mem
+                      ALU_OUT     when MUX_FWD_CMP_A_SEL = "10" else  -- from the exe
+                      ALU_OUT_REG when MUX_FWD_CMP_A_SEL = "11";      -- from mem
     mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_CMP_B_SEL = "00" else
-                      ALU_OUT_REG when MUX_FWD_CMP_B_SEL = "10" else  -- from the exe
-                      MUX_LMD_OUT when MUX_FWD_CMP_B_SEL = "11";      -- from mem
+                      ALU_OUT     when MUX_FWD_CMP_B_SEL = "10" else  -- from the exe
+                      ALU_OUT_REG when MUX_FWD_CMP_B_SEL = "11";      -- from mem
     -- Branch Comparator
     a_gte_b <= '1' when
                         (cw.decode.cmp_sel = '0' and 
