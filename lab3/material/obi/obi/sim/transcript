@@ -1,0 +1,9 @@
+# vsim -c -t ps -L ./mem_wrap -do "wave2.0.do" work.tb_mem_wrap_fake -voptargs="+acc" 
+# Start time: 17:24:46 on Feb 18,2024
+# ** Error: (vsim-3170) Could not find 'tb_mem_wrap_fake'.
+#         Searched libraries:
+#             /mnt/c/Users/aless/Desktop/Robba/Materiale Polito/Master/Integrated Systems Architecture/isa2324-labs/lab3/material/obi/obi/sim/mem_wrap
+#             /mnt/c/Users/aless/Desktop/Robba/Materiale Polito/Master/Integrated Systems Architecture/isa2324-labs/lab3/material/obi/obi/sim/work
+# Error loading design
+# End time: 17:24:47 on Feb 18,2024, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
