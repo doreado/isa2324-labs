@@ -248,9 +248,8 @@ begin
     -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
     -- TODO: evaluate if MUX_J_OUT is appropriate (maybe taking the immediate directly from IR is better)
     with cw.decode.ta_op1_sel select target_addr <= 
-        PC + shift_left(unsigned(MUX_IMM_OUT), 1) when pc_ta,
         unsigned(mux_fwd_cmp_a_out) + unsigned(MUX_IMM_OUT) when jalr_ta,
-        PC_IFID + unsigned(MUX_IMM_OUT) when j_ta;
+        PC_IFID + unsigned(MUX_IMM_OUT) when others;
 
     MUX_COND_OUT    <= pc_t(target_addr) when 
                        ((CW.decode.MUX_COND_SEL = "11") or  -- J-TYPE instructions
