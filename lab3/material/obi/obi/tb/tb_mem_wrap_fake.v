@@ -1,9 +1,11 @@
 `timescale 1ps/1ps
 
+import work.myTypes::*;
 module tb_mem_wrap_fake ();
 
    wire        CLK;
    wire        RSTn;
+   wire        RST;
    wire        PROC_REQ;
    wire        MEM_RDY;
    wire [31:0] ADDR;
@@ -11,6 +13,9 @@ module tb_mem_wrap_fake ();
    wire [31:0] WDATA;
    wire [31:0] RDATA;
    wire        VALID;
+   wire valid_out_s, we_out_s;
+   wire we_out_sn;
+   wire [31:0] addr_out_s, wdata_out_s;
 
    localparam Ts = 10000;
    localparam tco = 1;
@@ -61,7 +66,27 @@ module tb_mem_wrap_fake ();
       );      
    end // block: RGF0
 
-   mem_wrap_fake #(
+   LoadStoreUnit LSU (
+      .clk( CLK ),
+      .rst( RSTn ),
+      .proc_req_in( PROC_REQ ),
+      .addr_in( ADDR ),
+      .wdata_in( WDATA ),
+      .we_in( WE ),
+      .mem_rdy( MEM_RDY ),
+      .rdata( RDATA ),
+      .valid_in( VALID ),
+      .data_out( RDATA),
+      .valid_out ( valid_out_s ),
+      .addr_out( ADDR ),
+      .we_out( we_out_s ),
+      .wdata_out( wdata_out_s )
+   );
+
+   assign RST = ~RSTn;
+   assign we_out_sn = ~we_out_s;
+
+   /*mem_wrap_fake #(
 		   .CONTENT_TYPE( cCONTENT_TYPE ),
 		   .tco( tco ),
 		   .tpd( tpd )
@@ -76,12 +101,32 @@ module tb_mem_wrap_fake ();
       .RDATA( RDATA ),
       .VALID( VALID )
    );
+   */
+
+   RWMEM #(
+       .FILE_PATH(RW_HEX),
+       .FILE_PATH_INIT(RW_HEX_INIT),
+       .DATA_SIZE( numBit),
+       .INSTR_SIZE( numBit ),
+       .RAM_DEPTH ( DRAM_DEPTH ),
+       .DATA_DELAY ( DRAM_DELAY )
+     ) data_RAM (
+      .CLK( CLK ),
+      .RST( RST ),
+      //.PROC_REQ( PROC_REQ ),
+      //.MEM_RDY( MEM_RDY ),
+      .ADDR( ADDR ),
+      .READNOTWRITE( we_out_sn ), 
+      .DATA_IN( wdata_out_s ),
+      .DATA_OUT( rdata ),
+      .DATA_READY( valid_out )
+   ); 
 
   data_dumper dd (
 		  .CLK( CLK ),
 		  .RSTn( RSTn ),
-		  .RDATA( RDATA ),
-		  .VALID( VALID )
+		  .RDATA( rdata ),
+		  .VALID( valid_out )
 		  );
          
 endmodule
