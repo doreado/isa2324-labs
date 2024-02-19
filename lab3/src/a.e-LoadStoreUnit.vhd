@@ -31,7 +31,7 @@ end LoadStoreUnit;
 
 architecture Beh of LoadStoreUnit is
     TYPE Statetype IS
-        (IDLE, READY);
+        (IDLE, READY, VALID);
     signal curr_state, next_state: Statetype;
     signal addr_in_s: addr_t;
     signal wdata_in_s: data_t;  
@@ -41,11 +41,19 @@ begin
     begin
         case curr_state is
             when IDLE =>
+                valid_out <= '0';
                 if(proc_req_in = '1') then
                     -- store request content 
                     addr_in_s <= addr_in;
                     if(we_in = '1') then
                         wdata_in_s <= wdata_in;
+                    end if;
+                    --burst case
+                    if(mem_rdy = '1') then
+                        addr_out <= addr_in;
+                        if(we_in = '1') then
+                            wdata_out <= wdata_in_s;
+                        end if;
                     end if;
                 end if;
             when READY =>
@@ -54,12 +62,17 @@ begin
                     if(we_in = '1') then
                         wdata_out <= wdata_in_s;
                     end if;
+                end if;
+            when VALID =>
+                if (valid_in = '1') then
+                    data_out <= rdata;
+                    valid_out <= '1';
                 end if;  
         end case;
     end process;
     
-    data_out <= rdata when valid_in = '1';
-    valid_out <= '1' when valid_in = '1' else '0';
+    --data_out <= rdata when valid_in = '1';
+    --valid_out <= '1' when valid_in = '1' else '0';
 
     Control: process(curr_state, proc_req_in, mem_rdy, valid_in)
     begin
@@ -67,10 +80,20 @@ begin
             when IDLE =>
                 if(proc_req_in = '1') then
                     next_state <= READY;
+                    if(mem_rdy = '1') then
+                        next_state <= VALID;
+                    end if;
+                else
+                    next_state <= IDLE;
                 end if;
             when READY =>
-                next_state <= READY;
                 if(mem_rdy = '1') then
+                    next_state <= VALID;
+                else
+                    next_state <= READY;
+                end if;
+            when VALID =>
+                if(valid_in = '1') then
                     next_state <= IDLE;
                 end if;
         end case;        
@@ -78,7 +101,7 @@ begin
 
     StateReg: process(clk, rst)
     begin
-        if(rst = '1') then
+        if(rst = '0') then
             curr_state <= IDLE;
         elsif (rising_edge(clk)) then
             curr_state <= next_state;
