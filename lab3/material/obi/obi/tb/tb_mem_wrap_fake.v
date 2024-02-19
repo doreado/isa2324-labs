@@ -1,21 +1,19 @@
 `timescale 1ps/1ps
 
-import work.myTypes::*;
 module tb_mem_wrap_fake ();
 
+   
    wire        CLK;
    wire        RSTn;
    wire        RST;
-   wire        PROC_REQ;
-   wire        MEM_RDY;
-   wire [31:0] ADDR;
-   wire        WE;
-   wire [31:0] WDATA;
-   wire [31:0] RDATA;
-   wire        VALID;
-   wire valid_out_s, we_out_s;
-   wire we_out_sn;
-   wire [31:0] addr_out_s, wdata_out_s;
+   wire        PROC_REQ, PROC_REQ_S;
+   wire        MEM_RDY, MEM_RDY_S;
+   wire [31:0] ADDR, ADDR_S;
+   wire        WE, WE_S;
+   wire [31:0] WDATA, WDATA_S;
+   wire [31:0] RDATA, RDATA_S;
+   wire        VALID, VALID_S;
+
 
    localparam Ts = 10000;
    localparam tco = 1;
@@ -76,17 +74,14 @@ module tb_mem_wrap_fake ();
       .mem_rdy( MEM_RDY ),
       .rdata( RDATA ),
       .valid_in( VALID ),
-      .data_out( RDATA),
-      .valid_out ( valid_out_s ),
-      .addr_out( ADDR ),
-      .we_out( we_out_s ),
-      .wdata_out( wdata_out_s )
+      .data_out( RDATA_S),
+      .valid_out ( VALID_S ),
+      .addr_out( ADDR_S ),
+      .we_out( WE_S ),
+      .wdata_out( WDATA_S )
    );
 
-   assign RST = ~RSTn;
-   assign we_out_sn = ~we_out_s;
-
-   /*mem_wrap_fake #(
+   mem_wrap_fake #(
 		   .CONTENT_TYPE( cCONTENT_TYPE ),
 		   .tco( tco ),
 		   .tpd( tpd )
@@ -95,38 +90,18 @@ module tb_mem_wrap_fake ();
       .RSTn( RSTn ),
       .PROC_REQ( PROC_REQ ),
       .MEM_RDY( MEM_RDY ),
-      .ADDR( ADDR ),
-      .WE( WE ),
+      .ADDR( ADDR_S ),
+      .WE( WE_out_s ),
       .WDATA( WDATA ),
       .RDATA( RDATA ),
       .VALID( VALID )
    );
-   */
-
-   RWMEM #(
-       .FILE_PATH(RW_HEX),
-       .FILE_PATH_INIT(RW_HEX_INIT),
-       .DATA_SIZE( numBit),
-       .INSTR_SIZE( numBit ),
-       .RAM_DEPTH ( DRAM_DEPTH ),
-       .DATA_DELAY ( DRAM_DELAY )
-     ) data_RAM (
-      .CLK( CLK ),
-      .RST( RST ),
-      //.PROC_REQ( PROC_REQ ),
-      //.MEM_RDY( MEM_RDY ),
-      .ADDR( ADDR ),
-      .READNOTWRITE( we_out_sn ), 
-      .DATA_IN( wdata_out_s ),
-      .DATA_OUT( rdata ),
-      .DATA_READY( valid_out )
-   ); 
-
+   
   data_dumper dd (
 		  .CLK( CLK ),
 		  .RSTn( RSTn ),
-		  .RDATA( rdata ),
-		  .VALID( valid_out )
+		  .RDATA( RDATA_S ),
+		  .VALID( VALID_S )
 		  );
          
 endmodule
