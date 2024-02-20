@@ -116,8 +116,8 @@ begin
                 when UTYPE_AUIPC => 
                     cw_s <= AUIPC_CW;
                     imm <= "001";
-                --when UTYPE_LUI => 
-                  --  cw_s <= LUI_CW;
+                when UTYPE_LUI => 
+                    cw_s <= LUI_CW;
                 when ITYPE_ADDI => -- ITYPE
                     cw_s <= ADDI_CW;
                     imm <= "000";

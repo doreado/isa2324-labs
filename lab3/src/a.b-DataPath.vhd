@@ -185,7 +185,8 @@ begin
         to_data(signed(INS_I_IMM)) when i_imm,
         to_data(signed(INS_S_IMM)) when s_imm,
         to_data(signed(INS_SB_IMM & '0')) when sb_imm,
-        to_data(shift_left(signed(INS_U_IMM), 12)) when u_imm,
+        --to_data(shift_left(signed(INS_U_IMM), 12)) when u_imm,
+        to_data(signed(INS_U_IMM & "000000000000")) when u_imm,
         to_data(signed(INS_UJ_IMM) & '0') when uj_imm,
         (others => '0') when zero;
 
