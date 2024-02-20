@@ -33,18 +33,18 @@ architecture Beh of LoadStoreUnit is
     TYPE Statetype IS
         (IDLE, READY, VALID);
     signal curr_state, next_state: Statetype;
-    signal addr_in_s: addr_t;
-    signal wdata_in_s: data_t;  
+    signal addr_in_s, next_addr_in_s: addr_t;
+    signal wdata_in_s, next_wdata_in_s: data_t;  
 begin
 
-    Logic: process(curr_state)
+    Logic: process(curr_state, proc_req_in, we_in, mem_rdy, valid_in, addr_in, addr_in_s, wdata_in, wdata_in_s, rdata)
     begin
         case curr_state is
             when IDLE =>
                 valid_out <= '0';
                 if(proc_req_in = '1') then
                     -- store request content 
-                    addr_in_s <= addr_in;
+                    next_addr_in_s <= addr_in;
                     if(we_in = '1') then
                         wdata_in_s <= wdata_in;
                     end if;
@@ -52,15 +52,15 @@ begin
                     if(mem_rdy = '1') then
                         addr_out <= addr_in;
                         if(we_in = '1') then
-                            wdata_out <= wdata_in_s;
+                            wdata_out <= wdata_in;
                         end if;
                     end if;
                 end if;
             when READY =>
                 if(mem_rdy = '1') then
-                    addr_out <= addr_in_s;
+                    addr_out <= next_addr_in_s;
                     if(we_in = '1') then
-                        wdata_out <= wdata_in_s;
+                        wdata_out <= next_wdata_in_s;
                     end if;
                 end if;
             when VALID =>
@@ -103,8 +103,12 @@ begin
     begin
         if(rst = '0') then
             curr_state <= IDLE;
+            addr_in_s <= (others => '0');
+            wdata_in_s <= (others => '0');
         elsif (rising_edge(clk)) then
             curr_state <= next_state;
+            addr_in_s <= next_addr_in_s;
+            wdata_in_s <= next_wdata_in_s;
         end if;
     end process;
 
