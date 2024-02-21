@@ -11,9 +11,6 @@ package control_words is
     -- Pipeline control signals type definitions
     -----------------------------------------------------------------------------
 
-    -- Symbols to distinguish diffent immediate modes in control words.
-    type imm_t is (u_imm, uj_imm, i_imm, s_imm, sb_imm, zero);
-
     type decode_cw_t is record
         RF_RESET   : std_logic; -- register file reset signal
         RF_ENABLE  : std_logic; -- register file enable signal
@@ -21,7 +18,7 @@ package control_words is
         RF_RD2     : std_logic; -- register file read port two signal
         cmp_sel    : std_logic; -- Select how to extend operands in branch comparator (1: signed, 0: unsigned)
         imm_sel    : imm_t;     -- Select the second operand used to compute the target address 
-        is_jalr    : std_logic;
+        ta_op1_sel : ta_op1_sel_t; -- Select how to compute the target address
         MUX_COND_SEL : std_logic_vector(1 downto 0); -- used to distinguish bge, blt, jal
         MUX_SIGNED : std_logic; -- MUX_SIGNED selection signal
         MUX_J_SEL  : std_logic; -- MUX_J_SEL selection signal TODO: useless
@@ -74,7 +71,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => i_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -106,7 +103,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => u_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -138,7 +135,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => s_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -170,7 +167,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => i_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -202,7 +199,7 @@ package control_words is
             RF_RD2       => '1',
             cmp_sel      => '0',
             imm_sel      => zero,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -234,7 +231,7 @@ package control_words is
             RF_RD2       => '1',
             cmp_sel      => '0',
             imm_sel      => zero,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -266,7 +263,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => uj_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => j_ta,
             MUX_COND_SEL => "11",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '1',
@@ -298,7 +295,7 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => i_imm,
-            is_jalr      => '1',
+            ta_op1_sel      => jalr_ta,
             MUX_COND_SEL => "11",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '1',
@@ -317,11 +314,11 @@ package control_words is
         ),
         wb      => (
             RF_WR       => '1',
-            MUX_LMD_SEL => "01"
+            MUX_LMD_SEL => "10"
         )
     );
 
-    -- BGE
+    -- BGE (BLE with inverted operands)
     constant BGE_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
@@ -330,7 +327,7 @@ package control_words is
             RF_RD2       => '1',
             cmp_sel      => '1',
             imm_sel      => sb_imm,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "01",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',
@@ -353,7 +350,7 @@ package control_words is
         )
     );
 
-    -- BLTU
+    -- BLTU (bgt)
     constant BLTU_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
@@ -362,8 +359,8 @@ package control_words is
             RF_RD2       => '1',
             cmp_sel      => '0',
             imm_sel      => sb_imm,
-            is_jalr      => '0',
-            MUX_COND_SEL => "01",
+            ta_op1_sel      => pc_ta,
+            MUX_COND_SEL => "10",
             MUX_SIGNED   => '0',
             MUX_J_SEL    => '0',
             MUX_R_SEL    => "00"
@@ -394,8 +391,8 @@ package control_words is
             RF_RD2       => '0',
             cmp_sel      => '0',
             imm_sel      => u_imm,
-            is_jalr      => '0',
-            MUX_COND_SEL => "01",
+            ta_op1_sel      => pc_ta,
+            MUX_COND_SEL => "00",
             MUX_SIGNED   => '0',
             MUX_J_SEL    => '0',
             MUX_R_SEL    => "00"
@@ -428,7 +425,7 @@ package control_words is
             RF_RD2       => '1',
             cmp_sel      => '0',
             imm_sel      => zero,
-            is_jalr      => '0',
+            ta_op1_sel      => pc_ta,
             MUX_COND_SEL => "00",
             MUX_SIGNED   => '1',
             MUX_J_SEL    => '0',

@@ -189,6 +189,14 @@ package myTypes is
     pure function to_data(arg : pc_t) return data_t;
     pure function to_data(arg : signed) return data_t;
 
+
+    ---- Types declarations   ----
+
+    -- Symbols to distinguish diffent immediate modes in control words.
+    type imm_t is (u_imm, uj_imm, i_imm, s_imm, sb_imm, zero);
+    -- First operand Target address selection signal
+    type ta_op1_sel_t is (pc_ta, jalr_ta, j_ta);
+
     type dp_to_fu_t is record
         rs1_F     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
         rs2_F     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
@@ -209,6 +217,7 @@ package myTypes is
         DRAM_ENABLE_EX    : std_logic;
         IS_JUMP_EX        : std_logic;
         MUX_COND_SEL      : std_logic_vector(1 downto 0);
+        ta_op1_sel        : ta_op1_sel_t;
     end record;
 
     type dp_to_hu_t is record

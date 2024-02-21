@@ -64,7 +64,8 @@ begin
         (
         ALU_OPCODE_UPDATED,
         cw2.execute.MUX_A_SEL,
-        cw2.execute.MUX_B_SEL
+        cw2.execute.MUX_B_SEL,
+        cw2.execute.is_lui
         ),
         cw3.memory,
         cw4.wb
@@ -80,7 +81,8 @@ begin
         MUX_A_CU          => cw2.execute.MUX_A_SEL,
         MUX_B_CU          => cw2.execute.MUX_B_SEL,
         IS_JUMP_EX        => cw2.decode.MUX_J_SEL,
-        MUX_COND_SEL      => cw2.decode.MUX_COND_SEL
+        MUX_COND_SEL      => cw_s.decode.MUX_COND_SEL,
+        ta_op1_sel        => cw_s.decode.ta_op1_sel
         );
 
     ---------------------------- Hazard detectino unit
@@ -114,8 +116,8 @@ begin
                 when UTYPE_AUIPC => 
                     cw_s <= AUIPC_CW;
                     imm <= "001";
-                --when UTYPE_LUI => 
-                  --  cw_s <= LUI_CW;
+                when UTYPE_LUI => 
+                    cw_s <= LUI_CW;
                 when ITYPE_ADDI => -- ITYPE
                     cw_s <= ADDI_CW;
                     imm <= "000";

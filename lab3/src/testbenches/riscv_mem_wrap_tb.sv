@@ -3,6 +3,16 @@ module tb;
   // Include necessary libraries
   import mytypes::*;        // Use custom types defined in myTypes package
 
+   wire        CLK;
+   wire        RSTn;
+   wire        PROC_REQ;
+   wire        MEM_RDY;
+   wire [31:0] ADDR;
+   wire        WE;
+   wire [31:0] WDATA;
+   wire [31:0] RDATA;
+   wire        VALID;
+
   // Define signals
   logic         CLK = 1'b0;
   logic         RST;
@@ -13,37 +23,16 @@ module tb;
   logic         DRAM_READY;
   logic         IRAM_ENABLE;
   logic [ins_size-1:0] IRAM_ADDRESS;
+  logic [ins_size-1:0] IRAM_ADDRESS_mem;
   logic         DRAM_ENABLE;
   logic         init_DRAM_ENABLE;
   logic         DRAM_ENABLE_s;
   logic         DRAM_READNOTWRITE;
   logic [ins_size-1:0] DRAM_ADDRESS;
+  logic [ins_size-1:0] DRAM_ADDRESS_mem;
 
-  // Instantiate ROMEM component
-  ROMEM #(ro_hex, iram_depth, ins_size, iram_addr_size, iram_delay)
-  ROMEM_1 
-  (
-    .CLK        (CLK),
-    .RST        (RST),
-    .ADDRESS    (IRAM_ADDRESS),
-    .ENABLE     (IRAM_ENABLE),
-    .DATA_READY (IRAM_READY),
-    .DATA       (IRAM_DATA)
-  );
-
-  // Instantiate RWMEM component
-  RWMEM #(rw_hex, rw_hex_init, numbit, numbit, dram_depth, dram_delay)
-  DRAM_1 
-  (
-    .CLK          (CLK),
-    .RST          (RST),
-    .ADDR         (DRAM_ADDRESS),
-    .DATA_IN      (DRAM_IN),
-    .ENABLE       (DRAM_ENABLE),
-    .READNOTWRITE (DRAM_READNOTWRITE),
-    .DATA_READY   (DRAM_READY),
-    .DATA_OUT     (DRAM_OUT)
-  );
+  assign IRAM_ADDRESS_mem = IRAM_ADDRESS >> 2;
+  assign DRAM_ADDRESS_mem = DRAM_ADDRESS >> 2;
 
   // Instantiate DLX component
   DLX DLX_1 (

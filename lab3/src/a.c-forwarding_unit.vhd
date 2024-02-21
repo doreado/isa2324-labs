@@ -74,17 +74,20 @@ begin
       end if;
     end if;
 
+    if (cu_to_fu.MUX_COND_SEL = "01" or cu_to_fu.MUX_COND_SEL = "10" or cu_to_fu.ta_op1_sel = jalr_ta) -- if the istruction is a bge
+            and (unsigned(dp_to_fu.RD_EX) /= 0) then -- and destination is not zero
+        if (dp_to_fu.RD_ID = dp_to_fu.rs1_f) then -- if destination reg in mem = fetched rs1
+            MUX_FWD_CMP_A_SEL <= "10"; -- forward from exe at the output of the alu (higher precedende)
+        elsif (dp_to_fu.RD_EX = dp_to_fu.rs1_f) then -- if dest reg in wb = fetched rs1
+            MUX_FWD_CMP_A_SEL <= "11"; -- forward from mem
+        end if;
+    end if;
+
     if (cu_to_fu.MUX_COND_SEL = "01" or cu_to_fu.MUX_COND_SEL = "10") -- if the istruction is a bge
             and (unsigned(dp_to_fu.RD_EX) /= 0) then -- and destination is not zero
-        if (dp_to_fu.RD_EX = dp_to_fu.rs1_f) then -- if destination reg in mem = fetched rs1
-            MUX_FWD_CMP_A_SEL <= "10"; -- forward from mem (higher precedende)
-        elsif (dp_to_fu.RD_MEM = dp_to_fu.rs1_f) then -- if dest reg in wb = fetched rs1
-            MUX_FWD_CMP_A_SEL <= "11"; -- forward from wb
-        end if;
-
-        if (dp_to_fu.RD_EX = dp_to_fu.rs2_f) then -- if destination reg in mem = fetched rs2                 
+        if (dp_to_fu.RD_ID = dp_to_fu.rs2_f) then -- if destination reg in mem = fetched rs2                 
             MUX_FWD_CMP_B_SEL <= "10"; -- forward from mem (higher precedence)
-        elsif (dp_to_fu.RD_MEM = dp_to_fu.rs2_f) then -- if dest reg in wb = fetched rs2                         
+        elsif (dp_to_fu.RD_EX = dp_to_fu.rs2_f) then -- if dest reg in wb = fetched rs2                         
             MUX_FWD_CMP_B_SEL <= "11"; -- forward from wb                                         
         end if;
     end if;
