@@ -3,24 +3,9 @@
 SIM_DIR='./sim'
 SRC_DIR='./src'
 COMPONENTS_FILE='./components'
-TESTBENCH_FILE='./testbenches/DLX_tb.vhd'
 
 echo "[INFO] Starting Compilation."
 echo "[INFO] Moving into simulation directory"
-
-# rm -rf sim
-if [ ! -d "$SIM_DIR" ]; then
-    echo "[INFO] $SIM_DIR does not exist yet."
-    echo "[INFO] Creating it."
-    mkdir -p "$SIM_DIR"
-    echo "[INFO] Copying sources from $SRC_DIR"
-    # TODO add simulation specific files to components
-    echo "$TESTBENCH_FILE" >> "$SIM_FILE_LIST"
-    cp -r $SRC_DIR/* $SIM_DIR/
-else
-    echo "[INFO] $SIM_DIR found."
-    cp -r --update $SRC_DIR/* $SIM_DIR/
-fi
 
 cd "$SIM_DIR"
 echo "[INFO] (SETMENTOR)"
@@ -78,5 +63,5 @@ done < "$COMPONENTS_FILE"
 if ps aux | grep -q [v]sim; then
     exit 1
 else
-    setsid vsim -c -t 10ps work.tb -voptargs=+acc
+    setsid vsim -L fake_wrap -t 10ps work.tb -voptargs=+acc
 fi
