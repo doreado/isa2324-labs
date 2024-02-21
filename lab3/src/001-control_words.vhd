@@ -318,7 +318,7 @@ package control_words is
         )
     );
 
-    -- BGE
+    -- BGE (BLE with inverted operands)
     constant BGE_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
@@ -350,7 +350,7 @@ package control_words is
         )
     );
 
-    -- BLTU
+    -- BLTU (bgt)
     constant BLTU_CW : cw_t := (
         decode  => (
             RF_RESET     => '0',
@@ -360,7 +360,7 @@ package control_words is
             cmp_sel      => '0',
             imm_sel      => sb_imm,
             ta_op1_sel      => pc_ta,
-            MUX_COND_SEL => "01",
+            MUX_COND_SEL => "10",
             MUX_SIGNED   => '0',
             MUX_J_SEL    => '0',
             MUX_R_SEL    => "00"
@@ -392,7 +392,7 @@ package control_words is
             cmp_sel      => '0',
             imm_sel      => u_imm,
             ta_op1_sel      => pc_ta,
-            MUX_COND_SEL => "01",
+            MUX_COND_SEL => "00",
             MUX_SIGNED   => '0',
             MUX_J_SEL    => '0',
             MUX_R_SEL    => "00"
