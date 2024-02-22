@@ -330,7 +330,7 @@ begin
     PC_P : process (CLK, RST)
     begin
         if RST = '1' then
-            PROC_REQ <= '0';
+            PROC_REQ <= '1';
             PC <= (others => '0');
         elsif falling_edge(CLK) then
             PROC_REQ <= '0';

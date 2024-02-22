@@ -39,8 +39,8 @@ module tb;
   logic [31:0] IRAM_DATA_OBI, DRAM_DATA_OBI; 
   logic IRAM_OBI_RDY, DRAM_OBI_RDY;
 
-  assign IRAM_ADDRESS_mem = IRAM_ADDRESS >> 2;
-  assign DRAM_ADDRESS_mem = DRAM_ADDRESS >> 2;
+  assign IRAM_ADDRESS_mem = IRAM_ADDRESS;
+  assign DRAM_ADDRESS_mem = DRAM_ADDRESS;
 
   // Instantiate DLX component
   DLX DLX_1 (

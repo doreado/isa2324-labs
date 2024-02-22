@@ -23,8 +23,9 @@ module OBI_interface(
     output logic [32-1:0] DRAM_addr_out,
     output logic web_out,
     output logic [32-1:0] wdata_out,
-    output logic proc_req_out,
+    //output logic proc_req_out,
     // to CPU
+    output logic req_busy_out,
     output logic IRAM_rdy_out,
     output logic DRAM_rdy_out,
     output logic [32-1:0] IRAM_dout,
@@ -47,6 +48,7 @@ module OBI_interface(
         // to CPU
         .data_out(IRAM_dout),
         .valid_out(IRAM_valid_out),
+        .req_busy(req_busy_out),
         // to memories
         .addr_out(IRAM_addr_out)
     );

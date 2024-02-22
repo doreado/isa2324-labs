@@ -18,6 +18,7 @@ entity Fetcher is
         -- to CPU
         data_out: out data_t;
         valid_out: out std_logic;
+        req_busy: out std_logic;
         -- to MEM
         addr_out: out addr_t
     );
@@ -35,7 +36,9 @@ begin
         case curr_state is
             when IDLE =>
                 valid_out <= '0';
+                req_busy <= '0';
                 if(proc_req_in = '1') then
+                    req_busy <= '1';
                     -- store request content 
                     next_addr_in_s <= addr_in;
                     --burst case
@@ -49,6 +52,7 @@ begin
                 end if;
             when VALID =>
                 if (valid_in = '1') then
+                    req_busy <= '0';
                     data_out <= rdata;
                     valid_out <= '1';
                 end if;  

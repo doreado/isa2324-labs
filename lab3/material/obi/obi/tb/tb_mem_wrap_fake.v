@@ -63,8 +63,21 @@ module tb_mem_wrap_fake ();
             .WDATA( WDATA )
       );      
    end // block: RGF0
+   
+    Fetcher F (
+      .clk( CLK ),
+      .rst( RSTn ),
+      .proc_req_in( PROC_REQ ),
+      .addr_in( ADDR ),
+      .mem_rdy( MEM_RDY ),
+      .rdata( RDATA ),
+      .valid_in( VALID ),
+      .data_out( RDATA_S),
+      .valid_out ( VALID_S ),
+      .addr_out( ADDR_S )
+   ); 
 
-   LoadStoreUnit LSU (
+   /*LoadStoreUnit LSU (
       .clk( CLK ),
       .rst( RSTn ),
       .proc_req_in( PROC_REQ ),
@@ -79,7 +92,7 @@ module tb_mem_wrap_fake ();
       .addr_out( ADDR_S ),
       .we_out( WE_S ),
       .wdata_out( WDATA_S )
-   );
+   );  */
 
    mem_wrap_fake #(
 		   .CONTENT_TYPE( cCONTENT_TYPE ),

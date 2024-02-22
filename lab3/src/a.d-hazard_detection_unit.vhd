@@ -73,7 +73,7 @@ begin
             else
                 SECW <= STALL_CLEAR; -- do nothing if the branch is not taken
             end if;
-        elsif (IRAM_READY = '0') then -- fetch a nop if the iram is still reading
+        elsif (IRAM_READY = '1') then -- fetch a nop if the iram is still reading
             SECW <= (
                 FLUSH_IF => '1',
                 PREFETCH => '0',
