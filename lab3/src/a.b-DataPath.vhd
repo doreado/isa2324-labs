@@ -40,7 +40,8 @@ entity DATAPATH is
         DRAM_OUT     : in data_t;
         IRAM_DATA    : in data_t;
         IRAM_ADDRESS : out std_logic_vector(IRAM_ADDR_SIZE - 1 downto 0);
-        DRAM_ADDRESS : out data_t
+        DRAM_ADDRESS : out data_t;
+        PROC_REQ : out std_logic 
     );
 end entity DATAPATH;
 
@@ -329,10 +330,13 @@ begin
     PC_P : process (CLK, RST)
     begin
         if RST = '1' then
+            PROC_REQ <= '0';
             PC <= (others => '0');
         elsif falling_edge(CLK) then
+            PROC_REQ <= '0';
             if (SECW.PREFETCH = '1') then
                 PC <= MUX_COND_OUT;
+                PROC_REQ <= '1';
             end if;
         end if;
     end process PC_P;

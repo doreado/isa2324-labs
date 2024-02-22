@@ -19,7 +19,7 @@ entity Fetcher is
         data_out: out data_t;
         valid_out: out std_logic;
         -- to MEM
-        addr_out: out addr_t;
+        addr_out: out addr_t
     );
 end Fetcher;
 
@@ -85,7 +85,7 @@ begin
         if(rst = '0') then
             curr_state <= IDLE;
             addr_in_s <= (others => '0');
-        elsif (rising_edge(clk)) then
+        elsif (falling_edge(clk)) then
             curr_state <= next_state;
             addr_in_s <= next_addr_in_s;
         end if;

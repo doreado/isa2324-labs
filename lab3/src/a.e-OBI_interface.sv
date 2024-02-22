@@ -1,41 +1,40 @@
-`include "myTypes.sv" 
+import myTypes::*;
 
-module obi_interface(
+module OBI_interface(
+
     input logic clk,
     input logic rst,
     // from CPU
     input logic IRAM_proc_req,
     input logic DRAM_proc_req,
-    input logic [ADDRESS_WIDTH-1:0] IRAM_addr,
-    input logic [ADDRESS_WIDTH-1:0] DRAM_addr,
-    input logic [DATA_WIDTH-1:0] wdata,
+    input logic [32-1:0] IRAM_addr,
+    input logic [32-1:0] DRAM_addr,
+    input logic [32-1:0] wdata,
     input logic web,        // write enable -  active low
     // from MEMORY
     input logic IRAM_rdy,
     input logic DRAM_rdy,
-    input logic [DATA_WIDTH-1:0] IRAM_rdata,
-    input logic [DATA_WIDTH-1:0] DRAM_rdata,
+    input logic [32-1:0] IRAM_rdata,
+    input logic [32-1:0] DRAM_rdata,
     input logic IRAM_valid_in,
     input logic DRAM_valid_in,
     // to MEMORY
-    output logic [ADDRESS_WIDTH-1:0] IRAM_addr_out,
-    output logic [ADDRESS_WIDTH-1:0] DRAM_addr_out,
+    output logic [32-1:0] IRAM_addr_out,
+    output logic [32-1:0] DRAM_addr_out,
     output logic web_out,
-    output logic wdata_out,
+    output logic [32-1:0] wdata_out,
+    output logic proc_req_out,
     // to CPU
-    output logic [DATA_WIDTH-1:0] IRAM_dout,
-    output logic [DATA_WIDTH-1:0] DRAM_dout,
+    output logic IRAM_rdy_out,
+    output logic DRAM_rdy_out,
+    output logic [32-1:0] IRAM_dout,
+    output logic [32-1:0] DRAM_dout,
     output logic IRAM_valid_out,
     output logic DRAM_valid_out
 );
 
-    
-    /*
-    always @* begin
-        csb0 = (mem_sel == 1'b0) ? 1'b0 : 1'b1;
-        csb1 = (mem_sel == 1'b0) ? 1'b1 : 1'b0;
-    end
-    */
+
+
     Fetcher F_0 (
         .clk(clk),
         .rst(rst),

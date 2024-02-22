@@ -26,7 +26,9 @@ entity DLX is
         DRAM_IN           : out data_t;
         DRAM_OUT          : in data_t;
         DRAM_ENABLE       : out std_logic;
-        DRAM_ADDRESS      : out data_t);
+        DRAM_ADDRESS      : out data_t;
+        PROC_REQ : out std_logic
+        );
 end DLX;
 
 architecture RTL of DLX is
@@ -110,7 +112,8 @@ architecture RTL of DLX is
             IRAM_DATA           : in data_t;
             IRAM_ADDRESS        : out std_logic_vector(INS_SIZE - 1 downto 0);
             DRAM_ADDRESS        : out data_t;
-            DRAM_OUT            : in data_t
+            DRAM_OUT            : in data_t;
+            PROC_REQ : out std_logic
         );
     end component DATAPATH;
 
@@ -141,6 +144,8 @@ begin
     -- Components Instantiation
     ----------------------------------------------------------------
 
+    IRAM_ENABLE <= '1'; -- SECW.PREFETCH;
+
     CU_1 : entity work.CU
         port map(
             cw          => cw,
@@ -153,7 +158,7 @@ begin
             FUNCT7      => FUNCT7,
             CLK         => CLK,
             RST         => RST,
-            IRAM_ENABLE => IRAM_ENABLE,
+            IRAM_ENABLE => open,
             -- DRAM_READY        => DRAM_READY,
             DRAM_ENABLE       => DRAM_ENABLE,
             DRAM_READNOTWRITE => DRAM_READNOTWRITE
@@ -208,7 +213,8 @@ begin
             IRAM_DATA           => IRAM_DATA,
             IRAM_ADDRESS        => IRAM_ADDRESS,
             DRAM_ADDRESS        => DRAM_ADDRESS,
-            DRAM_OUT            => DRAM_OUT
+            DRAM_OUT            => DRAM_OUT,
+            PROC_REQ            => PROC_REQ
         );
 end RTL;
 

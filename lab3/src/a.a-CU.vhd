@@ -95,7 +95,7 @@ begin
         );
 
     ---------------------------- RAM
-    IRAM_ENABLE       <= '1';
+    --IRAM_ENABLE       <= '1';
     DRAM_ENABLE       <= cw3.memory.DRAM_ENABLE;
     DRAM_READNOTWRITE <= cw3.memory.DRAM_READNOTWRITE;
 
