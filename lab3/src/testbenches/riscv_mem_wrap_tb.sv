@@ -15,11 +15,12 @@ module tb;
    wire        VALID;
    */
   // Define signals
-  logic PROQ_REQ;
+  logic PROQ_REQ, REQ_DONE, DPROC_REQ, DREQ_DONE;
   logic         CLK = 1'b0;
   logic         RST;
   logic         IRAM_READY;
   logic [numbit-1:0] IRAM_DATA;
+  logic [numbit-1:0] DMEM_RDATA;
   logic [31:0] DRAM_IN;
   logic [31:0] DRAM_OUT;
   logic         DRAM_READY;
@@ -33,11 +34,13 @@ module tb;
   logic [ins_size-1:0] DRAM_ADDRESS;
   logic [ins_size-1:0] DRAM_ADDRESS_mem;
 
-  logic         WEB_OUT, MEM_VALID;
+  logic         WEB_OUT, MEM_VALID, DMEM_VALID;
   logic [31:0] MEM_RDATA, WDATA_OUT;
   logic [31:0] IRAM_ADDR_OBI, DRAM_ADDR_OBI;
   logic [31:0] IRAM_DATA_OBI, DRAM_DATA_OBI; 
   logic IRAM_OBI_RDY, DRAM_OBI_RDY;
+  logic we_s;
+  logic mem_en;
 
   assign IRAM_ADDRESS_mem = IRAM_ADDRESS;
   assign DRAM_ADDRESS_mem = DRAM_ADDRESS;
@@ -46,43 +49,49 @@ module tb;
   DLX DLX_1 (
     .CLK               (CLK),
     .RST               (RST),
-    .IRAM_READY        (IRAM_VALID_OBI),
+    .IRAM_READY        (IRAM_READY),
     .IRAM_DATA         (IRAM_DATA_OBI),
     .DRAM_IN           (DRAM_IN),
-    .DRAM_OUT          (DRAM_OUT),
-    .DRAM_READY        (DRAM_VALID_OBI),
+    .DRAM_OUT          (DRAM_DATA_OBI),
+    .DRAM_READY        (DRAM_READY),
     .IRAM_ENABLE       (IRAM_ENABLE),
     .IRAM_ADDRESS      (IRAM_ADDRESS),
-    .DRAM_ENABLE       (DRAM_ENABLE_s),
+    .DRAM_ENABLE       (mem_en),
     .DRAM_READNOTWRITE (DRAM_READNOTWRITE),
     .DRAM_ADDRESS      (DRAM_ADDRESS),
-    .PROC_REQ          (PROC_REQ)
+    .DPROC_REQ          (DPROC_REQ),
+    .DREQ_DONE          (DREQ_DONE),
+    .PROC_REQ          (PROC_REQ),
+    .REQ_DONE          (REQ_DONE)
   );
 
   //Instantiate OBI_interface
   OBI_interface OBI(
     .clk(CLK),
     .rst(~RST),
+    .mem_en(mem_en),
     .IRAM_proc_req(PROC_REQ),
-    .DRAM_proc_req(DRAM_ENABLE_s),
+    .DRAM_proc_req(DPROC_REQ),
     .IRAM_addr(IRAM_ADDRESS_mem),
     .DRAM_addr(DRAM_ADDRESS_mem),
     .wdata(DRAM_IN),
-    .web(DRAM_READNOTWRITE),            //check for active low/high inside OBI
+    .web(~DRAM_READNOTWRITE),            //check for active low/high inside OBI
     .IRAM_rdy(IRAM_OBI_READY),
     .DRAM_rdy(DRAM_OBI_READY),
     .IRAM_rdata(MEM_RDATA),
-    .DRAM_rdata(MEM_RDATA),
+    .DRAM_rdata(DMEM_RDATA),
     .IRAM_valid_in(MEM_VALID),
     .DRAM_valid_in(MEM_VALID),
     .IRAM_addr_out(IRAM_ADDR_OBI),
     .DRAM_addr_out(DRAM_ADDR_OBI),
-    .web_out(WEB_OUT),
+    .web_out(we_s),
     .wdata_out(WDATA_OUT),
     .IRAM_dout(IRAM_DATA_OBI),
     .DRAM_dout(DRAM_DATA_OBI),
-    .IRAM_rdy_out(IRAM_READY),
-    .DRAM_rdy_out(DRAM_READY),
+    .req_busy_out(IRAM_READY),
+    .dreq_busy_out(DRAM_READY),
+    .dreq_done_out(DREQ_DONE),
+    .req_done_out(REQ_DONE),
     .IRAM_valid_out(IRAM_VALID_OBI),
     .DRAM_valid_out(DRAM_VALID_OBI)
   );
@@ -92,19 +101,18 @@ module tb;
 		   .CONTENT_TYPE(0),            // 0-CODE, 1-DATA
 		   .tco( 1 ),
 		   .tpd( 1 )
-   ) UUT (
+   ) IRAM (
       .CLK( CLK ),
       .RSTn( ~RST ),
       .PROC_REQ( PROC_REQ ),
       .MEM_RDY( IRAM_OBI_READY ),
       .ADDR(IRAM_ADDR_OBI),
-      .WE(WEB_OUT),
-      .WDATA(WDATA_OUT),
+      .WE(1'b0),
+      //.WDATA(WDATA_OUT),
       .RDATA( MEM_RDATA ),
       .VALID( MEM_VALID )
    );
    
-   /*
    mem_wrap_fake #(
 		   .CONTENT_TYPE(1),            // 0-CODE, 1-DATA
 		   .tco( 1 ),
@@ -112,20 +120,20 @@ module tb;
    ) DRAM (
       .CLK( CLK ),
       .RSTn( ~RST ),
-      .PROC_REQ( DRAM_ENABLE ),
+      .PROC_REQ( DPROC_REQ ),
       .MEM_RDY( DRAM_OBI_READY ),
       .ADDR(DRAM_ADDR_OBI),
-      .WE(WEB_OUT),
+      .WE(we_s),
       .WDATA(WDATA_OUT),
-      .RDATA( MEM_RDATA ),
-      .VALID( MEM_VALID )
-   );  */
+      .RDATA( DMEM_RDATA ),
+      .VALID( DMEM_VALID )
+   );  
 
   // Assignments and clock generation
   always #10 CLK = ~CLK;
   initial begin
-    #5 RST = 1'b1;
-    #5 RST = 1'b0;
+    #1 RST = 1'b1;
+    #15 RST = 1'b0;
   end
   initial begin
     #60 init_DRAM_ENABLE = 1'b0;
