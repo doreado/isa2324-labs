@@ -2,51 +2,40 @@
 
 module ssram_wrap (
     input logic clk,
-    input logic csb,        // chip select - active low
-    input logic web,        // write enable -  active low
-    input logic mem_sel,       // 0 - CODE, 1 - DATA
-    input logic [ADDRESS_WIDTH-1:0] addr, 
-    input logic [DATA_WIDTH-1:0] din,     
-    output logic [DATA_WIDTH-1:0] dout     
+    
+    input logic proc_req_in,                        // chip select - active low 
+    input logic [DATA_WIDTH-1:0] addr,
+    input logic web,                        // write enable -  active low
+    input logic [DATA_WIDTH-1:0] din,       // write data 
+
+    output logic req_done,
+    output logic dout,
+    output logic valid
 );
 
-    wire csb0, csb1;
-    logic [DATA_WIDTH-1:0] dout_reg;
+    wire csb0, web0, addr0;
+    logic valid_reg;
 
-    always @* begin
-        csb0 = (mem_sel == 1'b0) ? 1'b0 : 1'b1;
-        csb1 = (mem_sel == 1'b0) ? 1'b1 : 1'b0;
+    always_ff @(posedge clk) begin
+        valid_reg <= proc_req_in;               // rise valid 1 cc later 
     end
 
-    sram_32_1024_freepdk45 IRAM (
+    always_comb begin
+        req_done = 1'b1;
+        csb0 = ~proc_req_in;
+        web0 = ~web;
+        addr0 = {2'b0, addr[9:2]};
+        valid = valid_reg;
+    end 
+
+    sram_32_1024_freepdk45 RAM (
         .clk0(clk),
         .csb0(csb0),
-        .web0(web),
+        .web0(web0),
         .addr0(addr),
         .din0(din),
         .dout0(dout)
     );
-
-    sram_32_1024_freepdk45 DRAM (
-        .clk0(clk),
-        .csb0(csb1),
-        .web0(web),
-        .addr0(addr),
-        .din0(din),
-        .dout0(dout)
-    );
-
-    always_ff @(posedge clk) begin
-        dout <= dout_reg;               //delayed output
-    end
-    // put data from MEM into a register
-    always_ff @(posedge clk) begin
-        if (mem_sel)
-            dout_reg <= DRAM.dout;
-        else
-            dout_reg <= IRAM.dout;
-
-    //assign dout = mem_sel ? DRAM.dout : IRAM.dout;
 
 
 endmodule
