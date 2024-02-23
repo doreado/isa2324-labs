@@ -29,11 +29,9 @@ architecture Beh of Fetcher is
     TYPE Statetype IS
         (IDLE, READY, VALID);
     signal curr_state, next_state: Statetype;
-    signal valid_in_s: std_logic;
-    signal addr_in_s, next_addr_in_s: addr_t;
 begin
 
-    Logic: process(curr_state, proc_req_in, mem_rdy, valid_in, addr_in, next_addr_in_s, rdata)
+    Logic: process(curr_state, proc_req_in, mem_rdy, valid_in, addr_in)
     begin
         -- req_done <= '1';
        
@@ -43,20 +41,9 @@ begin
         req_done <= '0';
         case curr_state is
             when IDLE =>
-                -- valid_out <= '0';
-                -- req_done <= '0';
                 if(proc_req_in = '1') then
                     req_done <= '0';
-                    
                     req_busy <= '1';
-                    -- store request content 
-                    -- next_addr_in_s <= addr_in;
-                    --burst case
-                    -- if(mem_rdy = '1') then
-                        -- addr_out <= addr_in;
-                        -- req_done <= '1';
-                        ----aaaaaa;
-                    -- end if;
                 end if;
             when READY =>
                 req_busy <= '1';
@@ -82,10 +69,6 @@ begin
                 if(proc_req_in = '1') then
                     if(mem_rdy = '1') then
                         next_state <= VALID;  
-                        --next_state <= READY;
-                    --if(mem_rdy = '1') then
-                        --next_state <= VALID;
-                    --end if;
                     else
                         next_state <= READY;
                     end if;
@@ -93,8 +76,6 @@ begin
             when READY =>
                 if(mem_rdy = '1') then
                     next_state <= VALID;
-                --else
-                   -- next_state <= READY;
                 end if;
             when VALID =>
                 if(valid_in = '1') then
@@ -102,8 +83,6 @@ begin
                 else 
                     next_state <= VALID;
                 end if;
-            --default:
-               -- next_state <= curr_state;
         end case;        
     end process;
 
@@ -111,12 +90,8 @@ begin
     begin
         if(rst = '0') then
             curr_state <= IDLE;
-           --addr_in_s <= (others => '0');
-            valid_in_s <= '0';
         elsif (rising_edge(clk)) then
             curr_state <= next_state;
-            valid_in_s <= valid_in;
-            --addr_in_s <= next_addr_in_s;
         end if;
     end process;
 

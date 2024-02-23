@@ -476,28 +476,5 @@ package control_words is
         WB       => '1'
     );
 
-    -----------------------------------------------------------------------------
-    -- Functions
-    -----------------------------------------------------------------------------
-    -- insert_stall: insert a new stall without overriding the target SECW
-    pure function insert_stall(secw : stage_enable_t; stall_to_insert : stage_enable_t) return stage_enable_t;
-
 end package control_words;
 
-package body control_words is
-    pure function insert_stall(secw : stage_enable_t; stall_to_insert : stage_enable_t) return stage_enable_t is
-    variable result : stage_enable_t;
-begin
-    -- Perform the AND operation for each field
-    result.PREFETCH := secw.PREFETCH and stall_to_insert.PREFETCH;
-    result.FETCH    := secw.FETCH and stall_to_insert.FETCH;
-    result.DECODE   := secw.DECODE and stall_to_insert.DECODE;
-    result.EXECUTE  := secw.EXECUTE and stall_to_insert.EXECUTE;
-    result.MEMORY   := secw.MEMORY and stall_to_insert.MEMORY;
-    result.WB       := secw.WB and stall_to_insert.WB;
-
-    -- Return the result
-    return result;
-end function insert_stall;
-
-end control_words;

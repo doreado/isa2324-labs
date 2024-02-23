@@ -45,8 +45,8 @@ module tb;
   assign IRAM_ADDRESS_mem = IRAM_ADDRESS;
   assign DRAM_ADDRESS_mem = DRAM_ADDRESS;
 
-  // Instantiate DLX component
-  DLX DLX_1 (
+  // Instantiate CORE component
+  CORE CORE_1 (
     .CLK               (CLK),
     .RST               (RST),
     .IRAM_READY        (IRAM_READY),
@@ -144,7 +144,7 @@ module tb;
   // Monitor process to display signals
   always @(posedge CLK) begin
     $display("Time = %0t: IR = %h OPCODE = %b FUNCT3 = %b FUNCT7 = %b", 
-      $time, DLX_1.datapath_1.ir, DLX_1.datapath_1.opcode, DLX_1.datapath_1.funct3, DLX_1.datapath_1.funct7);
+      $time, CORE_1.datapath_1.ir, CORE_1.datapath_1.opcode, CORE_1.datapath_1.funct3, CORE_1.datapath_1.funct7);
   end
 
 endmodule: tb

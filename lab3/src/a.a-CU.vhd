@@ -21,7 +21,6 @@ entity CU is
         cu_to_hu : out cu_to_hu_t;
         STALL    : in stage_enable_t;
         -- Inputs
-        IN_CW  : in cw_from_mem;
         OPCODE : in opcode_t;
         FUNCT7  : in funct7_t;
         FUNCT3  : in funct3_t;

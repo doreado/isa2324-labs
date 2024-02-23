@@ -10,7 +10,7 @@ use work.control_words.all;
 -- Entity Declaration
 --------------------------------------------------------------------
 
-entity DLX is
+entity CORE is
     port (
         -- Inputs
         CLK : in std_logic; -- Clock
@@ -32,9 +32,9 @@ entity DLX is
         REQ_DONE : in std_logic;
         PROC_REQ : out std_logic
         );
-end DLX;
+end CORE;
 
-architecture RTL of DLX is
+architecture RTL of CORE is
 
     --------------------------------------------------------------------
     -- Components Declaration
@@ -50,7 +50,6 @@ architecture RTL of DLX is
             cu_to_hu : out cu_to_hu_t;
             STALL    : in stage_enable_t;
             -- Inputs
-            IN_CW  : in cw_from_mem;
             OPCODE : in opcode_t;
             FUNCT3 : in funct3_t;
             FUNCT7 : in funct7_t;
@@ -114,7 +113,6 @@ architecture RTL of DLX is
             MUX_FWD_CMP_B_SEL   : in std_logic_vector(1 downto 0);
             dp_to_fu            : out dp_to_fu_t;
             dp_to_hu            : out dp_to_hu_t;
-            OUT_CW              : out cw_from_mem;
             OPCODE              : out opcode_t;
             FUNC3               : out funct3_t;
             FUNC7               : out funct7_t;
@@ -159,7 +157,6 @@ begin
     CU_1 : entity work.CU
         port map(
             cw          => cw,
-            in_cw       => cw_from,
             cu_to_fu    => cu_to_fu,
             cu_to_hu    => cu_to_hu,
             stall       => SECW,
@@ -202,17 +199,13 @@ begin
 
     DATAPATH_1 : entity work.DATAPATH
         generic map(
-            DATA_SIZE => numBit,
-            INS_SIZE  => INS_SIZE,
-            CW_SIZE   => C_CW_SIZE,
-            IR_SIZE   => C_IR_SIZE
+            INS_SIZE  => INS_SIZE
         )
         port map(
             CLK                 => CLK,
             RST                 => RST,
             CW                  => CW,
             SECW                => SECW,
-            OUT_CW              => cw_from,
             MUX_FWD_MEM_LMD_SEL => MUX_FWD_MEM_LMD_SEL,
             MUX_FWD_EX_LMD_SEL  => MUX_FWD_EX_LMD_SEL,
             MUX_FWD_CMP_A_SEL   => MUX_FWD_CMP_A_SEL,
@@ -237,7 +230,7 @@ end RTL;
 -- Configurations
 ----------------------------------------------------------------
 
-configuration CFG_DLX_BEH of DLX is
+configuration CFG_CORE_BEH of CORE is
     for RTL
     end for;
 end configuration;

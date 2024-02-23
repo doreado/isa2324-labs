@@ -12,11 +12,7 @@ use work.alu_type.all;
 
 entity DATAPATH is
     generic (
-        DATA_SIZE : integer := numBit;    -- Data Size
-        INS_SIZE  : integer := INS_SIZE;  -- Instructions Size
-        CW_SIZE   : integer := C_CW_SIZE; -- CW Size
-        PC_SIZE   : integer := PC_SIZE;   -- PC Size
-        IR_SIZE   : integer := IRAM_DEPTH -- instruction register size
+        INS_SIZE  : integer := INS_SIZE   -- Instructions Size
     );
     port (
         CLK          : in std_logic;      -- Clock
@@ -32,7 +28,6 @@ entity DATAPATH is
         MUX_B_SEL    : in std_logic_vector(1 downto 0); -- signal coming from forwading unit
         dp_to_fu     : out dp_to_fu_t;
         dp_to_hu     : out dp_to_hu_t;
-        OUT_CW       : out cw_from_mem;   -- Output Signals to CU
         OPCODE       : out opcode_t;
         FUNCT3        : out funct3_t;
         FUNCT7        : out funct7_t;
@@ -105,8 +100,6 @@ architecture RTL of DATAPATH is
     signal INS_FUNC3     : std_logic_vector(INS_FUNCT3_SIZE - 1 downto 0);
     signal INS_S_IMM    : std_logic_vector(INS_S_IMM_SIZE - 1 downto 0);
     signal INS_SB_IMM    : std_logic_vector(INS_SB_IMM_SIZE - 1 downto 0);
-    signal INS_IMM_EXT   : data_t;
-    signal INS_J_IMM_EXT : data_t;
 
     ---------------------------- [IF] STAGE
     signal IR  : std_logic_vector(INS_SIZE - 1 downto 0);
@@ -125,7 +118,6 @@ architecture RTL of DATAPATH is
     signal NPC_ID    : pc_t;
     signal RD_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal MUX_IMM_OUT : data_t;
-    signal MUX_R_OUT : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RS_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal RT_ID     : std_logic_vector(INS_R1_SIZE - 1 downto 0);
     signal a_gte_b : std_logic;
@@ -137,7 +129,6 @@ architecture RTL of DATAPATH is
     signal ALU_IN_2    : data_t;
     signal ALU_OUT     : data_t;
     signal ALU_OUT_REG : data_t;
-    signal COND        : std_logic;
     signal B_EX        : data_t;
     signal B_TAKEN     : std_logic;
     signal NPC_EX      : pc_t;
@@ -146,7 +137,7 @@ architecture RTL of DATAPATH is
     signal mux_fwd_cmp_b_out : data_t;
 
     ---------------------------- [ME] STAGE
-    signal MUX_COND_OUT   : pc_t;
+    signal PC_MUX_OUT   : pc_t;
     signal LMD            : data_t;
     signal ALU_OUT_REG_ME : data_t;
     signal RD_MEM         : std_logic_vector(INS_R1_SIZE - 1 downto 0);
@@ -192,21 +183,19 @@ begin
         (others => '0') when zero;
 
     ---------------------------- MUX_LMDs
-    -- MUX_R: based on the instruction type or jal (0: I, 1: R, 2: jal)
-    MUX_R_OUT <= INS_RD;
 
     -- MUX_A
-    MUX_A_OUT <= to_data(NPC_ID) when MUX_A_SEL = "00" else
+    MUX_A: MUX_A_OUT <= to_data(NPC_ID) when MUX_A_SEL = "00" else
                 A               when MUX_A_SEL = "01" else
                 ALU_OUT_REG     when MUX_A_SEL = "10" else -- from the exe
                 MUX_LMD_OUT     when MUX_A_SEL = "11"; -- from mem
 
     -- MUX_LUI: ALU input 1, switch between lui and other instructions
-    ALU_IN_1 <= (others => '0') when cw.execute.is_lui = '1' else 
+    MUX_LUI: ALU_IN_1 <= (others => '0') when cw.execute.is_lui = '1' else 
                 MUX_A_OUT;
 
     -- MUX_B: ALU input 2 (0: B, 1: IMM)
-    ALU_IN_2 <= B               when MUX_B_SEL = "00" else
+    MUX_B: ALU_IN_2 <= B               when MUX_B_SEL = "00" else
                 IMM             when MUX_B_SEL = "01" else
                 ALU_OUT_REG     when MUX_B_SEL = "10" else -- from exe
                 MUX_LMD_OUT     when MUX_B_SEL = "11"; -- from mem
@@ -228,10 +217,10 @@ begin
 
     ---------------------------- BRANCH COMPARATOR
     -- Forwarding connections
-    mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_CMP_A_SEL = "00" else
+    MUX_FWD_CMP_A: mux_fwd_cmp_a_out <= RF_OUT_1 when MUX_FWD_CMP_A_SEL = "00" else
                       ALU_OUT     when MUX_FWD_CMP_A_SEL = "10" else  -- from the exe
                       ALU_OUT_REG when MUX_FWD_CMP_A_SEL = "11";      -- from mem
-    mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_CMP_B_SEL = "00" else
+    MUX_FWD_CMP_B: mux_fwd_cmp_b_out <= RF_OUT_2 when MUX_FWD_CMP_B_SEL = "00" else
                       ALU_OUT     when MUX_FWD_CMP_B_SEL = "10" else  -- from the exe
                       ALU_OUT_REG when MUX_FWD_CMP_B_SEL = "11";      -- from mem
     -- Branch Comparator
@@ -247,13 +236,11 @@ begin
     -- Compute the next address to be fetched
     NPC <= PC + 4;
 
-    -- MUX_COND: based on whether or not a jump needs to be performed (00: NPC, 01/10: B ADDR, 11: J ADDR)
-    -- TODO: evaluate if MUX_J_OUT is appropriate (maybe taking the immediate directly from IR is better)
-    with cw.decode.ta_op1_sel select target_addr <= 
+    TA_MUX : with cw.decode.ta_op1_sel select target_addr <=
         unsigned(mux_fwd_cmp_a_out) + unsigned(MUX_IMM_OUT) when jalr_ta,
         PC_IFID + unsigned(MUX_IMM_OUT) when others;
 
-    MUX_COND_OUT    <= pc_t(target_addr) when 
+    PC_MUX : PC_MUX_OUT <= pc_t(target_addr) when 
                        ((CW.decode.MUX_COND_SEL = "11") or  -- J-TYPE instructions
                         ((CW.decode.MUX_COND_SEL = "01") and (a_gte_b = '1')) or -- gte[u] and a >= b
                         ((CW.decode.MUX_COND_SEL = "10") and (a_gte_b = '0'))) else -- blt[u] and a < b
@@ -333,7 +320,7 @@ begin
             PC <= (others => '0');
         elsif rising_edge(CLK) then
             if (SECW.PREFETCH = '1') then
-                PC <= MUX_COND_OUT;
+                PC <= PC_MUX_OUT;
             end if;
         end if;
     end process PC_P;
@@ -366,10 +353,10 @@ begin
     IR_P : process (CLK, RST)
     begin
         if RST = '1' then
-            IR <= "01010100000000000000000000000000"; -- reset in a NOP
+            IR <= "00000000000000000000000000010011"; -- reset in a NOP
         elsif rising_edge(CLK) then
             if SECW.FLUSH_IF = '1' then
-                IR <= "01010100000000000000000000000000"; -- reset in a NOP
+                IR <= "00000000000000000000000000010011"; -- reset in a NOP
             elsif (SECW.FETCH = '1') then
                 IR <= IRAM_DATA;
             -- else
@@ -434,7 +421,7 @@ begin
             RD_ID <= (others => '0');
         elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
-                RD_ID <= MUX_R_OUT;
+                RD_ID <= INS_RD;
             end if;
         end if;
     end process RD_ID_P;
@@ -462,22 +449,6 @@ begin
     end process RT_ID_P;
 
     ---------------------------- [EX] STAGE
-    -- COND
-    COND_P : process (CLK, RST)
-    begin
-        if RST = '1' then
-            COND <= '0';
-        elsif rising_edge(CLK) then
-            if (SECW.EXECUTE = '1') then
-                if unsigned(A) = 0 then
-                    COND <= '1';
-                else
-                    COND <= '0';
-                end if;
-            end if;
-        end if;
-    end process COND_P;
-
     -- ALU_OUT_REG
     ALU_OUT_REG_P : process (CLK, RST)
     begin

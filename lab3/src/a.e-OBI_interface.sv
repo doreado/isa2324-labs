@@ -1,4 +1,4 @@
-import myTypes::*;
+// import myTypes::*;
 
 module OBI_interface(
 

@@ -25,22 +25,13 @@ entity HAZARD_DETECTION_UNIT is
 end entity HAZARD_DETECTION_UNIT;
 
 architecture RTL of HAZARD_DETECTION_UNIT is
-    signal proc_req_s, req_done_reg: std_logic;
 begin
 
     ---------------------------- SECW Pipeline
-    secw_update : process(DRAM_READY, IRAM_READY, cu_to_hu.IS_B_EX,
-                          cu_to_hu.IS_B_ID, cu_to_hu.IS_JUMP_EX,
-                          cu_to_hu.IS_JUMP_ID, cu_to_hu.LMD_EN,
-                          dp_to_hu.B_TAKEN, dp_to_hu.RS_IF, dp_to_hu.RT_ID,
-                          dp_to_hu.RT_IF)
-    begin
+    secw_update : process(DRAM_READY, IRAM_READY, cu_to_hu, dp_to_hu)
+        begin
 
-        -- if (req_done = '1') then
-        -- proc_req <= not(req_done); --'1';
-        -- end if;
         if (cu_to_hu.IS_JUMP_ID = '1') then -- if a jump is decoded, put a nop in IR and do not update the PC.
-            -- proc_req <= '0';
             SECW <= (
                 FLUSH_IF => '1',
                 PREFETCH => '1',
@@ -50,17 +41,6 @@ begin
                 MEMORY   => '1',
                 WB       => '1'
             );
-        -- elsif ((cu_to_hu.LMD_EN = '1') and -- if the instruction is a load
-        --     ((dp_to_hu.RT_ID = dp_to_hu.RS_IF) or (dp_to_hu.RT_ID = dp_to_hu.RT_IF))) then -- if the instruction in decode needs the loaded value, stall it in decode
-        --     SECW <= (
-        --         FLUSH_IF => '0',
-        --         PREFETCH => '0',
-        --         FETCH    => '0',
-        --         DECODE   => '0',
-        --         EXECUTE  => '1',
-        --         MEMORY   => '1',
-        --         WB       => '1'
-        --     );
         elsif (DRAM_READY = '1') then -- freeze the pipeline until memory, if the dram is still reading or writing
            SECW <= (
                FLUSH_IF => '0',

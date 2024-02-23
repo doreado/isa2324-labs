@@ -53,7 +53,7 @@ begin
     begin
         if RESET = '1' then
             REGISTERS <= (others => (others => '0'));
-        elsif rising_edge(clk) then
+        elsif falling_edge(clk) then
             if ENABLE = '1' and WR = '1' then
                 -- force register 0 to keep value 0
                 if unsigned(ADD_WR) /= "0" then 

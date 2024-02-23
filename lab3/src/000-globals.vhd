@@ -72,20 +72,6 @@ package myTypes is
     constant INS_FUNC3_L    : integer := 14;
     constant INS_FUNC3_R    : integer := 12;
 
-    -- Mux
-    constant IVDELAY     : time := 0 ns; --0.1 ns;
-    constant NDDELAY     : time := 0 ns; -- 0.2 ns;
-    constant NDDELAYRISE : time := 0 ns; -- 0.6 ns;
-    constant NDDELAYFALL : time := 0 ns; -- 0.4 ns;
-    constant NRDELAY     : time := 0 ns; -- 0.2 ns;
-    constant DRCAS       : time := 0 ns; -- 1
-    constant DRCAC       : time := 0 ns; -- 2
-    constant TP_MUX      : time := 0 ns;
-
-    -- Adder
-    constant CARRY_SELECT_NBIT     : integer := 4;                        -- how many bits generate a carry
-    constant SUM_GENERATOR_NBLOCKS : integer := numBit/CARRY_SELECT_NBIT; -- numBit / CARRY_SELECT_NBIT
-
     -- Register File
     constant R_NUM       : integer := 32;
     constant RF_WORD_LEN : integer := 32;
@@ -97,16 +83,10 @@ package myTypes is
     constant C_TB_STAGES : integer := 3; -- Number of Clock Cycles between two instructions
 
     -- xRAM
-    constant DRAM_DEPTH     : integer := 256;
-    constant IRAM_DEPTH     : integer := 1024;
     constant PC_SIZE        : integer := numBit;
     constant IRAM_ADDR_SIZE : integer := PC_SIZE;
     subtype pc_t is unsigned(PC_SIZE - 1 downto 0);
     subtype addr_t is unsigned(PC_SIZE - 1 downto 0);
-
-    -- RAM Delays
-    constant DRAM_DELAY : integer := 0;
-    constant IRAM_DELAY : integer := 0;
 
     -- Control Unit Input Sizes
     constant C_OP_CODE_SIZE : integer := 7;        -- OPCODE field size
@@ -159,12 +139,9 @@ package myTypes is
     constant ITYPE_JALR  : opcode_t := "1100111";
     
     -- SB-Type instruction -> OPCODE field
-     --constant SBTYPE_BGE  : opcode_t := "1100011";   --for ble
-    -- constant SBTYPE_BLTU : opcode_t := "1100011";
     constant SBTYPE       : opcode_t := "1100011";
     constant STYPE_SW    : opcode_t := "0100011";
     -- UJ-Type instruction -> OPCODE field
-    --constant JTYPE_J   : opcode_t := "000010";
     constant UJTYPE_JAL : opcode_t := "1101111";
     
 
@@ -172,18 +149,6 @@ package myTypes is
      constant UTYPE_AUIPC : opcode_t := "0010111";
      constant UTYPE_LUI   : opcode_t := "0110111";
 
-
-    -- N-Type instruction -> OPCODE field
-    --constant NTYPE_NOP : opcode_t := "010101";
-
-    -- Only for simulation purpose
-    constant RO_HEX      : string := "./memories/ro/hex.txt";
-    constant RW_HEX_INIT : string := "./memories/rw/hex_init.txt";
-    constant RW_HEX      : string := "./memories/rw/hex.txt";
-    -- LORENZO
-    -- constant RO_HEX      : string := "C:\Users\ruoto\OneDrive\UNI\08 MS Microelectronic Systems\Progetto\ms\dlx\src\memories\ro\hex.txt";
-    -- constant RW_HEX_INIT : string := "C:\Users\ruoto\OneDrive\UNI\08 MS Microelectronic Systems\Progetto\ms\dlx\src\memories\rw\hex_init.txt";
-    -- constant RW_HEX      : string := "C:\Users\ruoto\OneDrive\UNI\08 MS Microelectronic Systems\Progetto\ms\dlx\src\memories\rw\hex.txt";
 
     ---- Process declarations ----
     pure function to_data(arg : pc_t) return data_t;
