@@ -330,13 +330,10 @@ begin
     PC_P : process (CLK, RST)
     begin
         if RST = '1' then
-            PROC_REQ <= '1';
             PC <= (others => '0');
-        elsif falling_edge(CLK) then
-            PROC_REQ <= '0';
+        elsif rising_edge(CLK) then
             if (SECW.PREFETCH = '1') then
                 PC <= MUX_COND_OUT;
-                PROC_REQ <= '1';
             end if;
         end if;
     end process PC_P;
@@ -346,7 +343,7 @@ begin
     begin
         if RST = '1' then
             PC_IFID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.FETCH = '1') then
                 PC_IFID <= PC;
             end if;
@@ -358,7 +355,7 @@ begin
     begin
         if RST = '1' then
             NPC_IFID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.FETCH = '1') then
                 NPC_IFID <= NPC;
             end if;
@@ -370,7 +367,7 @@ begin
     begin
         if RST = '1' then
             IR <= "01010100000000000000000000000000"; -- reset in a NOP
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if SECW.FLUSH_IF = '1' then
                 IR <= "01010100000000000000000000000000"; -- reset in a NOP
             elsif (SECW.FETCH = '1') then
@@ -387,7 +384,7 @@ begin
     begin
         if RST = '1' then
             A <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 A <= RF_OUT_1;
             end if;
@@ -399,7 +396,7 @@ begin
     begin
         if RST = '1' then
             B <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 B <= RF_OUT_2;
             end if;
@@ -411,7 +408,7 @@ begin
     begin
         if RST = '1' then
             IMM <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 IMM <= MUX_IMM_OUT;
             end if;
@@ -423,7 +420,7 @@ begin
     begin
         if RST = '1' then
             NPC_ID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 NPC_ID <= NPC_IFID;
             end if;
@@ -435,7 +432,7 @@ begin
     begin
         if RST = '1' then
             RD_ID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 RD_ID <= MUX_R_OUT;
             end if;
@@ -446,7 +443,7 @@ begin
     begin
         if RST = '1' then
             RS_ID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 RS_ID <= INS_RS1;
             end if;
@@ -457,7 +454,7 @@ begin
     begin
         if RST = '1' then
             RT_ID <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.DECODE = '1') then
                 RT_ID <= INS_RS2;
             end if;
@@ -470,7 +467,7 @@ begin
     begin
         if RST = '1' then
             COND <= '0';
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.EXECUTE = '1') then
                 if unsigned(A) = 0 then
                     COND <= '1';
@@ -486,7 +483,7 @@ begin
     begin
         if RST = '1' then
             ALU_OUT_REG <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.EXECUTE = '1') then
                 ALU_OUT_REG <= ALU_OUT;
             end if;
@@ -498,7 +495,7 @@ begin
     begin
         if RST = '1' then
             B_EX <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.EXECUTE = '1') then
                 B_EX <= MUX_FWD_EX_LMD_OUT;
             end if;
@@ -510,7 +507,7 @@ begin
     begin
         if RST = '1' then
             NPC_EX <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.EXECUTE = '1') then
                 NPC_EX <= NPC_ID;
             end if;
@@ -522,7 +519,7 @@ begin
     begin
         if RST = '1' then
             RD_EX <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.EXECUTE = '1') then
                 RD_EX <= RD_ID;
             end if;
@@ -535,7 +532,7 @@ begin
     begin
         if RST = '1' then
             LMD <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.MEMORY = '1') then
                 LMD <= DRAM_OUT;
             end if;
@@ -547,7 +544,7 @@ begin
     begin
         if RST = '1' then
             ALU_OUT_REG_ME <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.MEMORY = '1') then
                 ALU_OUT_REG_ME <= ALU_OUT_REG;
             end if;
@@ -559,7 +556,7 @@ begin
     begin
         if RST = '1' then
             RD_MEM <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.MEMORY = '1') then
                 RD_MEM <= RD_EX;
             end if;
@@ -571,7 +568,7 @@ begin
     begin
         if RST = '1' then
             NPC_MEM <= (others => '0');
-        elsif falling_edge(CLK) then
+        elsif rising_edge(CLK) then
             if (SECW.MEMORY = '1') then
                 NPC_MEM <= NPC_EX;
             end if;

@@ -158,7 +158,7 @@ begin
             cw2 <= init_cw;
             cw3 <= init_cw;
             cw4 <= init_cw;
-        elsif falling_edge(clk) then
+        elsif rising_edge(clk) then
             ALU_OPCODE_UPDATED <= ALU_OPCODE;
             -- shift the slice of the control word to the correct control register
             -- update CW pipeline if not stalling

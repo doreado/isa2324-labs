@@ -132,7 +132,7 @@ package control_words is
             RF_RESET     => '0',
             RF_ENABLE    => '1',
             RF_RD1       => '1',
-            RF_RD2       => '0',
+            RF_RD2       => '1',
             cmp_sel      => '0',
             imm_sel      => s_imm,
             ta_op1_sel      => pc_ta,

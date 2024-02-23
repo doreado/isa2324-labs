@@ -27,6 +27,9 @@ entity DLX is
         DRAM_OUT          : in data_t;
         DRAM_ENABLE       : out std_logic;
         DRAM_ADDRESS      : out data_t;
+        DREQ_DONE : in std_logic;
+        DPROC_REQ : out std_logic;
+        REQ_DONE : in std_logic;
         PROC_REQ : out std_logic
         );
 end DLX;
@@ -80,7 +83,14 @@ architecture RTL of DLX is
             cu_to_hu   : in cu_to_hu_t;
             IRAM_READY : in std_logic;
             DRAM_READY : in std_logic;
-            SECW       : out stage_enable_t);
+            SECW       : out stage_enable_t;
+
+            DREQ_DONE : in std_logic;
+            DPROC_REQ : out std_logic;
+
+            REQ_DONE   : in std_logic;
+            PROC_REQ : out std_logic);
+
     end component HAZARD_DETECTION_UNIT;
 
     component DATAPATH is
@@ -183,7 +193,12 @@ begin
             cu_to_hu   => cu_to_hu,
             IRAM_READY => IRAM_READY,
             DRAM_READY => DRAM_READY,
-            SECW       => SECW);
+            SECW       => SECW,
+            DREQ_DONE  => DREQ_DONE,
+            DPROC_REQ  => DPROC_REQ,
+            REQ_DONE   => REQ_DONE,
+            PROC_REQ   => PROC_REQ
+        );
 
     DATAPATH_1 : entity work.DATAPATH
         generic map(
@@ -214,7 +229,7 @@ begin
             IRAM_ADDRESS        => IRAM_ADDRESS,
             DRAM_ADDRESS        => DRAM_ADDRESS,
             DRAM_OUT            => DRAM_OUT,
-            PROC_REQ            => PROC_REQ
+            PROC_REQ            => open
         );
 end RTL;
 

@@ -25,9 +25,11 @@ module OBI_interface(
     output logic [32-1:0] wdata_out,
     //output logic proc_req_out,
     // to CPU
+    input  logic mem_en,
     output logic req_busy_out,
-    output logic IRAM_rdy_out,
-    output logic DRAM_rdy_out,
+    output logic req_done_out,
+    output logic dreq_busy_out,
+    output logic dreq_done_out,
     output logic [32-1:0] IRAM_dout,
     output logic [32-1:0] DRAM_dout,
     output logic IRAM_valid_out,
@@ -49,6 +51,7 @@ module OBI_interface(
         .data_out(IRAM_dout),
         .valid_out(IRAM_valid_out),
         .req_busy(req_busy_out),
+        .req_done(req_done_out),
         // to memories
         .addr_out(IRAM_addr_out)
     );
@@ -56,6 +59,7 @@ module OBI_interface(
     LoadStoreUnit LSU (
         .clk(clk),
         .rst(rst),
+        .mem_en(mem_en),
         .proc_req_in(DRAM_proc_req),
         .addr_in(DRAM_addr),
         .wdata_in(wdata),
@@ -67,6 +71,8 @@ module OBI_interface(
         // to CPU         
         .data_out(DRAM_dout),
         .valid_out(DRAM_valid_out),
+        .req_done(dreq_done_out),
+        .req_busy(dreq_busy_out),
         // to memories
         .addr_out(DRAM_addr_out),
         .we_out(web_out),
