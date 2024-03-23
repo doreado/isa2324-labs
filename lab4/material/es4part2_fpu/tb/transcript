@@ -1,0 +1,12 @@
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 16:19:48 on Mar 23,2024
+# vlog -sv -work work ../tb/top.sv 
+# ** Error: ../tb/top.sv(1): (vlog-13006) Could not find the package (uvm_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# ** Error: ../tb/top.sv(2): Cannot open `include file "uvm_macros.svh".
+# ** Error: (vlog-13069) ** while parsing file included at ../tb/top.sv(6)
+# ** at ../tb/packet_in.sv(1): near "uvm_sequence_item": syntax error, unexpected IDENTIFIER.
+# ** Error: ** while parsing file included at ../tb/top.sv(6)
+# ** at ../tb/packet_in.sv(1): Error in class extension specification.
+# End time: 16:19:48 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 4, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
