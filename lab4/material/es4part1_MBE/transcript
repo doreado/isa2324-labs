@@ -1,0 +1,251 @@
+vlib woek 
+vlib work
+ls
+# LICENSE
+# sim
+# src
+# tb
+# transcript
+# woek
+# work
+cd src
+l
+# ambiguous command name "l": label labelframe langOf lappend lassign lattice_edition layout lconcat lecho left library_image light_green_class_image lindex linsert linux_edition list listbox live_item_image llength lmap load local log log_diagnostic_msg lost_file_image lower lrange lremove lrepeat lreplace lreverse lrmdups ls lsearch lset lshift lsort lsublist ltTime lteTime luniq
+ls
+# alu_pkg.sv
+# alu.sv
+vlog *.sb
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:57:16 on Mar 23,2024
+# vlog -reportprogress 300 *.sb 
+# ** Error: (vlog-7) Failed to open design unit file "*.sb" in read mode.
+# No such file or directory. (errno = ENOENT)
+# End time: 15:57:16 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
+vlog *.sb
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:57:17 on Mar 23,2024
+# vlog -reportprogress 300 *.sb 
+# ** Error: (vlog-7) Failed to open design unit file "*.sb" in read mode.
+# No such file or directory. (errno = ENOENT)
+# End time: 15:57:17 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
+vlog *.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:57:19 on Mar 23,2024
+# vlog -reportprogress 300 alu.sv alu_pkg.sv 
+# ** Error: alu.sv(23): (vlog-13006) Could not find the package (alu_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# ** Error: (vlog-13069) alu.sv(32): near "alu_op_i": syntax error, unexpected IDENTIFIER, expecting ')'.
+# End time: 15:57:19 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
+vlog alu_pkg.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:57:28 on Mar 23,2024
+# vlog -reportprogress 300 alu_pkg.sv 
+# -- Compiling package alu_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 15:57:28 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog alu.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:57:32 on Mar 23,2024
+# vlog -reportprogress 300 alu.sv 
+# -- Compiling package alu_sv_unit
+# -- Importing package alu_pkg
+# -- Compiling module alu
+# 
+# Top level modules:
+# 	alu
+# End time: 15:57:32 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+cd ..
+cd tb
+ls
+# alu_cov.svh
+# alu_if.sv
+# alu_if_sva.svh
+# alu_op_verbose_tester.svh
+# alu_tb.sv
+# alu_tester.svh
+# alu_verbose_tester.svh
+# alu_wrap.sv
+vlog alu_if 
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:58:07 on Mar 23,2024
+# vlog -reportprogress 300 alu_if 
+# ** Error: (vlog-7) Failed to open design unit file "alu_if" in read mode.
+# No such file or directory. (errno = ENOENT)
+# End time: 15:58:07 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
+vlog alu_if.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:58:24 on Mar 23,2024
+# vlog -reportprogress 300 alu_if.sv 
+# ** Error: alu_if.sv(21): (vlog-13006) Could not find the package (alu_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# End time: 15:58:24 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vlog failed.
+ls
+# alu_cov.svh
+# alu_if.sv
+# alu_if_sva.svh
+# alu_op_verbose_tester.svh
+# alu_tb.sv
+# alu_tester.svh
+# alu_verbose_tester.svh
+# alu_wrap.sv
+# work
+cd ..
+ls
+# LICENSE
+# sim
+# src
+# tb
+# transcript
+# woek
+# work
+vlog -help
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+#     The vlog command compiles Verilog source code and SystemVerilog extensions
+#     into a specified working library (or to the work library by default).
+#     Compressed SystemVerilog source files (those compressed with zlib) are
+#     accepted.
+#     
+#     The vlog command may be invoked from within Questa SIM or from the
+#     operating system command prompt. It may also be invoked during simulation.
+#     Compiled libraries are major-version dependent. When moving between major
+#     version, you have to refresh compiled libraries using the -refresh argument
+#     to vlog. This is not true for minor versions (letter releases).
+#     
+#     All arguments to the vlog command are case sensitive. For example, -WORK
+#     and -work are not equivalent.
+#     
+#     SystemVerilog requires that the default behavior of the vlog command is to
+#     treat each Verilog design file listed on the command line as a separate
+#     compilation unit. To treat multiple files listed within a single command
+#     line as a single compilation unit, use either the vlog -mfcu argument or
+#     the MultiFileCompilationUnit in the User's Manual
+#     
+#     Try the following to get help on specific options or categories: 
+# 
+#     vlog -help all            : List all categories and options
+#     vlog -help category       : List all categories
+#     vlog -help <option>       : Help on an option
+#     vlog -help <command-line> : Help on all options in a command-line
+#     vlog -help <category>     : List all options in a category
+# 
+#     Category:       The list of categories in vlog tool.
+# 
+#     General         List most common general options
+#     Analog          List options supporting analog mixed-signal (AMS)
+#     Coverage        List options for Coverage
+#     Cpp             List options supporting SystemC module
+#     Debug           List options for debug, and assertion
+#     GLS             List options for Gate Level Simulation
+#     Language        List all options supported by hardware language Verilog/VHDL
+#     Library         List options for design, work library
+#     Messages        List all warn, error, note, fatal messages options
+#     Optimize        List options for optimization
+vlog -work work src/alu_pkg.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:59:16 on Mar 23,2024
+# vlog -reportprogress 300 -work work src/alu_pkg.sv 
+# -- Compiling package alu_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 15:59:16 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -work work src/alu.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:59:21 on Mar 23,2024
+# vlog -reportprogress 300 -work work src/alu.sv 
+# -- Compiling package alu_sv_unit
+# -- Importing package alu_pkg
+# -- Compiling module alu
+# 
+# Top level modules:
+# 	alu
+# End time: 15:59:21 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -work work tb/alu_if.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:59:38 on Mar 23,2024
+# vlog -reportprogress 300 -work work tb/alu_if.sv 
+# -- Compiling package alu_if_sv_unit
+# -- Importing package alu_pkg
+# -- Compiling interface alu_if
+# ** Warning: tb/alu_if_sva.svh(43): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# ** Warning: tb/alu_if_sva.svh(43): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# ** Warning: tb/alu_if_sva.svh(47): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# 
+# Top level modules:
+# 	--none--
+# End time: 15:59:38 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 3
+vlog -work work tb/alu_wrap.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 15:59:50 on Mar 23,2024
+# vlog -reportprogress 300 -work work tb/alu_wrap.sv 
+# -- Compiling module alu_wrap
+# 
+# Top level modules:
+# 	alu_wrap
+# End time: 15:59:50 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -work work tb/alu_tb.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 16:00:08 on Mar 23,2024
+# vlog -reportprogress 300 -work work tb/alu_tb.sv 
+# -- Compiling package alu_tb_sv_unit
+# -- Importing package alu_pkg
+# ** Warning: tb/alu_tester.svh(124): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# -- Compiling module alu_tb
+# 
+# Top level modules:
+# 	alu_tb
+# End time: 16:00:08 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+run --all 
+# No Design Loaded!
+vsim work.tb
+# vsim work.tb 
+# Start time: 16:00:47 on Mar 23,2024
+# ** Error: (vsim-3170) Could not find 'tb'.
+#         Searched libraries:
+#             /home/doreado/repos/isa-labs/lab4/material/es4part1/work
+# Error loading design
+# End time: 16:00:48 on Mar 23,2024, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
+vsim work.alu_tb
+# vsim work.alu_tb 
+# Start time: 16:01:13 on Mar 23,2024
+# Loading sv_std.std
+# Loading work.alu_pkg
+# Loading work.alu_tb_sv_unit
+# Loading work.alu_tb
+# Loading work.alu_if_sv_unit
+# Loading work.alu_if
+# Loading work.alu_wrap
+# Loading work.alu_sv_unit
+# Loading work.alu
+# ** Warning: (vsim-8311) System Verilog assertions are supported only in Questasim.
+# ** Error: (vsim-1) Unable to checkout verification license - testbench generation feature (randomize, randcase, randsequence, covergroup) is only supported with QuestaSim.
+#    Time: 0 ps  Iteration: 0  Instance: /alu_tb File: tb/alu_tb.sv
+# Error loading design
+# End time: 16:01:13 on Mar 23,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 1
