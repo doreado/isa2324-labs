@@ -5,6 +5,8 @@ class refmod extends uvm_component;
     packet_out tr_out;
     uvm_get_port #(packet_in) in;
     uvm_put_port #(packet_out) out;
+
+    rand bit [15:0] results[12];
     
     function new(string name = "refmod", uvm_component parent);
         super.new(name, parent);
@@ -20,11 +22,15 @@ class refmod extends uvm_component;
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
         
-        forever begin
+        // read into results
+        $readmemb("./refmod/result_c.txt", results);
+
+        for (int i = 0; i < 12; i+=1) begin
             in.get(tr_in);
-              tr_out.data = tr_in.A - tr_in.B;
-            $display("refmod: input A = %d, input B = %d, output OUT = %d",tr_in.A, tr_in.B, tr_out.data);
-			$display("refmod: input A = %b, input B = %b, output OUT = %b",tr_in.A, tr_in.B, tr_out.data);
+            tr_out.data = results[i];
+            $display("refmod: A      B        OUT");
+            $display("        %6d  %6d  %6d", tr_in.A, tr_in.B, tr_out.data);
+            $display("        0x%04h  0x%04h  0x%04h", tr_in.A, tr_in.B, tr_out.data);
             out.put(tr_out);
         end
     endtask: run_phase
