@@ -44,7 +44,6 @@ module DUT #(
     assign tag_i = 0;
     assign flush_i = 0;
     assign out_ready_i = out_valid_o;
-    // assign in_inter.ready = out_ready_i;
 
     fpnew_top fpu_under_test(
       .clk_i(in_inter.clk),
@@ -58,11 +57,11 @@ module DUT #(
       .int_fmt_i,
       .vectorial_op_i,
       .tag_i,
-      .in_valid_i,
+      .in_valid_i(1),
       .in_ready_o,
       .flush_i,
       .status_o,
-      .result_o, 
+      .result_o(out_inter.data), 
       .tag_o,
       .out_valid_o,
       .busy_o,
@@ -86,15 +85,20 @@ module DUT #(
                 WAIT: begin
                     if(in_inter.valid) begin
                         in_inter.ready <= 0;
-                        //out_inter.data <= in_inter.A + in_inter.B;
-                        $display("adder: input A = %d, input B = %d, output OUT = %d",in_inter.A,in_inter.B,out_inter.data);
-                        $display("adder: input A = %b, input B = %b, output OUT = %b",in_inter.A,in_inter.B,out_inter.data);
-                        out_inter.valid <= 1;
-                        state <= SEND;
+                        $display("[WAIT]: input A = %h, input B = %h, output OUT = %h", in_inter.A, in_inter.B, out_inter.data);
+                        out_inter.valid <= 0;
+                        state <= WAIT_1;
                     end
                 end
                 
+                WAIT_1: begin
+                    $display("[WAIT_1]: input A = %h, input B = %h, output OUT = %h", in_inter.A, in_inter.B, out_inter.data);
+                    out_inter.valid <= 1;
+                    state <= SEND;
+                end
+
                 SEND: begin
+                    $display("[SEND]: input A = %h, input B = %h, output OUT = %h", in_inter.A, in_inter.B, out_inter.data);
                     if(out_inter.ready) begin
                         out_inter.valid <= 0;
                         in_inter.ready <= 1;
