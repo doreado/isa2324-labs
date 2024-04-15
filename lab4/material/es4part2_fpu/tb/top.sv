@@ -1,6 +1,23 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
-`include "../src/adder.sv"
+`include "../src/mbe/mod_dadda_mul_pkg.sv"
+`include "../src/mbe/HA.sv"
+`include "../src/mbe/FA.sv"
+`include "../src/mbe/RCA.sv"
+`include "../src/mbe/mod_dadda_tree.sv"
+`include "../src/mbe/Booth_Encoder.sv"
+`include "../src/mbe/MBE.sv"
+`include "../src/cvfpu_lite/src/cf_math_pkg.sv"
+`include "../src/cvfpu_lite/src/lzc.sv"
+`include "../src/cvfpu_lite/src/rr_arb_tree.sv"
+`include "../src/cvfpu_lite/src/fpnew_pkg.sv"
+`include "../src/cvfpu_lite/src/fpnew_classifier.sv"
+`include "../src/cvfpu_lite/src/fpnew_rounding.sv"
+`include "../src/cvfpu_lite/src/fpnew_fma.sv"
+`include "../src/cvfpu_lite/src/fpnew_opgroup_fmt_slice.sv"
+`include "../src/cvfpu_lite/src/fpnew_opgroup_block.sv"
+`include "../src/cvfpu_lite/src/fpnew_top.sv"
+// `include "../src/adder.sv"
 `include "../src/dut_if.sv"
 `include "../src/DUT.sv"
 `include "../tb/packet_in.sv"
@@ -32,7 +49,7 @@ module top;
   
   always #5 clk = !clk;
   
-  logic [1:0] state;
+  logic [2:0] state;
   
   dut_if in(clk, rst);
   dut_if out(clk, rst);

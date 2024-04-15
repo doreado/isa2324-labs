@@ -1,8 +1,17 @@
-module DUT(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic [1:0] {INITIAL,WAIT,SEND} state);
+import fpnew_pkg::*;
+
+module DUT #(
+    parameter fpnew_pkg::fpu_features_t       Features       = fpnew_pkg::RV16F,         
+    parameter fpnew_pkg::fpu_implementation_t Implementation = fpnew_pkg::ISA_PIPE,
+    parameter type                            TagType        = logic,
+    // Do not change
+    localparam int unsigned WIDTH        = Features.Width,
+    localparam int unsigned NUM_OPERANDS = 3
+) (dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic [2:0] {INITIAL,WAIT, WAIT_1, WAIT_2, SEND} state);
     
     wire clk_i;
     wire rst_ni;
-    wire [NUM_OPERANDS-1:0][WIDTH-1:0] operands_i;
+    var [NUM_OPERANDS-1:0][WIDTH-1:0] operands_i;
     var fpnew_pkg::roundmode_e rnd_mode_i;
     var fpnew_pkg::operation_e op_i;
     var logic op_mod_i;
@@ -22,6 +31,9 @@ module DUT(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic
     wire busy_o;
     wire end_sim;
 
+    assign operands_i[0] = in_inter.A;
+    assign operands_i[1] = in_inter.B;
+    assign operands_i[2] = in_inter.C;
     assign rnd_mode_i = fpnew_pkg::RNE;
     assign op_i = fpnew_pkg::MUL;
     assign op_mod_i = 0;
@@ -32,11 +44,12 @@ module DUT(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic
     assign tag_i = 0;
     assign flush_i = 0;
     assign out_ready_i = out_valid_o;
+    // assign in_inter.ready = out_ready_i;
 
     fpnew_top fpu_under_test(
       .clk_i(in_inter.clk),
       .rst_ni(!in_inter.rst),
-      .operands_i(in_inter.operands),
+      .operands_i,
       .rnd_mode_i,
       .op_i,
       .op_mod_i,
@@ -45,15 +58,15 @@ module DUT(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic
       .int_fmt_i,
       .vectorial_op_i,
       .tag_i,
-      .in_valid_i(in_inter.valid),
+      .in_valid_i,
       .in_ready_o,
       .flush_i,
       .status_o,
-      .result_o(out_inter.result), 
+      .result_o, 
       .tag_o,
       .out_valid_o,
       .busy_o,
-      .out_ready_i,
+      .out_ready_i
     );
 
     always_ff @(posedge in_inter.clk)
