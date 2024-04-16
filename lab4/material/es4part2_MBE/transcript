@@ -1,0 +1,32 @@
+# vsim -c top -do "run 1000ns; quit" 
+# Start time: 21:00:12 on Apr 15,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: ./tb/top.sv(50): (vopt-2241) Connection width does not match width of port 'a'. The port definition is at: ./tb/../src/MBE.sv(2).
+# ** Warning: ./tb/top.sv(50): (vopt-2241) Connection width does not match width of port 'b'. The port definition is at: ./tb/../src/MBE.sv(2).
+# ** Warning: ./tb/top.sv(50): (vopt-2241) Connection width does not match width of port 'result'. The port definition is at: ./tb/../src/MBE.sv(2).
+# ** Note: ./tb/../src/mod_dadda_mul_pkg.sv(15): (vopt-13177) Promoting concatenation '{3,4,4,4,4,4,4,4,4,4,4,4,...}' to an assignment pattern:  Unsized literal found.
+# ** Note: ./tb/../src/mod_dadda_mul_pkg.sv(15): (vopt-13177) Promoting concatenation '{{2,2,3,4,5,6,7,8,8,8,8,...},...}' to an assignment pattern:  Unpacked concat or assignment pattern found within.
+# ** Warning: ./tb/../tb/monitor.sv(49): (vopt-2240) Treating stand-alone use of function 'begin_tr' as an implicit VOID cast.
+# ** Warning: ./tb/../tb/monitor_out.sv(48): (vopt-2240) Treating stand-alone use of function 'begin_tr' as an implicit VOID cast.
+# ** Warning: ./tb/../src/mod_dadda_tree.sv(3): (vopt-13314) Defaulting port 'pp' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/top.sv(70): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/top.sv(70): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/top.sv(70): (vopt-13215) Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# ** Error (suppressible): ./tb/../src/MBE.sv(8): (vopt-13215) Case item comparison:  Cannot assign an unpacked type 'interface dut_if' to a packed type 'reg[10:0]'.
+# Optimization failed
+# ** Error: (vopt-2064) Compiler back-end code generation process terminated with code 12.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=16, Warnings=6.
+# Error loading design
+# End time: 21:00:21 on Apr 15,2024, Elapsed time: 0:00:09
+# Errors: 16, Warnings: 6

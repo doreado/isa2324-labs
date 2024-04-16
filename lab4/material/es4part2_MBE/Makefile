@@ -1,9 +1,4 @@
-all: remote
-
-remote:
-	rsync -avh . -e 'ssh -p 10038' isa:~/tmp
-	ssh -CX isa "source /eda/scripts/init_questa_core_prime && cd ~/tmp/tb && make --file ../Makefile run && rm -rf work/ "
-
+FILES := $(shell cat compile.txt)
 compile:
 	vlog -sv ./tb/top.sv
 sim:
