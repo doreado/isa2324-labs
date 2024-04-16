@@ -47,7 +47,7 @@ module top;
   dut_if out(clk, rst);
   
   //DUT sum(in, out, state);
-  MBE mult(in, out, state);
+  DUT mult(in, out, state);
 
 
   initial begin

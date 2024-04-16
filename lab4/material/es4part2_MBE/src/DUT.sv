@@ -1,6 +1,6 @@
 module DUT(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic [1:0] {INITIAL,WAIT,SEND} state);
     
-    MBE MBE_under_test(.a(in_inter.A),.b(in_inter.B),.result(out_inter.data));
+    MBE MBE_under_test(.a(in_inter.A[10:0]),.b(in_inter.B[10:0]),.result(out_inter.data));
 
     always_ff @(posedge in_inter.clk)
     begin

@@ -1,5 +1,5 @@
 import mod_dadda_mul_pkg::*;
-module MBE (input [10:0] a, b, output [21:0] result);
+module MBE (input logic [10:0] a, b, output logic [21:0] result);
 
 pp_t partial_products;
 wire signs_t s;
